@@ -1,6 +1,6 @@
 # react-gtk _Pre Release_
 
-React Native bridge for Gtk
+React Native bridge for Gtk3
 
 Documentation for building a 3rd party React bridge is very sparse. If anyone has
 knowledge about this subject or would like to get involved, please contact me.
@@ -11,8 +11,8 @@ Please &#9733; this repo if you found it useful &#9733; &#9733; &#9733;
 ## Dependencies
 <!------------------------------------------------------->
 
-[Gtk](https://www.gtk.org/)
-[NodeJS](https://nodejs.org/en/)
+* [Gtk3](https://developer.gnome.org/gtk3/3.0/)
+* [NodeJS](https://nodejs.org/en/)
 
 
 ## Support

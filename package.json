@@ -1,0 +1,9 @@
+{
+  "name": "react-gtk",
+  "version": "0.0.1",
+  "description": "React Native bridge for Gtk3",
+  "main": "index.js",
+  "repository": "https://github.com/jamrizzi/react-gtk.git",
+  "author": "Jam Risser <jam@jamrizzi.com>",
+  "license": "MIT"
+}

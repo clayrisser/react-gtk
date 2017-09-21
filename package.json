@@ -1,9 +1,29 @@
 {
   "name": "react-gtk",
-  "version": "0.0.1",
-  "description": "React Native bridge for Gtk3",
-  "main": "index.js",
-  "repository": "https://github.com/jamrizzi/react-gtk.git",
-  "author": "Jam Risser <jam@jamrizzi.com>",
-  "license": "MIT"
+  "version": "1.0.0",
+  "description": "Describe react-gtk here",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "files": [
+    "es",
+    "lib",
+    "umd"
+  ],
+  "scripts": {
+    "build": "nwb build-web-module",
+    "clean": "nwb clean-module",
+    "test": "nwb test",
+    "test:coverage": "nwb test --coverage",
+    "test:watch": "nwb test --server"
+  },
+  "dependencies": {
+    "node-gtk3": "^0.0.1"
+  },
+  "devDependencies": {
+    "nwb": "0.18.x"
+  },
+  "author": "",
+  "homepage": "",
+  "license": "MIT",
+  "repository": ""
 }

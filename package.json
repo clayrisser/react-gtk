@@ -10,6 +10,7 @@
     "umd"
   ],
   "scripts": {
+    "start": "node ./node_modules/babel-cli/bin/babel-node ./src/index.js",
     "build": "nwb build-web-module",
     "clean": "nwb clean-module",
     "test": "nwb test",
@@ -17,10 +18,16 @@
     "test:watch": "nwb test --server"
   },
   "dependencies": {
-    "node-gtk3": "^0.0.1"
+    "node-gtk3": "^0.0.7"
   },
   "devDependencies": {
     "nwb": "0.18.x"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-2"
+    ]
   },
   "author": "",
   "homepage": "",

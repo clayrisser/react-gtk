@@ -2,7 +2,7 @@
 
 [![Gitter](https://img.shields.io/gitter/room/react-gtk/lobby.svg?style=flat-square)](https://gitter.im/react-gtk)
 
-This project is depricated in favor of [https://github.com/Place1/react-native-gtk/tree/master/packages/react-native-gtk](https://github.com/Place1/react-native-gtk/tree/master/packages/react-native-gtk). You can still contact me if you would like to contribute to [https://github.com/Place1/react-native-gtk](https://github.com/Place1/react-native-gtk). We're working very hard in our free time to make this project a reality.
+This project is depricated in favor of [https://github.com/Place1/react-native-gtk](https://github.com/Place1/react-native-gtk). You can still contact me if you would like to contribute to [https://github.com/Place1/react-native-gtk](https://github.com/Place1/react-native-gtk). We're working very hard in our free time to make this project a reality.
 
 React Native bridge for Gtk3
 

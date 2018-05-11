@@ -28,7 +28,8 @@
     "url": "https://github.com/codejamninja/react-gtk"
   },
   "scripts": {
-    "start": "npm run build && babel-node ./examples/button.js",
+    "example:button": "babel-node ./examples/button.js",
+    "example:entry": "babel-node ./examples/entry.js",
     "build": "npm run clean && babel src -d lib",
     "clean": "rm -rf lib",
     "lint": "eslint ./",
@@ -70,7 +71,5 @@
       "stage-2"
     ]
   },
-  "eslintIgnore": [
-    "lib"
-  ]
+  "eslintIgnore": ["lib"]
 }

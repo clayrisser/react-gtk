@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { render, Button } from '../src';
+import { render, Entry } from '../src';
 
 class Example extends Component {
   render() {
-    return <Button />;
+    return <Entry>Hello</Entry>;
   }
 }
 

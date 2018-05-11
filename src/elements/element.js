@@ -6,13 +6,11 @@ export default class Element {
   }
 
   appendChild(child) {
-    this.node.add(child.node);
     this.node.showAll();
     this.children.push(child);
   }
 
   removeChild(child) {
-    this.node.remove(child.node);
     this.children.splice(this.children.indexOf(child), 1);
   }
 

@@ -9,4 +9,14 @@ export default class Window extends Element {
       title: this.props.title || 'React Gtk'
     });
   }
+
+  appendChild(child) {
+    super.appendChild(child);
+    this.node.add(child.node);
+  }
+
+  removeChild(child) {
+    super.removeChild(child);
+    this.node.remove(child.node);
+  }
 }

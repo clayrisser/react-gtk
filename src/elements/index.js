@@ -1,6 +1,7 @@
 import Button from './button';
+import Entry from './entry';
 import Window from './window';
 
-export { Button, Window };
+export { Button, Entry, Window };
 
-export default { Button, Window };
+export default { Button, Entry, Window };

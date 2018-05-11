@@ -6,4 +6,14 @@ export default class Button extends Element {
     super(props);
     this.node = new Gtk.Button();
   }
+
+  appendChild(child) {
+    super.appendChild(child);
+    this.node.add(child.node);
+  }
+
+  removeChild(child) {
+    super.removeChild(child);
+    this.node.remove(child.node);
+  }
 }

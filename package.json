@@ -1,36 +1,76 @@
 {
   "name": "react-gtk",
-  "version": "1.0.0",
-  "description": "Describe react-gtk here",
-  "main": "lib/index.js",
-  "module": "es/index.js",
-  "files": [
-    "es",
-    "lib",
-    "umd"
+  "version": "0.0.1",
+  "description": "React bridge for gtk desktop applications",
+  "keywords": [
+    "react",
+    "native",
+    "react-native",
+    "desktop",
+    "gtk",
+    "bridge",
+    "renderer"
   ],
+  "homepage": "https://github.com/codejamninja/react-gtk",
+  "bugs": {
+    "url": "https://github.com/codejamninja/react-gtk/issues",
+    "email": "jam@codejam.ninja"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Jam Risser",
+    "email": "jam@codejam.ninja",
+    "url": "https://codejam.ninja"
+  },
+  "main": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codejamninja/react-gtk"
+  },
   "scripts": {
-    "start": "node ./node_modules/babel-cli/bin/babel-node ./src/index.js",
-    "build": "nwb build-web-module",
-    "clean": "nwb clean-module",
-    "test": "nwb test",
-    "test:coverage": "nwb test --coverage",
-    "test:watch": "nwb test --server"
+    "start": "npm run build && babel-node ./examples/button.js",
+    "build": "npm run clean && babel src -d lib",
+    "clean": "rm -rf lib",
+    "lint": "eslint ./",
+    "lint:fix": "eslint --fix ./",
+    "prepublish": "npm run build"
   },
   "dependencies": {
-    "node-gtk3": "^0.0.7"
+    "node-gir": "^0.1.5",
+    "react": "^16.3.2",
+    "react-reconciler": "^0.10.0"
   },
   "devDependencies": {
-    "nwb": "0.18.x"
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0"
+  },
+  "engines": {
+    "node": ">=4.0.0"
   },
   "babel": {
     "presets": [
-      "es2015",
+      [
+        "env",
+        {
+          "targets": {
+            "node": "4"
+          }
+        }
+      ],
+      "react",
       "stage-2"
     ]
   },
-  "author": "",
-  "homepage": "",
-  "license": "MIT",
-  "repository": ""
+  "eslintIgnore": [
+    "lib"
+  ]
 }

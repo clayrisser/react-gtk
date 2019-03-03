@@ -1,6 +1,6 @@
 {
   "name": "react-gtk",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "React bridge for gtk desktop applications",
   "keywords": [
     "react",

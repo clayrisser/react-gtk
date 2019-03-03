@@ -2,7 +2,6 @@
 
 [![npm](https://img.shields.io/npm/v/react-gtk.svg?style=flat-square)](https://www.npmjs.com/package/react-gtk)
 [![npm](https://img.shields.io/npm/dt/react-gtk.svg?style=flat-square)]( [![npm](https://img.shields.io/npm/v/npm.svg?style=flat-square)](https://www.npmjs.com/package/react-gtk))
-[![GitHub stars](https://img.shields.io/github/stars/codejamninja/react-gtk.svg?style=social&label=Stars)]
 [![GitHub stars](https://img.shields.io/github/stars/codejamninja/react-gtk.svg?style=social&label=Stars)](https://github.com/codejamninja/react-gtk)
 
 > React bridge for gtk desktop applications

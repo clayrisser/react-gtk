@@ -3,7 +3,7 @@ import { render, Button } from '../src';
 
 class Example extends Component {
   render() {
-    return <Button />;
+    return <Button label="Hello, world!" />;
   }
 }
 

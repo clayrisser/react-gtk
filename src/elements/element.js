@@ -6,13 +6,12 @@ export default class Element {
   children = [];
 
   constructor(node, props = {}, meta = {}) {
-    const { isContainer = false, isText } = meta;
+    const { isContainer = false, mapChildren } = meta;
     this.props = props;
     this.node = node;
     this.isContainer = isContainer;
-    this.isText = isText;
+    this.mapChildren = mapChildren;
     this.setDefaultProps();
-    if (this.isText) this.node.setText(this.props.children || '');
   }
 
   appendChild(child) {
@@ -39,13 +38,28 @@ export default class Element {
   }
 
   update() {
+    this.updateNode();
+    this.node.showAll();
+  }
+
+  updateNode() {
+    if (
+      this.mapChildren &&
+      typeof this.props.children !== 'undefined' &&
+      this.props.children !== null
+    ) {
+      this.node[this.mapChildren] = this.props.children;
+    }
     Object.keys(this.props).forEach(key => {
       const prop = this.props[key];
-      if (Object.keys(Object.getPrototypeOf(this.node)).includes(key)) {
+      if (
+        typeof prop !== 'undefined' &&
+        prop !== null &&
+        Object.keys(Object.getPrototypeOf(this.node)).includes(key)
+      ) {
         this.node[key] = prop;
       }
     });
-    this.node.showAll();
   }
 
   setDefaultProps() {

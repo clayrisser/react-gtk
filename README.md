@@ -1,5 +1,8 @@
 # react-gtk
 
+[![npm](https://img.shields.io/npm/v/react-gtk.svg?style=flat-square)](https://www.npmjs.com/package/react-gtk)
+[![npm](https://img.shields.io/npm/dt/react-gtk.svg?style=flat-square)]( [![npm](https://img.shields.io/npm/v/npm.svg?style=flat-square)](https://www.npmjs.com/package/react-gtk))
+[![GitHub stars](https://img.shields.io/github/stars/codejamninja/react-gtk.svg?style=social&label=Stars)]
 [![GitHub stars](https://img.shields.io/github/stars/codejamninja/react-gtk.svg?style=social&label=Stars)](https://github.com/codejamninja/react-gtk)
 
 > React bridge for gtk desktop applications
@@ -9,7 +12,7 @@ Please ★ this repo if you found it useful ★ ★ ★
 
 ## Installation
 
-#### 1. Install Gtk
+#### 1. Install Gtk and GObject Introspection
 
 ##### Ubuntu
 ```sh
@@ -41,8 +44,9 @@ npm install --save react-gtk
 
 ## Dependencies
 
-* [NodeJS](https://nodejs.org)
+* [GObject Introspection](https://wiki.gnome.org/Projects/GObjectIntrospection)
 * [GTK](https://www.gtk.org)
+* [NodeJS](https://nodejs.org)
 
 
 ## Usage

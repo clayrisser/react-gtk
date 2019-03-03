@@ -1,10 +1,9 @@
-import { Gtk } from 'node-gir';
+import Gtk from '../gtk';
 import Element from './element';
 
 export default class Button extends Element {
   constructor(props = {}) {
-    super(props);
-    this.node = new Gtk.Button();
+    super(new Gtk.Button(), props);
   }
 
   appendChild(child) {

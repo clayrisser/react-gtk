@@ -1,6 +1,6 @@
 {
   "name": "react-gtk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "React bridge for gtk desktop applications",
   "keywords": [
     "react",
@@ -37,7 +37,7 @@
     "prepublish": "npm run build"
   },
   "dependencies": {
-    "node-gir": "^0.1.5",
+    "node-gtk": "^0.2.2",
     "react": "^16.3.2",
     "react-reconciler": "^0.10.0"
   },
@@ -71,5 +71,7 @@
       "stage-2"
     ]
   },
-  "eslintIgnore": ["lib"]
+  "eslintIgnore": [
+    "lib"
+  ]
 }

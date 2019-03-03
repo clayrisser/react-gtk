@@ -1,13 +1,15 @@
-import { Gtk } from 'node-gir';
+import Gtk from '../gtk';
 import Element from './element';
 
 export default class Window extends Element {
   constructor(props = {}) {
-    super(props);
-    this.node = new Gtk.Window({
-      type: Gtk.WindowType.TOPLEVEL,
-      title: this.props.title || 'React Gtk'
-    });
+    super(
+      new Gtk.Window({
+        type: Gtk.WindowType.TOPLEVEL,
+        title: props.title || 'React Gtk'
+      }),
+      props
+    );
   }
 
   appendChild(child) {

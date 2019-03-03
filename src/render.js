@@ -1,4 +1,4 @@
-import { Gtk } from 'node-gir';
+import Gtk from './gtk';
 import Renderer from './reconciler';
 import { Window } from './elements';
 
@@ -10,7 +10,7 @@ export default function render(element) {
   Renderer.updateContainer(element, root, null);
   if (!hasStarted) {
     hasStarted = true;
-    window.node.connect('destroy', () => Gtk.mainQuit());
+    window.node.on('destroy', () => Gtk.mainQuit());
     window.node.showAll();
     Gtk.main();
   }

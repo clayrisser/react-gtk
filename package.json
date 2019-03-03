@@ -28,8 +28,7 @@
     "url": "https://github.com/codejamninja/react-gtk"
   },
   "scripts": {
-    "example:button": "babel-node ./examples/button.js",
-    "example:entry": "babel-node ./examples/entry.js",
+    "start": "babel-node",
     "build": "npm run clean && babel src -d lib",
     "clean": "rm -rf lib",
     "lint": "eslint ./",
@@ -38,7 +37,7 @@
   },
   "dependencies": {
     "node-gtk": "^0.2.2",
-    "react": "^16.3.2",
+    "react": "^16.8.3",
     "react-reconciler": "^0.10.0"
   },
   "devDependencies": {

@@ -1,11 +1,11 @@
 import Gtk from './gtk';
 import Renderer from './reconciler';
-import { Window } from './elements';
+import { GtkWindow } from './elements';
 
 let hasStarted = false;
 
 export default function render(element) {
-  const window = new Window();
+  const window = new GtkWindow();
   const root = Renderer.createContainer(window);
   Renderer.updateContainer(element, root, null);
   if (!hasStarted) {

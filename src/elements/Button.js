@@ -37,4 +37,24 @@ export default class Button extends Element {
   constructor(props = {}) {
     super(new Gtk.Button(), props, { isContainer: true });
   }
+
+  pressed(...props) {
+    this.node.pressed(...props);
+  }
+
+  released(...props) {
+    this.node.released(...props);
+  }
+
+  clicked(...props) {
+    this.node.clicked(...props);
+  }
+
+  enter(...props) {
+    this.node.enter(...props);
+  }
+
+  leave(...props) {
+    this.node.leave(...props);
+  }
 }

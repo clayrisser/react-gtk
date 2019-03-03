@@ -117,4 +117,32 @@ export default class Entry extends Element {
   constructor(props = {}) {
     super(new Gtk.Entry(), props, { mapChildren: 'text' });
   }
+
+  unsetInvisibleChar(...props) {
+    this.node.unsetInvisibleChar(...props);
+  }
+
+  layoutIndexToTextIndex(...props) {
+    this.node.layoutIndexToTextIndex(...props);
+  }
+
+  textIndexToLayoutIndex(...props) {
+    this.node.textIndexToLayoutIndex(...props);
+  }
+
+  progressPulse(...props) {
+    this.node.progressPulse(...props);
+  }
+
+  imContextFilterKeypress(...props) {
+    this.node.imContextFilterKeypress(...props);
+  }
+
+  resetImContext(...props) {
+    this.node.resetImContext(...props);
+  }
+
+  grabFocusWithoutSelecting(...props) {
+    this.node.grabFocusWithoutSelecting(...props);
+  }
 }

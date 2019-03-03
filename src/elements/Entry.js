@@ -1,7 +1,7 @@
 import Gtk from '../gtk';
-import Element from './element';
+import Element from './Element';
 
-export default class GtkEntry extends Element {
+export default class Entry extends Element {
   constructor(props = {}) {
     super(new Gtk.Entry(), props, { isText: true });
   }

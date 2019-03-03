@@ -1,7 +1,7 @@
 import Gtk from '../gtk';
-import Element from './element';
+import Element from './Element';
 
-export default class GtkButton extends Element {
+export default class Button extends Element {
   constructor(props = {}) {
     super(new Gtk.Button(), props, { isContainer: true });
   }

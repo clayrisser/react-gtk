@@ -15,11 +15,11 @@ export default class Spinner extends Element {
     super(new Gtk.Spinner(), props);
   }
 
-  stop() {
-    this.node.stop();
+  start(...props) {
+    this.node.start(...props);
   }
 
-  start() {
-    this.node.start();
+  stop(...props) {
+    this.node.stop(...props);
   }
 }

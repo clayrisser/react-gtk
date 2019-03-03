@@ -8,6 +8,7 @@ export default class Entry extends Element {
     attributes: PropTypes.object,
     buffer: PropTypes.object,
     capsLockWarning: PropTypes.bool,
+    children: PropTypes.string,
     completion: PropTypes.object,
     cursorPosition: PropTypes.number,
     editable: PropTypes.bool,
@@ -62,6 +63,7 @@ export default class Entry extends Element {
     attributes: null,
     buffer: null,
     capsLockWarning: null,
+    children: '',
     completion: null,
     cursorPosition: null,
     editable: null,
@@ -113,6 +115,6 @@ export default class Entry extends Element {
   };
 
   constructor(props = {}) {
-    super(new Gtk.Entry(), props, { isText: true });
+    super(new Gtk.Entry(), props, { mapChildren: 'text' });
   }
 }

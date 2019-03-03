@@ -1,7 +1,7 @@
 import Gtk from '../gtk';
-import Element from './element';
+import Element from './Element';
 
-export default class GtkWindow extends Element {
+export default class Window extends Element {
   constructor(props = {}) {
     super(
       new Gtk.Window({

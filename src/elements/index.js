@@ -1,7 +1,7 @@
-import GtkButton from './gtkButton';
-import GtkEntry from './gtkEntry';
-import GtkSpinner from './gtkSpinner';
-import GtkWindow from './gtkWindow';
+import Button from './Button';
+import Entry from './Entry';
+import Spinner from './Spinner';
+import Window from './Window';
 
-export { GtkButton, GtkEntry, GtkSpinner, GtkWindow };
-export default { GtkButton, GtkEntry, GtkSpinner, GtkWindow };
+export { Button, Entry, Spinner, Window };
+export default { Button, Entry, Spinner, Window };

@@ -9,6 +9,31 @@ Please ★ this repo if you found it useful ★ ★ ★
 
 ## Installation
 
+#### 1. Install Gtk
+
+##### Ubuntu
+```sh
+sudo apt-get install \
+  build-essential git \
+  nodejs \
+  gobject-introspection \
+  libgirepository1.0-dev
+```
+
+##### ArchLinux
+```sh
+pacman -S --needed \
+  base-devel git \
+  nodejs npm \
+  gtk3 gobject-introspection
+```
+
+##### OSX
+```sh
+brew install git node gobject-introspection gtk+3
+```
+
+#### 2. Install react-gtk
 ```sh
 npm install --save react-gtk
 ```
@@ -22,7 +47,23 @@ npm install --save react-gtk
 
 ## Usage
 
-[Contribute](https://github.com/codejamninja/react-gtk/blob/master/CONTRIBUTING.md) usage docs
+_index.js_
+```js
+import React, { Component } from 'react';
+import { render, Button } from 'react-gtk';
+
+class Example extends Component {
+  render() {
+    return <Button label="Hello, world!" />;
+  }
+}
+
+render(<Example />);
+```
+
+```sh
+node ./index.js
+```
 
 
 ## Support

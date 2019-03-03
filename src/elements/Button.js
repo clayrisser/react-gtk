@@ -36,21 +36,5 @@ export default class Button extends Element {
 
   constructor(props = {}) {
     super(new Gtk.Button(), props, { isContainer: true });
-    console.log('static propTypes = {');
-    Object.keys(Object.getPrototypeOf(this.node)).forEach(key => {
-      if (key === 'actionTarget') return;
-      let type = typeof this.node[key];
-      if (type === 'function') type = 'func';
-      if (type === 'boolean') type = 'bool';
-      if (type === 'object') {
-        type = Array.isArray(this.node[key]) ? 'array' : 'object';
-      }
-      console.log(`${key}: PropTypes.${type},`);
-    });
-    console.log('}\n\nstatic defaultProps = {');
-    Object.keys(Object.getPrototypeOf(this.node)).forEach(key => {
-      console.log(`${key}: null,`);
-    });
-    console.log('\n}');
   }
 }

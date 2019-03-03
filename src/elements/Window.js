@@ -26,7 +26,16 @@ export default class Window extends Element {
     modal: PropTypes.bool,
     resizable: PropTypes.bool,
     resizeGripVisible: PropTypes.bool,
-    role: PropTypes.string
+    role: PropTypes.string,
+    skipPagerHint: PropTypes.bool,
+    skipTaskbarHint: PropTypes.bool,
+    startupId: PropTypes.string,
+    title: PropTypes.string,
+    transientFor: PropTypes.object,
+    type: PropTypes.number,
+    typeHint: PropTypes.number,
+    urgencyHint: PropTypes.bool,
+    windowPosition: PropTypes.number
   };
 
   static defaultProps = {
@@ -52,7 +61,17 @@ export default class Window extends Element {
     modal: null,
     resizable: null,
     resizeGripVisible: null,
-    role: null
+    role: null,
+    screen: null,
+    skipPagerHint: null,
+    skipTaskbarHint: null,
+    startupId: null,
+    title: null,
+    transientFor: null,
+    type: null,
+    typeHint: null,
+    urgencyHint: null,
+    windowPosition: null
   };
 
   constructor(props = {}) {

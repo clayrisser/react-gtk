@@ -1,0 +1,38 @@
+{
+  "name": "@react-gtk/binding",
+  "version": "0.0.1",
+  "description": "react gtk bindings",
+  "keywords": [
+    "bridge",
+    "desktop",
+    "gnome",
+    "gtk",
+    "native",
+    "pc",
+    "react",
+    "react-native",
+    "render"
+  ],
+  "homepage": "https://github.com/codejamninja/react-gtk/packages/binding",
+  "bugs": {
+    "url": "https://github.com/codejamninja/react-gtk/issues",
+    "email": "jam@codejam.ninja"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Jam Risser",
+    "email": "jam@codejam.ninja",
+    "url": "https://codejam.ninja"
+  },
+  "main": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codejamninja/react-gtk"
+  },
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=4.0.0"
+  }
+}

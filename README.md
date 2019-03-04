@@ -1,72 +1,36 @@
 # react-gtk
 
-[![npm](https://img.shields.io/npm/v/react-gtk.svg?style=flat-square)](https://www.npmjs.com/package/react-gtk)
-[![npm](https://img.shields.io/npm/dt/react-gtk.svg?style=flat-square)]( [![npm](https://img.shields.io/npm/v/npm.svg?style=flat-square)](https://www.npmjs.com/package/react-gtk))
 [![GitHub stars](https://img.shields.io/github/stars/codejamninja/react-gtk.svg?style=social&label=Stars)](https://github.com/codejamninja/react-gtk)
 
-> React bridge for gtk desktop applications
+> cross-platform react native desktop applications
 
 Please ★ this repo if you found it useful ★ ★ ★
 
 
+## Features
+
+* supports native osx desktop
+* supports native dinux desktop
+* supports native windows desktop
+
+
 ## Installation
 
-#### 1. Install Gtk and GObject Introspection
-
-##### Ubuntu
 ```sh
-sudo apt-get install \
-  build-essential git \
-  nodejs \
-  gobject-introspection \
-  libgirepository1.0-dev
-```
-
-##### ArchLinux
-```sh
-pacman -S --needed \
-  base-devel git \
-  nodejs npm \
-  gtk3 gobject-introspection
-```
-
-##### OSX
-```sh
-brew install git node gobject-introspection gtk+3
-```
-
-#### 2. Install react-gtk
-```sh
-npm install --save react-gtk
+npm install --save @react-gtk/binding
 ```
 
 
 ## Dependencies
 
-* [GObject Introspection](https://wiki.gnome.org/Projects/GObjectIntrospection)
-* [GTK](https://www.gtk.org)
 * [NodeJS](https://nodejs.org)
+* [GTK](https://www.gtk.org)
+* [GObject Introspection](https://wiki.gnome.org/Projects/GObjectIntrospection)
 
 
 ## Usage
 
-_index.js_
-```js
-import React, { Component } from 'react';
-import { render, Button } from 'react-gtk';
-
-class Example extends Component {
-  render() {
-    return <Button label="Hello, world!" />;
-  }
-}
-
-render(<Example />);
-```
-
-```sh
-node ./index.js
-```
+[Contribute](https://github.com/codejamninja/react-gtk/blob/master/CONTRIBUTING.md) usage docs
 
 
 ## Support
@@ -88,7 +52,7 @@ Review the [guidelines for contributing](https://github.com/codejamninja/react-g
 
 [MIT License](https://github.com/codejamninja/react-gtk/blob/master/LICENSE)
 
-[Jam Risser](https://codejam.ninja) © 2018
+[Jam Risser](https://codejam.ninja) © 2019
 
 
 ## Changelog

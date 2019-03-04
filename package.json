@@ -1,80 +1,21 @@
 {
   "name": "react-gtk",
-  "version": "0.0.3",
-  "description": "React bridge for gtk desktop applications",
-  "keywords": [
-    "react",
-    "native",
-    "react-native",
-    "desktop",
-    "gtk",
-    "bridge",
-    "renderer"
+  "description": "cross-platform react native desktop applications",
+  "version": "0.0.1",
+  "files": [
+    "packages"
   ],
-  "homepage": "https://github.com/codejamninja/react-gtk",
-  "bugs": {
-    "url": "https://github.com/codejamninja/react-gtk/issues",
-    "email": "jam@codejam.ninja"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "Jam Risser",
-    "email": "jam@codejam.ninja",
-    "url": "https://codejam.ninja"
-  },
-  "main": "",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/codejamninja/react-gtk"
-  },
   "scripts": {
-    "build": "npm run clean && babel src -d lib",
-    "clean": "rm -rf lib",
-    "gen-methods": "babel-node ./tools/genMethods",
-    "lint": "eslint ./",
-    "lint:fix": "eslint --fix ./",
-    "prepublish": "npm run build",
-    "start": "babel-node"
-  },
-  "dependencies": {
-    "node-gtk": "^0.2.2",
-    "prop-types": "^15.7.2",
-    "react": "^16.8.3",
-    "react-reconciler": "^0.10.0"
+    "bootstrap": "lerna bootstrap && npm run link",
+    "bootstrap:hoist": "lerna bootstrap --hoist && npm run link",
+    "clean": "lerna clean -y",
+    "lerna": "lerna",
+    "link": "lerna link",
+    "ls": "lerna ls",
+    "publish": "lerna publish"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.2.2",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-import": "^2.9.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.7.0",
-    "fs-extra": "^7.0.1",
-    "lodash": "^4.17.11"
+    "lerna": "^3.2.1"
   },
-  "engines": {
-    "node": ">=4.0.0"
-  },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "4"
-          }
-        }
-      ],
-      "react",
-      "stage-2"
-    ]
-  },
-  "eslintIgnore": [
-    "lib"
-  ]
+  "license": "MIT"
 }

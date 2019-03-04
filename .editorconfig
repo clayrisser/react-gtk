@@ -7,9 +7,16 @@ indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
+[*.{html,css,less,sass,scss}]
+charset = utf-8
+
 [*.{js,jsx,json}]
 charset = utf-8
 
 [*.md]
 charset = utf-8
 trim_trailing_whitespace = false
+
+[{m,M}akefile]
+charset = utf-8
+indent_style = tab

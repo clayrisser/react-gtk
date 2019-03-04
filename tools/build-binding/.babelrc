@@ -1,0 +1,12 @@
+{
+  "presets": [
+    [
+      "babel-preset-jam",
+      {
+        "targets": {
+          "node": "6"
+        }
+      }
+    ]
+  ]
+}

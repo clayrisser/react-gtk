@@ -1,3 +1,5 @@
+import _ from 'lodash';
+import { mapSeries } from 'bluebird';
 import GtkGir from './GtkGir';
 import renderTemplate from './renderTemplate';
 
@@ -10,31 +12,42 @@ export default class Renderer {
     await this.gtkGir.init();
   }
 
-  async renderElements() {
-    await renderTemplate('Element.ts', {
-      klass: {
-        name: 'Goober'
-      },
-      propTypes: [
-        {
-          name: 'chop',
-          type: 'bool'
-        },
-        {
-          name: 'howdy',
-          type: 'func'
-        }
-      ],
-      methods: [
-        {
-          name: 'hello',
-          parameters: [
-            { name: 'one', type: 'number' },
-            { name: 'two', type: 'any' }
-          ],
-          returnType: 'string'
-        }
-      ]
+  async getElementsData() {
+    const elementsData = [];
+    await mapSeries(this.gtkGir.classes, async klass => {
+      if (klass.hasParent({ name: 'Widget' })) {
+        elementsData.push({
+          klass: {
+            name: klass.attrs.name
+          },
+          propTypes: _.map(
+            this.gtkGir.getProperties(klass),
+            property => property.attrs
+          ),
+          methods: _.map(this.gtkGir.getMethods(klass), method => {
+            return {
+              ...method.attrs,
+              name: _.camelCase(method.attrs.name),
+              parameters: _.map(
+                method.parameters,
+                parameter => parameter.attrs
+              ),
+              returnType: method.returnValue.attrs.type
+            };
+          })
+        });
+      }
     });
+    return JSON.parse(JSON.stringify(elementsData));
+  }
+
+  async renderElements() {
+    const elementsData = await this.getElementsData();
+    await renderTemplate(
+      'Element.ts',
+      elementsData[0],
+      '.elements',
+      `${elementsData[0].klass.name}.ts`
+    );
   }
 }

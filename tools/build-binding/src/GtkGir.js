@@ -46,12 +46,60 @@ export default class GtkGir {
 
   getClasses(namespace) {
     return _.map(this.getNodes('class', namespace), klass => {
+      const self = this;
       return {
         ...klass,
         methods: this.getMethods(klass),
-        properties: this.getProperties(klass)
+        properties: this.getProperties(klass),
+        getParent() {
+          return self.getClass(namespace, { name: klass.attrs.parent });
+        },
+        hasParent(where = {}) {
+          const parent = this.getParent();
+          if (!parent) return false;
+          let foundParent = false;
+          _.forEach(where, (value, key) => {
+            if (parent.attrs[key] === value) {
+              foundParent = true;
+              return false;
+            }
+            return true;
+          });
+          if (foundParent) return true;
+          return parent.hasParent(where);
+        }
       };
     });
+  }
+
+  getClass(namespace, where = {}) {
+    const klass = this.getNode('class', namespace, where);
+    const self = this;
+    if (klass) {
+      return {
+        ...klass,
+        methods: this.getMethods(klass),
+        properties: this.getProperties(klass),
+        getParent() {
+          return self.getClass(namespace, { name: klass.attrs.parent });
+        },
+        hasParent(where = {}) {
+          const parent = this.getParent();
+          if (!parent) return false;
+          let foundParent = false;
+          _.forEach(where, (value, key) => {
+            if (parent.attrs[key] === value) {
+              foundParent = true;
+              return false;
+            }
+            return true;
+          });
+          if (foundParent) return true;
+          return parent.hasParent(where);
+        }
+      };
+    }
+    return null;
   }
 
   getMethods(klass) {
@@ -103,6 +151,20 @@ export default class GtkGir {
         element,
         nodeType
       };
+    });
+  }
+
+  getNode(nodeType, node, where = {}) {
+    return _.find(this.getNodes(nodeType, node), node => {
+      let foundNode = false;
+      _.forEach(where, (value, key) => {
+        if (node.attrs[key] === value) {
+          foundNode = true;
+          return false;
+        }
+        return true;
+      });
+      return foundNode;
     });
   }
 

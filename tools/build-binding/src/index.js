@@ -1,10 +1,9 @@
-import _ from 'lodash';
-import GtkGir from './GtkGir';
+import Renderer from './Renderer';
 
 async function main() {
-  const gtkGir = new GtkGir();
-  await gtkGir.init();
-  console.log(gtkGir.namespaces);
+  const renderer = new Renderer();
+  await renderer.init();
+  await renderer.renderElements();
 }
 
 main();

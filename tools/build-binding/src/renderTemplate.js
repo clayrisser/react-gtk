@@ -7,7 +7,8 @@ const options = {};
 export default async function renderTemplate(
   templateName,
   data = {},
-  outPath = '.tmp'
+  outPath = '.tmp',
+  outName = null
 ) {
   const output = await new Promise((resolve, reject) => {
     const templatePath = path.resolve(
@@ -22,5 +23,5 @@ export default async function renderTemplate(
   });
   outPath = path.resolve(process.cwd(), outPath);
   if (!(await fs.exists(outPath))) fs.mkdir(outPath);
-  return fs.writeFile(path.resolve(outPath, templateName), output);
+  return fs.writeFile(path.resolve(outPath, outName || templateName), output);
 }

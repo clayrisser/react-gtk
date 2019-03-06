@@ -2,24 +2,24 @@ import PropTypes from 'prop-types';
 import Gtk from '../gtk';
 import Element from './Element';
 
-export default class <%= klass.name %> extends Element {<% if (propTypes.length) { %>
+export default class <%- klass.name %> extends Element {<% if (propTypes.length) { %>
   static propTypes = {<% for (var i = 0; i < propTypes.length; i++) { var propType = propTypes[i]; %>
-    <%= propType.name %>: PropTypes.<%= propType.type -%>
+    <%- propType.name %>: PropTypes.<%- propType.type -%>
 <% if (i < propTypes.length - 1) { %>,<% }} %>
   };<% } %><% if (propTypes.length) { %>
 
   static defaultProps = {<% for (var i = 0; i < propTypes.length; i++) { var propType = propTypes[i]; %>
-    <%= propType.name %>: null<% -%>
+    <%- propType.name %>: null<% -%>
 <% if (i < propTypes.length - 1) { %>,<% }} %>
   };<% } %>
 
   constructor(props: object = {}) {
-    super(new Gtk.<%= klass.name %>(), props<% if (options.length) { -%>
+    super(new Gtk.<%- klass.name %>(), props<% if (options.length) { -%>
 , { <% for (var i = 0; i < options.length; i++) { var option = options[i]; -%>
-<%= option.name %>: <%= option.value %> }<% }} %>);
+<%- option.name %>: <%- option.value %> }<% }} %>);
   }<% if (methods.length) { for (var i = 0; i < methods.length; i++) { var method = methods[i]; %>
 
-  <%= method.name %>(<%= method.typedParameterString %>): <%= method.returnType %> {
-    return this.node.<%= method.name %>(<%= method.parameterString %>);
+  <%- method.name %>(<%- method.typedParameterString %>): <%- method.returnType %> {
+    return this.node.<%- method.name %>(<%- method.parameterString %>);
   }<% }} %>
 }

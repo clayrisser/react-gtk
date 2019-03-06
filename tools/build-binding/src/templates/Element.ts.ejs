@@ -18,6 +18,6 @@ export default class <%= klass.name %> extends Element {<% if (propTypes.length)
   }<% if (methods.length) { for (var i = 0; i < methods.length; i++) { var method = methods[i]; %>
 
   <%= method.name %>(<%= method.typedParameterString %>): <%= method.returnType %> {
-    this.node.<%= method.name %>(<%= method.parameterString %>) {
+    return this.node.<%= method.name %>(<%= method.parameterString %>);
   }<% }} %>
 }

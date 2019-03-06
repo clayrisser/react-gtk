@@ -32,14 +32,21 @@ export default class Renderer {
           gdouble: 'number',
           gfloat: 'number',
           gint: 'number',
+          glong: 'number',
+          gsize: 'number',
+          guint16: 'number',
+          guint32: 'number',
+          guint8: 'number',
           guint: 'number',
+          gunichar: 'string',
           none: 'null',
           utf8: 'string'
         }[type]))(type) || 'object'
     );
   }
 
-  async getElementsData() {
+  async getElementsData(options = {}) {
+    const { getSet = false } = options;
     const elementsData = [];
     await mapSeries(this.gtkGir.classes, async klass => {
       if (klass.hasParent({ name: 'Widget' })) {
@@ -52,31 +59,41 @@ export default class Renderer {
             name: _.camelCase(property.attrs.name),
             type: this.getPropType(property.type)
           })),
-          methods: _.map(this.gtkGir.getMethods(klass), method => {
-            const parameters = _.map(method.parameters, parameter => ({
-              ...parameter.attrs,
-              name: _.camelCase(parameter.attrs.name),
-              type: this.getType(parameter.type)
-            }));
-            return {
-              ...method.attrs,
-              name: _.camelCase(method.attrs.name),
-              parameters,
-              typedParameterString: _.map(
+          methods: _.filter(
+            _.map(this.gtkGir.getMethods(klass), method => {
+              const parameters = _.map(method.parameters, parameter => ({
+                ...parameter.attrs,
+                name: _.camelCase(parameter.attrs.name),
+                type: this.getType(parameter.type)
+              }));
+              if (
+                !getSet &&
+                (method.attrs.name.substr(0, 3) === 'get' ||
+                  method.attrs.name.substr(0, 3) === 'set')
+              ) {
+                return null;
+              }
+              return {
+                ...method.attrs,
+                name: _.camelCase(method.attrs.name),
                 parameters,
-                (parameter, i) =>
-                  `${parameter.name}: ${parameter.type}${
-                    i < parameters.length - 1 ? ', ' : ''
-                  }`
-              ).join(''),
-              parameterString: _.map(
-                parameters,
-                (parameter, i) =>
-                  parameter.name + (i < parameters.length - 1 ? ', ' : '')
-              ).join(''),
-              returnType: this.getType(method.returnValue.type)
-            };
-          })
+                typedParameterString: _.map(
+                  parameters,
+                  (parameter, i) =>
+                    `${parameter.name}: ${parameter.type}${
+                      i < parameters.length - 1 ? ', ' : ''
+                    }`
+                ).join(''),
+                parameterString: _.map(
+                  parameters,
+                  (parameter, i) =>
+                    parameter.name + (i < parameters.length - 1 ? ', ' : '')
+                ).join(''),
+                returnType: this.getType(method.returnValue.type)
+              };
+            }),
+            method => !_.isNull(method)
+          )
         });
       }
     });
@@ -91,8 +108,8 @@ export default class Renderer {
         `.elements/${elementData.klass.name}.ts`,
         {
           ...elementData,
-          methods: elementData.methods.slice(0, 5),
-          propTypes: elementData.propTypes.slice(0, 5)
+          methods: elementData.methods,
+          propTypes: elementData.propTypes
         }
       );
     });

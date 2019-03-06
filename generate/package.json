@@ -1,7 +1,8 @@
 {
-  "name": "build-binding",
+  "name": "generate",
+  "private": true,
   "version": "0.0.1",
-  "description": "build react gtk binding",
+  "description": "generate react gtk binding",
   "keywords": [
     "build-binding",
     "binding",
@@ -18,50 +19,36 @@
     "email": "jam@codejam.ninja",
     "url": "https://codejamninja.com"
   },
-  "files": [
-    "lib",
-    "bin"
-  ],
-  "main": "lib/index.js",
-  "bin": {
-    "build-binding": "bin/build-binding.js"
-  },
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/codejamninja/react-gtk"
   },
   "scripts": {
-    "build": "npm run test && babel src -d lib",
     "clean": "git clean -fXd -e \\!node_modules -e \\!node_modules/**/*",
     "clean:purge": "git clean -fXd",
     "format": "prettier --write ./src/**/*.js",
     "lint": "npm run format && eslint ./",
     "lint:fix": "npm run format && eslint --fix ./",
-    "prepublish": "npm run build",
     "start": "babel-node src",
     "test": "npm run lint"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.2.5",
-    "bluebird": "^3.5.3",
-    "ejs": "^2.6.1",
-    "fs-extra": "^7.0.1",
-    "lodash": "^4.17.11",
-    "xmldom": "^0.1.27"
-  },
-  "devDependencies": {
     "@babel/cli": "^7.2.0",
     "@babel/core": "^7.2.0",
     "@babel/node": "^7.2.0",
+    "@babel/polyfill": "^7.2.5",
     "babel-preset-jam": "^0.1.0",
+    "bluebird": "^3.5.3",
+    "ejs": "^2.6.1",
     "eslint": "^5.9.0",
     "eslint-config-jam": "^0.1.6",
+    "fs-extra": "^7.0.1",
+    "lodash": "^4.17.11",
+    "xmldom": "^0.1.27",
     "yo": "^2.0.5"
   },
   "engines": {
     "node": ">=6.0.0"
-  },
-  "eslintIgnore": [
-    "lib"
-  ]
+  }
 }

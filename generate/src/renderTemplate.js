@@ -10,8 +10,8 @@ export default async function renderTemplate(templateName, outPath, data = {}) {
   );
   const templateData = (await fs.readFile(templatePath)).toString();
   const output = ejs.render(templateData, data);
-  outPath = path.resolve(process.cwd(), outPath);
+  outPath = path.resolve(__dirname, outPath);
   const outPathFolder = outPath.replace(/[^/]+$/, '');
-  if (!(await fs.exists(outPathFolder))) fs.mkdir(outPathFolder);
+  if (!(await fs.exists(outPathFolder))) await fs.mkdirs(outPathFolder);
   return fs.writeFile(path.resolve(outPath, outPath), output);
 }

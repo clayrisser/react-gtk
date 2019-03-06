@@ -148,7 +148,7 @@ export default class Renderer {
     await mapSeries(elementsData, async elementData => {
       await renderTemplate(
         'Element.ts',
-        `.elements/${elementData.klass.name}.ts`,
+        `../../packages/binding/src/elements/${elementData.klass.name}.ts`,
         {
           ...elementData,
           methods: elementData.methods,

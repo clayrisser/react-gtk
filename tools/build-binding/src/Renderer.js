@@ -54,6 +54,12 @@ export default class Renderer {
           klass: {
             name: klass.attrs.name
           },
+          options: [
+            ...(klass.attrs.name === 'Container' ||
+            klass.hasParent({ name: 'Container' })
+              ? [{ name: 'isContainer', value: 'true' }]
+              : [])
+          ],
           propTypes: _.map(this.gtkGir.getProperties(klass), property => ({
             ...property.attrs,
             name: _.camelCase(property.attrs.name),

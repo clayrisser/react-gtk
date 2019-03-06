@@ -46,7 +46,6 @@ export default class Renderer {
   }
 
   async getElementsData(options = {}) {
-    const { getSet = false } = options;
     const elementsData = [];
     await mapSeries(this.gtkGir.classes, async klass => {
       if (klass.hasParent({ name: 'Widget' })) {
@@ -60,50 +59,81 @@ export default class Renderer {
               ? [{ name: 'isContainer', value: 'true' }]
               : [])
           ],
-          propTypes: _.map(this.gtkGir.getProperties(klass), property => ({
-            ...property.attrs,
-            name: _.camelCase(property.attrs.name),
-            type: this.getPropType(property.type)
-          })),
-          methods: _.filter(
-            _.map(this.gtkGir.getMethods(klass), method => {
-              const parameters = _.map(method.parameters, parameter => ({
-                ...parameter.attrs,
-                name: _.camelCase(parameter.attrs.name),
-                type: this.getType(parameter.type)
-              }));
-              if (
-                !getSet &&
-                (method.attrs.name.substr(0, 3) === 'get' ||
-                  method.attrs.name.substr(0, 3) === 'set')
-              ) {
-                return null;
-              }
-              return {
-                ...method.attrs,
-                name: _.camelCase(method.attrs.name),
-                parameters,
-                typedParameterString: _.map(
-                  parameters,
-                  (parameter, i) =>
-                    `${parameter.name}: ${parameter.type}${
-                      i < parameters.length - 1 ? ', ' : ''
-                    }`
-                ).join(''),
-                parameterString: _.map(
-                  parameters,
-                  (parameter, i) =>
-                    parameter.name + (i < parameters.length - 1 ? ', ' : '')
-                ).join(''),
-                returnType: this.getType(method.returnValue.type)
-              };
-            }),
-            method => !_.isNull(method)
-          )
+          propTypes: this.getPropTypes(klass, options),
+          methods: this.getMethods(klass, options)
         });
       }
     });
     return elementsData;
+  }
+
+  getPropTypes(klass, options, propTypes = []) {
+    propTypes = _.uniqBy(
+      [
+        ...propTypes,
+        ..._.map(this.gtkGir.getProperties(klass), property => ({
+          ...property.attrs,
+          name: _.camelCase(property.attrs.name),
+          type: this.getPropType(property.type)
+        }))
+      ],
+      propType => propType.name
+    );
+    const parent = klass.getParent();
+    if (parent && parent.hasParent({ name: 'Widget' })) {
+      return this.getPropTypes(parent, options, propTypes);
+    }
+    return propTypes;
+  }
+
+  getMethods(klass, options, methods = []) {
+    const { getSet = false } = options;
+    methods = _.uniqBy(
+      [
+        ...methods,
+        ..._.filter(
+          _.map(this.gtkGir.getMethods(klass), method => {
+            const parameters = _.map(method.parameters, parameter => ({
+              ...parameter.attrs,
+              name: _.camelCase(parameter.attrs.name),
+              type: this.getType(parameter.type)
+            }));
+            if (
+              !getSet &&
+              (method.attrs.name.substr(0, 3) === 'get' ||
+                method.attrs.name.substr(0, 3) === 'set')
+            ) {
+              return null;
+            }
+            return {
+              ...method.attrs,
+              name: _.camelCase(method.attrs.name),
+              parameters,
+              typedParameterString: _.map(
+                parameters,
+                (parameter, i) =>
+                  `${parameter.name}: ${parameter.type}${
+                    i < parameters.length - 1 ? ', ' : ''
+                  }`
+              ).join(''),
+              parameterString: _.map(
+                parameters,
+                (parameter, i) =>
+                  parameter.name + (i < parameters.length - 1 ? ', ' : '')
+              ).join(''),
+              returnType: this.getType(method.returnValue.type)
+            };
+          }),
+          method => !_.isNull(method)
+        )
+      ],
+      method => method.name
+    );
+    const parent = klass.getParent();
+    if (parent && parent.hasParent({ name: 'Widget' })) {
+      return this.getMethods(parent, options, methods);
+    }
+    return methods;
   }
 
   async renderElements() {

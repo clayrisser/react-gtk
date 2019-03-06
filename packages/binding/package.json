@@ -33,7 +33,7 @@
     "build": "npm run build:types && npm run build:js",
     "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
     "build:types": "tsc --emitDeclarationOnly",
-    "format": "prettier --write ./src/**/*.ts",
+    "format": "prettier --write ./src/*.ts ./src/**/*.ts",
     "lint": "npm run format && eslint ./src/**/*.ts",
     "lint:fix": "npm run format && eslint --fix ./**/*.ts",
     "type-check": "tsc --noEmit",
@@ -41,7 +41,9 @@
   },
   "dependencies": {
     "@types/react-reconciler": "^0.18.0",
-    "node-gtk": "^0.2.2"
+    "node-gtk": "^0.2.2",
+    "prop-types": "^15.7.2",
+    "react-reconciler": "^0.20.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

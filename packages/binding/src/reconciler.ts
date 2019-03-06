@@ -1,9 +1,10 @@
 import ReactReconciler from 'react-reconciler';
 import createElement from './createElement';
 
-type Element = any;
-
-type Props = any;
+interface Props {
+  [key: string]: Prop;
+}
+type Prop = any;
 
 export default ReactReconciler({
   appendInitialChild(parentInstance: Element, child: Element) {

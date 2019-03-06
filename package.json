@@ -8,15 +8,17 @@
   "scripts": {
     "bootstrap": "lerna bootstrap && npm run link",
     "bootstrap:hoist": "lerna bootstrap --hoist && npm run link",
-    "generate": "cd generate && npm run start && cd ../packages/binding && npm run format",
     "clean": "lerna clean -y",
+    "generate": "cd generate && npm run start && cd ../packages/binding && npm run format",
     "lerna": "lerna",
     "link": "lerna link",
     "ls": "lerna ls",
+    "nuke": "bash generate/nuke.sh",
     "publish": "lerna publish"
   },
   "devDependencies": {
-    "lerna": "^3.2.1"
+    "lerna": "^3.2.1",
+    "rimraf": "^2.6.3"
   },
   "license": "MIT"
 }

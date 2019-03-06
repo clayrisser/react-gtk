@@ -1,20 +1,10 @@
 import Gtk from './gtk';
 import Renderer from './reconciler';
-
-type EventListener = (event: string, handler: () => any) => any;
-
-class Node {
-  on: EventListener = () => null;
-  showAll = () => null;
-}
-
-class Window {
-  node: Node = new Node();
-}
+import Window from './elements/Window';
 
 let hasStarted = false;
 
-export default function render(element: any) {
+export default function render(element: Element) {
   const window = new Window();
   const root = Renderer.createContainer(window);
   Renderer.updateContainer(element, root, null);

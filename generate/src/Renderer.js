@@ -52,11 +52,12 @@ export default class Renderer {
     );
   }
 
-  async getElementsData(options = {}) {
-    const elementsData = [];
+  async getData(options = {}) {
+    if (this._data) return this._data;
+    const data = [];
     await mapSeries(this.gtkGir.classes, async klass => {
       if (klass.hasParent({ name: 'Widget' })) {
-        elementsData.push({
+        data.push({
           klass: {
             name: klass.attrs.name
           },
@@ -71,7 +72,8 @@ export default class Renderer {
         });
       }
     });
-    return elementsData;
+    this._data = data;
+    return this._data;
   }
 
   getPropTypes(klass, options, propTypes = []) {
@@ -144,17 +146,27 @@ export default class Renderer {
   }
 
   async renderElements() {
-    const elementsData = await this.getElementsData();
-    await mapSeries(elementsData, async elementData => {
+    const data = await this.getData();
+    await mapSeries(data, async dataItem => {
       await renderTemplate(
-        'Element.ts',
-        `../../packages/binding/src/elements/${elementData.klass.name}.ts`,
-        {
-          ...elementData,
-          methods: elementData.methods,
-          propTypes: elementData.propTypes
-        }
+        'elements/Element.ts',
+        `../../packages/binding/src/elements/${dataItem.klass.name}.ts`,
+        dataItem
       );
+    });
+    await renderTemplate(
+      'elements/index.ts',
+      '../../packages/binding/src/elements/index.ts',
+      {
+        data
+      }
+    );
+  }
+
+  async renderIndex() {
+    const data = await this.getData();
+    await renderTemplate('index.ts', '../../packages/binding/src/index.ts', {
+      data
     });
   }
 }

@@ -122,7 +122,10 @@ export default class GtkGir {
   }
 
   getTypes(node) {
-    return this.getNodes('type', node);
+    return _.map(this.getNodes('type', node), type => {
+      type.isArray = type.element.parentNode.tagName === 'array';
+      return type;
+    });
   }
 
   getProperties(klass) {

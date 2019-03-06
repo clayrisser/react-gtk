@@ -14,6 +14,9 @@ export default class Renderer {
 
   getPropType(type) {
     type = this.getType(type);
+    if (type.substr(type.length - 2, type.length - 1) === '[]') {
+      return 'array';
+    }
     return (
       (type =>
         ({
@@ -24,10 +27,11 @@ export default class Renderer {
   }
 
   getType(type) {
-    type = type?.attrs?.name;
-    return (
+    const tsType =
       (type =>
         ({
+          'GLib.List': 'object[]',
+          'GLib.SList': 'string[]',
           gboolean: 'boolean',
           gdouble: 'number',
           gfloat: 'number',
@@ -41,7 +45,10 @@ export default class Renderer {
           gunichar: 'string',
           none: 'null',
           utf8: 'string'
-        }[type]))(type) || 'object'
+        }[type]))(type?.attrs?.name) || 'object';
+    return (
+      tsType +
+      (tsType !== 'null' ? _.times(type?.isArray, () => '[]').join('') : '')
     );
   }
 
@@ -73,7 +80,7 @@ export default class Renderer {
         ...propTypes,
         ..._.map(this.gtkGir.getProperties(klass), property => ({
           ...property.attrs,
-          name: _.camelCase(property.attrs.name),
+          name: camelCase(property.attrs.name),
           type: this.getPropType(property.type)
         }))
       ],
@@ -95,7 +102,7 @@ export default class Renderer {
           _.map(this.gtkGir.getMethods(klass), method => {
             const parameters = _.map(method.parameters, parameter => ({
               ...parameter.attrs,
-              name: _.camelCase(parameter.attrs.name),
+              name: camelCase(parameter.attrs.name),
               type: this.getType(parameter.type)
             }));
             if (
@@ -107,7 +114,7 @@ export default class Renderer {
             }
             return {
               ...method.attrs,
-              name: _.camelCase(method.attrs.name),
+              name: camelCase(method.attrs.name),
               parameters,
               typedParameterString: _.map(
                 parameters,
@@ -150,4 +157,10 @@ export default class Renderer {
       );
     });
   }
+}
+
+function camelCase(str) {
+  str = str.replace(/\./g, '_');
+  const camelCaseStr = _.camelCase(str);
+  return camelCaseStr.length ? camelCaseStr : str;
 }

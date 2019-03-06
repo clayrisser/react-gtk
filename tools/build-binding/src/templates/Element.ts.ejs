@@ -15,15 +15,9 @@ export default class <%= klass.name %> extends Element {<% if (propTypes.length)
 
   constructor(props = {}) {
     super(new Gtk.<%= klass.name %>(), props, { isContainer: true });
-  }<% if (methods.length) { %>
-<% for (var i = 0; i < methods.length; i++) { var method = methods[i]; %>
-  <%= method.name %>(<% -%>
-<% for (var i = 0; i < method.parameters.length; i++) { var parameter = method.parameters[i]; -%>
-<%= parameter.name %>: <%= parameter.type -%>
-<% if (i < method.parameters.length - 1) { %>, <% }} %>): <%= method.returnType %> {
-    this.node.<%= method.name %>(<% -%>
-<% for (var i = 0; i < method.parameters.length; i++) { var parameter = method.parameters[i]; -%>
-<%= parameter.name -%>
-<% if (i < method.parameters.length - 1) { %>, <% }} %>) {
+  }<% if (methods.length) { for (var i = 0; i < methods.length; i++) { var method = methods[i]; %>
+
+  <%= method.name %>(<%= method.typedParameterString %>): <%= method.returnType %> {
+    this.node.<%= method.name %>(<%= method.parameterString %>) {
   }<% }} %>
 }

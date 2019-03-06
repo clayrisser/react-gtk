@@ -8,6 +8,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap && npm run link",
     "bootstrap:hoist": "lerna bootstrap --hoist && npm run link",
+    "generate": "cd generate && npm run start && cd ../packages/binding && npm run format",
     "clean": "lerna clean -y",
     "lerna": "lerna",
     "link": "lerna link",

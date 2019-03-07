@@ -1,15 +1,14 @@
 {
-  "name": "button",
+  "name": "elements",
   "version": "0.0.1",
   "private": true,
-  "description": "react gtk button example",
+  "description": "react gtk elements example",
   "keywords": [
-    "button",
-    "button",
+    "elements",
     "react",
     "gtk"
   ],
-  "homepage": "https://github.com/codejamninja/react-gtk/examples/button",
+  "homepage": "https://github.com/codejamninja/react-gtk/examples/elements",
   "bugs": {
     "url": "https://github.com/codejamninja/react-gtk/issues",
     "email": "jam@codejam.ninja"
@@ -30,13 +29,14 @@
   },
   "scripts": {
     "build": "npm run test && babel src -d lib",
+    "button": "babel-node src/button",
     "clean": "git clean -fXd -e \\!node_modules -e \\!node_modules/**/*",
     "clean:purge": "git clean -fXd",
+    "entry": "babel-node src/entry",
     "format": "prettier --write ./src/**/*.js",
     "lint": "npm run format && eslint ./",
     "lint:fix": "npm run format && eslint --fix ./",
     "prepublish": "npm run build",
-    "start": "babel-node src",
     "test": "npm run lint"
   },
   "dependencies": {

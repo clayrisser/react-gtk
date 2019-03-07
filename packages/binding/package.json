@@ -1,6 +1,6 @@
 {
   "name": "@react-gtk/binding",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "react gtk bindings",
   "keywords": [
     "bridge",
@@ -24,7 +24,10 @@
     "email": "jam@codejam.ninja",
     "url": "https://codejam.ninja"
   },
-  "main": "",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/codejamninja/react-gtk"
@@ -36,6 +39,7 @@
     "format": "prettier --write ./src/*.ts ./src/**/*.ts",
     "lint": "npm run format && eslint ./src/**/*.ts",
     "lint:fix": "npm run format && eslint --fix ./**/*.ts",
+    "prepublish": "npm run build",
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch"
   },
@@ -43,6 +47,7 @@
     "@types/react-reconciler": "^0.18.0",
     "node-gtk": "^0.2.2",
     "prop-types": "^15.7.2",
+    "react": "^16.8.4",
     "react-reconciler": "^0.20.2"
   },
   "devDependencies": {

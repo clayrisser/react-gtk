@@ -7,8 +7,3 @@ export {
   <%- dataItem.klass.name -%>
 <% if (i < data.length - 1) { %>,<% }} %>
 };
-export default {
-  render,<% for (var i = 0; i < data.length; i++) { var dataItem = data[i]; %>
-  <%- dataItem.klass.name -%>
-<% if (i < data.length - 1) { %>,<% }} %>
-};

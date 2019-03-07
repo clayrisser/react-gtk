@@ -1,99 +1,163 @@
 import ReactReconciler from 'react-reconciler';
-// eslint-disable-next-line no-unused-vars
 import Element from './elements/Element';
 import createElement from './createElement';
+import dev from './dev';
+import {
+  ChildSet,
+  Container,
+  HostContext,
+  HydratableInstance,
+  Instance,
+  NoTimeout,
+  Props,
+  PublicInstance,
+  TextInstance,
+  TimeoutHandle,
+  Type,
+  UpdatePayload
+} from './types';
+import elements from './elements';
 
-interface Props {
-  [key: string]: Prop;
-}
-type Prop = any;
+// https://blog.atulr.com/react-custom-renderer-3
+// https://github.com/nitin42/Making-a-custom-React-renderer/blob/master/part-one.md
+
+const log = console;
+const { Label } = elements;
 
 export default ReactReconciler<
-  any,
+  Type,
   Props,
-  any,
-  Element,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any
+  Container,
+  Instance,
+  TextInstance,
+  HydratableInstance,
+  PublicInstance,
+  HostContext,
+  UpdatePayload,
+  ChildSet,
+  TimeoutHandle,
+  NoTimeout
 >({
-  appendInitialChild(parentInstance: Element, child: Element) {
-    return parentInstance.appendChild(child);
-  },
-
-  createInstance(type: string, props: Props) {
+  createInstance(
+    type: Type,
+    props: Props,
+    _rootContainerInstance: Container,
+    _hostContext: HostContext
+  ): Instance {
     return createElement(type, props);
   },
 
-  createTextInstance(text: string) {
-    return text;
+  appendInitialChild(
+    parentInstance: Instance,
+    child: Instance | TextInstance
+  ): void {
+    parentInstance.appendChild(child);
   },
 
-  finalizeInitialChildren() {
+  finalizeInitialChildren(
+    _parentInstance: Instance,
+    _type: Type,
+    _props: Props,
+    _rootContainerInstance: Container,
+    _hostContext: HostContext
+  ): boolean {
     return true;
   },
 
-  getPublicInstance(instance: Element) {
+  createTextInstance(
+    text: string,
+    _rootContainerInstance: Container,
+    _hostContext: HostContext
+  ) {
+    return new Label({ label: text });
+  },
+
+  getPublicInstance(instance: Instance | TextInstance): PublicInstance {
     return instance;
   },
 
-  prepareForCommit() {
-    return undefined;
+  prepareForCommit(_containerInfo: Container): void {
+    // noop
   },
 
-  prepareUpdate() {
+  prepareUpdate(
+    _instance: Instance,
+    _type: Type,
+    _oldProps: Props,
+    _newProps: Props,
+    _rootContainerInstance: Container,
+    _hostContext: HostContext
+  ): null | UpdatePayload {
     return true;
   },
 
-  resetAfterCommit() {
-    return undefined;
+  resetAfterCommit(_containerInfo: Container): void {
+    // noop
   },
 
-  resetTextContent() {
-    return undefined;
+  resetTextContent(_instance: Instance): void {
+    // noop
   },
 
-  getRootHostContext() {
-    return {};
+  commitTextUpdate(
+    _textInstance: TextInstance,
+    _oldText: string,
+    _newText: string
+  ): void {
+    throw new Error('commitTextUpdate should not be called');
   },
 
-  getChildHostContext() {
-    return {};
+  removeChild(parentInstance: Instance, child: Instance | TextInstance): void {
+    parentInstance.removeChild(child);
   },
 
-  shouldSetTextContent(props: Props) {
+  removeChildFromContainer(
+    _container: Container,
+    _child: Instance | TextInstance
+  ): void {
+    if (dev) log.warn("'removeChildFromContainer' not supported");
+  },
+
+  insertBefore(
+    _parentInstance: Instance,
+    _child: Instance | TextInstance,
+    _beforeChild: Instance | TextInstance
+  ): void {
+    if (dev) log.warn("'insertBefore' not supported");
+  },
+
+  appendChildToContainer(
+    container: Container,
+    child: Instance | TextInstance
+  ): void {
+    return container.appendChild(child);
+  },
+
+  appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
+    return parentInstance.appendChild(child);
+  },
+
+  shouldSetTextContent(_type: Type, props: Props): boolean {
+    // not exactly sure how this works
     if (typeof props.children === 'string') return true;
     return false;
   },
 
-  now() {
-    return 0;
+  getRootHostContext(rootContainerInstance: Container): HostContext {
+    if (dev) log.warn("'getRootHostContext' not supported");
+    return {};
   },
 
-  appendChild(parentInstance: Element, child: Element) {
-    return parentInstance.appendChild(child);
+  getChildHostContext(
+    _parentHostContext: HostContext,
+    _type: Type,
+    _rootContainerInstance: Container
+  ): HostContext {
+    if (dev) log.warn("'getChildHostContext' not supported");
+    return {};
   },
 
-  appendChildToContainer(parentInstance: Element, child: Element) {
-    return parentInstance.appendChild(child);
-  },
-
-  removeChild(parentInstance: Element, child: Element) {
-    return parentInstance.removeChild(child);
-  },
-
-  removeChildFromContainer(parentInstance: Element, child: Element) {
-    return parentInstance.removeChild(child);
-  },
-
-  insertBefore() {
-    return undefined;
-  },
+  now: Date.now,
 
   commitUpdate(
     instance: Element,
@@ -109,29 +173,44 @@ export default ReactReconciler<
     instance.commitMount();
   },
 
-  commitTextUpdate() {
-    throw new Error('commitTextUpdate should not be called');
-  },
-
   shouldDeprioritizeSubtree(): boolean {
     return true;
   },
 
-  scheduleDeferredCallback() {},
+  scheduleDeferredCallback(
+    callback: () => any,
+    _options: { timeout: number }
+  ): any {
+    if (callback) {
+      throw new Error(
+        'Scheduling a callback twice is excessive. Instead, keep track of ' +
+          'whether the callback has already been scheduled.'
+      );
+    }
+  },
 
-  cancelDeferredCallback() {},
+  cancelDeferredCallback(_callbackID: any): void {
+    // noop
+  },
 
-  setTimeout() {},
+  setTimeout(
+    handler: (...args: any[]) => void,
+    timeout: number
+  ): TimeoutHandle | NoTimeout {
+    return setTimeout(handler, timeout);
+  },
 
-  clearTimeout() {},
+  clearTimeout(handle: TimeoutHandle | NoTimeout): void {
+    return clearTimeout(handle);
+  },
 
-  noTimeout() {},
+  noTimeout: -1 as NoTimeout,
 
   isPrimaryRenderer: true,
 
   supportsMutation: true,
 
-  supportsPersistence: true,
+  supportsPersistence: false,
 
-  supportsHydration: true
+  supportsHydration: false
 });

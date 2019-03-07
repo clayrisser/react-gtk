@@ -30,7 +30,23 @@ npm install --save @react-gtk/binding
 
 ## Usage
 
-[Contribute](https://github.com/codejamninja/react-gtk/blob/master/CONTRIBUTING.md) usage docs
+```js
+import React, { Component } from 'react';
+import { render, Button, Box } from '@react-gtk/binding';
+
+class App extends Component {
+  render() {
+    return (
+      <Box>
+        <Button label="One" />
+        <Button label="Two" />
+      </Box>
+    );
+  }
+}
+
+render(<App />, 'My App');
+```
 
 
 ## Support

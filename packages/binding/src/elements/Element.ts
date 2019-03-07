@@ -1,24 +1,18 @@
 import PropTypes from 'prop-types';
+import { Instance, GtkNode, Prop, Props } from '../types';
 
 export interface ElementConstructor {
   new (node: GtkNode, props?: Props, meta?: Meta): Element;
-  defaultProps: Props;
   propTypes: object;
+  defaultProps: Props;
 }
 
-interface GtkNode {
-  [key: string]: any;
-}
-interface Props {
-  [key: string]: Prop;
-}
 interface Meta {
   isContainer?: boolean;
   mapChildren?: string;
 }
-type Prop = any;
 
-export default class Element {
+export default class Element implements Instance {
   static defaultProps: Props = {};
 
   static propTypes: object = {};

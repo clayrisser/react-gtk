@@ -1,6 +1,9 @@
+import * as pkg from '../package.json';
 import Gtk from './gtk';
 import Renderer from './reconciler';
 import Window from './elements/Window';
+import dev from './dev';
+import { BundleType } from './types';
 
 let hasStarted = false;
 
@@ -15,4 +18,9 @@ export default function render(element: Element, title = 'React Gtk') {
     window.node.showAll();
     Gtk.main();
   }
+  Renderer.injectIntoDevTools({
+    bundleType: Number(dev) as BundleType,
+    rendererPackageName: pkg.name,
+    version: pkg.version
+  });
 }

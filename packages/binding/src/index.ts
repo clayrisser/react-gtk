@@ -11,7 +11,6 @@ const ApplicationWindow = 'ApplicationWindow';
 const Arrow = 'Arrow';
 const AspectFrame = 'AspectFrame';
 const Assistant = 'Assistant';
-const Bin = 'Bin';
 const Box = 'Box';
 const Button = 'Button';
 const ButtonBox = 'ButtonBox';
@@ -26,7 +25,6 @@ const ColorSelection = 'ColorSelection';
 const ColorSelectionDialog = 'ColorSelectionDialog';
 const ComboBox = 'ComboBox';
 const ComboBoxText = 'ComboBoxText';
-const Container = 'Container';
 const Dialog = 'Dialog';
 const DrawingArea = 'DrawingArea';
 const Entry = 'Entry';
@@ -71,10 +69,8 @@ const Menu = 'Menu';
 const MenuBar = 'MenuBar';
 const MenuButton = 'MenuButton';
 const MenuItem = 'MenuItem';
-const MenuShell = 'MenuShell';
 const MenuToolButton = 'MenuToolButton';
 const MessageDialog = 'MessageDialog';
-const Misc = 'Misc';
 const ModelButton = 'ModelButton';
 const Notebook = 'Notebook';
 const OffscreenWindow = 'OffscreenWindow';
@@ -88,7 +84,6 @@ const ProgressBar = 'ProgressBar';
 const RadioButton = 'RadioButton';
 const RadioMenuItem = 'RadioMenuItem';
 const RadioToolButton = 'RadioToolButton';
-const Range = 'Range';
 const RecentChooserDialog = 'RecentChooserDialog';
 const RecentChooserMenu = 'RecentChooserMenu';
 const RecentChooserWidget = 'RecentChooserWidget';
@@ -149,7 +144,6 @@ export {
   Arrow,
   AspectFrame,
   Assistant,
-  Bin,
   Box,
   Button,
   ButtonBox,
@@ -164,7 +158,6 @@ export {
   ColorSelectionDialog,
   ComboBox,
   ComboBoxText,
-  Container,
   Dialog,
   DrawingArea,
   Entry,
@@ -209,10 +202,8 @@ export {
   MenuBar,
   MenuButton,
   MenuItem,
-  MenuShell,
   MenuToolButton,
   MessageDialog,
-  Misc,
   ModelButton,
   Notebook,
   OffscreenWindow,
@@ -226,7 +217,6 @@ export {
   RadioButton,
   RadioMenuItem,
   RadioToolButton,
-  Range,
   RecentChooserDialog,
   RecentChooserMenu,
   RecentChooserWidget,

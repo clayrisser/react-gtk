@@ -56,7 +56,10 @@ export default class Renderer {
     if (this._data) return this._data;
     const data = [];
     await mapSeries(this.gtkGir.classes, async klass => {
-      if (klass.hasParent({ name: 'Widget' })) {
+      if (
+        klass.hasParent({ name: 'Widget' }) &&
+        klass.attrs?.abstract !== '1'
+      ) {
         data.push({
           klass: {
             name: klass.attrs.name

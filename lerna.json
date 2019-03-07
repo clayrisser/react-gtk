@@ -1,4 +1,8 @@
 {
-  "packages": ["examples/*", "generate", "packages/*"],
-  "version": "0.1.33"
+  "packages": [
+    "examples/*",
+    "generate",
+    "packages/*"
+  ],
+  "version": "0.0.4"
 }

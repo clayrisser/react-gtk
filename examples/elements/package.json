@@ -1,6 +1,6 @@
 {
   "name": "elements",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "private": true,
   "description": "react gtk elements example",
   "keywords": [
@@ -40,7 +40,7 @@
     "test": "npm run lint"
   },
   "dependencies": {
-    "@react-gtk/binding": "^0.0.3",
+    "@react-gtk/binding": "^0.0.4",
     "react": "^16.8.4"
   },
   "devDependencies": {

@@ -1,4 +1,5 @@
 import { ElementConstructor } from './Element';
+
 import AboutDialog from './AboutDialog';
 import AccelLabel from './AccelLabel';
 import ActionBar from './ActionBar';
@@ -10,7 +11,6 @@ import ApplicationWindow from './ApplicationWindow';
 import Arrow from './Arrow';
 import AspectFrame from './AspectFrame';
 import Assistant from './Assistant';
-import Bin from './Bin';
 import Box from './Box';
 import Button from './Button';
 import ButtonBox from './ButtonBox';
@@ -25,7 +25,6 @@ import ColorSelection from './ColorSelection';
 import ColorSelectionDialog from './ColorSelectionDialog';
 import ComboBox from './ComboBox';
 import ComboBoxText from './ComboBoxText';
-import Container from './Container';
 import Dialog from './Dialog';
 import DrawingArea from './DrawingArea';
 import Entry from './Entry';
@@ -70,10 +69,8 @@ import Menu from './Menu';
 import MenuBar from './MenuBar';
 import MenuButton from './MenuButton';
 import MenuItem from './MenuItem';
-import MenuShell from './MenuShell';
 import MenuToolButton from './MenuToolButton';
 import MessageDialog from './MessageDialog';
-import Misc from './Misc';
 import ModelButton from './ModelButton';
 import Notebook from './Notebook';
 import OffscreenWindow from './OffscreenWindow';
@@ -87,7 +84,6 @@ import ProgressBar from './ProgressBar';
 import RadioButton from './RadioButton';
 import RadioMenuItem from './RadioMenuItem';
 import RadioToolButton from './RadioToolButton';
-import Range from './Range';
 import RecentChooserDialog from './RecentChooserDialog';
 import RecentChooserMenu from './RecentChooserMenu';
 import RecentChooserWidget from './RecentChooserWidget';
@@ -147,7 +143,6 @@ export default {
   Arrow,
   AspectFrame,
   Assistant,
-  Bin,
   Box,
   Button,
   ButtonBox,
@@ -162,7 +157,6 @@ export default {
   ColorSelectionDialog,
   ComboBox,
   ComboBoxText,
-  Container,
   Dialog,
   DrawingArea,
   Entry,
@@ -207,10 +201,8 @@ export default {
   MenuBar,
   MenuButton,
   MenuItem,
-  MenuShell,
   MenuToolButton,
   MessageDialog,
-  Misc,
   ModelButton,
   Notebook,
   OffscreenWindow,
@@ -224,7 +216,6 @@ export default {
   RadioButton,
   RadioMenuItem,
   RadioToolButton,
-  Range,
   RecentChooserDialog,
   RecentChooserMenu,
   RecentChooserWidget,

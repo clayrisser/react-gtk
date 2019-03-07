@@ -1,6 +1,6 @@
 {
   "name": "elements",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": true,
   "description": "react gtk elements example",
   "keywords": [
@@ -41,7 +41,7 @@
     "text": "babel-node src/text"
   },
   "dependencies": {
-    "@react-gtk/binding": "^0.0.6",
+    "@react-gtk/binding": "^0.0.7",
     "react": "^16.8.4"
   },
   "devDependencies": {

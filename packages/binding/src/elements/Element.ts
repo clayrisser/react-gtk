@@ -1,5 +1,11 @@
 import PropTypes from 'prop-types';
 
+export interface ElementConstructor {
+  new (node: GtkNode, props?: Props, meta?: Meta): Element;
+  defaultProps: Props;
+  propTypes: object;
+}
+
 interface GtkNode {
   [key: string]: any;
 }
@@ -13,11 +19,9 @@ interface Meta {
 type Prop = any;
 
 export default class Element {
-  ['constructor']: typeof Element;
+  static defaultProps: Props = {};
 
   static propTypes: object = {};
-
-  static defaultProps: Props = {};
 
   node: GtkNode;
 
@@ -29,7 +33,7 @@ export default class Element {
 
   children: Element[] = [];
 
-  constructor(node: GtkNode, props = {}, meta = {}) {
+  constructor(node: GtkNode, props: Props = {}, meta: Meta = {}) {
     const { isContainer = false, mapChildren }: Meta = meta;
     this.props = props;
     this.node = node;
@@ -87,7 +91,7 @@ export default class Element {
   }
 
   setDefaultProps() {
-    const { defaultProps } = this.constructor;
+    const { defaultProps, propTypes } = this.constructor as ElementConstructor;
     const props: Props = {};
     Object.keys(defaultProps).forEach(key => {
       const defaultProp = defaultProps[key];
@@ -103,7 +107,7 @@ export default class Element {
       props
     } as Props;
     PropTypes.checkPropTypes(
-      this.constructor.propTypes,
+      propTypes,
       this.props,
       'prop',
       this.constructor.name

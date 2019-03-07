@@ -1,4 +1,6 @@
 import ReactReconciler from 'react-reconciler';
+// eslint-disable-next-line no-unused-vars
+import Element from './elements/Element';
 import createElement from './createElement';
 
 interface Props {
@@ -6,7 +8,20 @@ interface Props {
 }
 type Prop = any;
 
-export default ReactReconciler({
+export default ReactReconciler<
+  any,
+  Props,
+  any,
+  Element,
+  any,
+  any,
+  any,
+  any,
+  any,
+  any,
+  any,
+  any
+>({
   appendInitialChild(parentInstance: Element, child: Element) {
     return parentInstance.appendChild(child);
   },
@@ -60,45 +75,63 @@ export default ReactReconciler({
     return 0;
   },
 
-  mutation: {
-    appendChild(parentInstance: Element, child: Element) {
-      return parentInstance.appendChild(child);
-    },
-
-    appendChildToContainer(parentInstance: Element, child: Element) {
-      return parentInstance.appendChild(child);
-    },
-
-    removeChild(parentInstance: Element, child: Element) {
-      return parentInstance.removeChild(child);
-    },
-
-    removeChildFromContainer(parentInstance: Element, child: Element) {
-      return parentInstance.removeChild(child);
-    },
-
-    insertBefore() {
-      return undefined;
-    },
-
-    commitUpdate(
-      instance: Element,
-      _updatePayload: any,
-      _type: string,
-      _oldProps: Props,
-      newProps: Props
-    ) {
-      return instance.commitUpdate(newProps);
-    },
-
-    commitMount(instance: Element) {
-      instance.commitMount();
-    },
-
-    commitTextUpdate() {
-      throw new Error('commitTextUpdate should not be called');
-    }
+  appendChild(parentInstance: Element, child: Element) {
+    return parentInstance.appendChild(child);
   },
 
-  useSyncScheduling: true
+  appendChildToContainer(parentInstance: Element, child: Element) {
+    return parentInstance.appendChild(child);
+  },
+
+  removeChild(parentInstance: Element, child: Element) {
+    return parentInstance.removeChild(child);
+  },
+
+  removeChildFromContainer(parentInstance: Element, child: Element) {
+    return parentInstance.removeChild(child);
+  },
+
+  insertBefore() {
+    return undefined;
+  },
+
+  commitUpdate(
+    instance: Element,
+    _updatePayload: any,
+    _type: string,
+    _oldProps: Props,
+    newProps: Props
+  ) {
+    return instance.commitUpdate(newProps);
+  },
+
+  commitMount(instance: Element) {
+    instance.commitMount();
+  },
+
+  commitTextUpdate() {
+    throw new Error('commitTextUpdate should not be called');
+  },
+
+  shouldDeprioritizeSubtree(): boolean {
+    return true;
+  },
+
+  scheduleDeferredCallback() {},
+
+  cancelDeferredCallback() {},
+
+  setTimeout() {},
+
+  clearTimeout() {},
+
+  noTimeout() {},
+
+  isPrimaryRenderer: true,
+
+  supportsMutation: true,
+
+  supportsPersistence: true,
+
+  supportsHydration: true
 });

@@ -1,0 +1,64 @@
+{
+  "name": "button",
+  "version": "0.0.1",
+  "private": true,
+  "description": "react gtk button example",
+  "keywords": [
+    "button",
+    "button",
+    "react",
+    "gtk"
+  ],
+  "homepage": "https://github.com/codejamninja/react-gtk/examples/button",
+  "bugs": {
+    "url": "https://github.com/codejamninja/react-gtk/issues",
+    "email": "jam@codejam.ninja"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Jam Risser",
+    "email": "jam@codejam.ninja",
+    "url": "https://codejam.ninja"
+  },
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codejamninja/react-gtk"
+  },
+  "scripts": {
+    "build": "npm run test && babel src -d lib",
+    "clean": "git clean -fXd -e \\!node_modules -e \\!node_modules/**/*",
+    "clean:purge": "git clean -fXd",
+    "format": "prettier --write ./src/**/*.js",
+    "lint": "npm run format && eslint ./",
+    "lint:fix": "npm run format && eslint --fix ./",
+    "prepublish": "npm run build",
+    "start": "babel-node src",
+    "test": "npm run lint"
+  },
+  "dependencies": {
+    "@react-gtk/binding": "^0.0.3",
+    "react": "^16.8.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.0",
+    "@babel/node": "^7.2.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-preset-jam": "^0.1.0",
+    "eslint": "^5.9.0",
+    "eslint-config-jam": "^0.1.6",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4",
+    "yo": "^2.0.5"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "eslintIgnore": [
+    "lib"
+  ]
+}

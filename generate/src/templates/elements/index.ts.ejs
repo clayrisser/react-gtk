@@ -1,15 +1,11 @@
+import { ElementConstructor } from './Element';
 <% for (var i = 0; i < data.length; i++) { var dataItem = data[i]; %>
 import <%- dataItem.klass.name %> from './<%- dataItem.klass.name %>';<% } %>
 
-export {
-  <% for (var i = 0; i < data.length; i++) { var dataItem = data[i]; %>
-  <%- dataItem.klass.name -%>
-<% if (i < data.length - 1) { %>,<% }} %>
-};
 export default {
   <% for (var i = 0; i < data.length; i++) { var dataItem = data[i]; %>
   <%- dataItem.klass.name -%>
 <% if (i < data.length - 1) { %>,<% }} %>
 } as {
-[key: string]: Element;
+  [key: string]: ElementConstructor;
 };

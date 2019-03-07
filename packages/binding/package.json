@@ -1,6 +1,6 @@
 {
   "name": "@react-gtk/binding",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "react gtk bindings",
   "keywords": [
     "bridge",

@@ -29,15 +29,14 @@ export default class Element implements Instance {
 
   constructor(node: GtkNode, props: Props = {}, meta: Meta = {}) {
     const { isContainer = false, mapChildren }: Meta = meta;
-    this.props = props;
     this.node = node;
     this.isContainer = isContainer;
     this.mapChildren = mapChildren;
-    this.setDefaultProps();
+    this.props = this.getProps(props);
   }
 
   appendChild(child: Element) {
-    this.node.showAll();
+    this.update();
     this.children.push(child);
     if (this.isContainer) this.node.add(child.node);
   }
@@ -74,37 +73,22 @@ export default class Element implements Instance {
     }
     Object.keys(this.props).forEach((key: string) => {
       const prop: Prop = this.props[key];
-      if (
-        typeof prop !== 'undefined' &&
-        prop !== null &&
-        Object.keys(Object.getPrototypeOf(this.node)).includes(key)
-      ) {
+      if (typeof prop !== 'undefined' && prop !== null) {
         this.node[key] = prop;
       }
     });
   }
 
-  setDefaultProps() {
+  getProps(props: Props): Props {
+    props = { ...props };
     const { defaultProps, propTypes } = this.constructor as ElementConstructor;
-    const props: Props = {};
     Object.keys(defaultProps).forEach(key => {
       const defaultProp = defaultProps[key];
-      if (
-        !(defaultProp in this.props) ||
-        typeof this.props[key] === 'undefined'
-      ) {
+      if (typeof props[key] === 'undefined' || props[key] === null) {
         props[key] = defaultProp;
       }
     });
-    this.props = {
-      ...this.props,
-      props
-    } as Props;
-    PropTypes.checkPropTypes(
-      propTypes,
-      this.props,
-      'prop',
-      this.constructor.name
-    );
+    PropTypes.checkPropTypes(propTypes, props, 'prop', this.constructor.name);
+    return props;
   }
 }

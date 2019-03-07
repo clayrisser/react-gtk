@@ -1,5 +1,4 @@
 import ReactReconciler from 'react-reconciler';
-import Element from './elements/Element';
 import createElement from './createElement';
 import dev from './dev';
 import {
@@ -21,8 +20,12 @@ import elements from './elements';
 // https://blog.atulr.com/react-custom-renderer-3
 // https://github.com/nitin42/Making-a-custom-React-renderer/blob/master/part-one.md
 
+const { env } = process;
 const log = console;
 const { Label } = elements;
+const debug: boolean = !!(
+  env.REACT_GTK_DEBUG && (env.REACT_GTK_DEBUG || '').toLowerCase() !== 'false'
+);
 
 export default ReactReconciler<
   Type,
@@ -44,6 +47,7 @@ export default ReactReconciler<
     _rootContainerInstance: Container,
     _hostContext: HostContext
   ): Instance {
+    if (debug) log.info(type);
     return createElement(type, props);
   },
 
@@ -68,8 +72,11 @@ export default ReactReconciler<
     text: string,
     _rootContainerInstance: Container,
     _hostContext: HostContext
-  ) {
-    return new Label({ label: text });
+  ): TextInstance {
+    if (debug) log.info('text');
+    const label = new Label({ label: text });
+    label.commitMount(); // prob should run at a later point
+    return label;
   },
 
   getPublicInstance(instance: Instance | TextInstance): PublicInstance {
@@ -160,16 +167,16 @@ export default ReactReconciler<
   now: Date.now,
 
   commitUpdate(
-    instance: Element,
+    instance: Instance,
     _updatePayload: any,
     _type: string,
     _oldProps: Props,
     newProps: Props
-  ) {
+  ): void {
     return instance.commitUpdate(newProps);
   },
 
-  commitMount(instance: Element) {
+  commitMount(instance: Instance, _type: Type, _newProps: Props): void {
     instance.commitMount();
   },
 

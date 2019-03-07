@@ -33,11 +33,13 @@ export interface Context {
 }
 
 export interface Instance {
-  appendChild(child: Instance): void;
+  appendChild(child: Instance | TextInstance): void;
   children: Instance[];
+  commitMount(): void;
+  commitUpdate(newProps: Props): void;
   node: GtkNode;
   props: Props;
-  removeChild(child: Instance): void;
+  removeChild(child: Instance | TextInstance): void;
 }
 
 export interface GtkNode {

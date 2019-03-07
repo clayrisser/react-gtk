@@ -37,7 +37,8 @@
     "lint": "npm run format && eslint ./",
     "lint:fix": "npm run format && eslint --fix ./",
     "prepublish": "npm run build",
-    "test": "npm run lint"
+    "test": "npm run lint",
+    "text": "babel-node src/text"
   },
   "dependencies": {
     "@react-gtk/binding": "^0.0.6",

@@ -6,6 +6,8 @@
 
 Please ★ this repo if you found it useful ★ ★ ★
 
+Built with [Node GTK](https://github.com/romgrk/node-gtk)
+
 
 ## Features
 

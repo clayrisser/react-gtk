@@ -12,7 +12,7 @@ Built with [Node GTK](https://github.com/romgrk/node-gtk)
 ## Features
 
 * supports native osx desktop
-* supports native dinux desktop
+* supports native linux desktop
 * supports native windows desktop
 
 

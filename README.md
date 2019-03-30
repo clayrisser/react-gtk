@@ -8,6 +8,11 @@ Please ★ this repo if you found it useful ★ ★ ★
 
 Built with [Node GTK](https://github.com/romgrk/node-gtk)
 
+## (FILE ISSUE)[https://github.com/codejamninja/react-gtk/issues/new]
+This project is under active development. Please help by sharing your
+expirience, bugs, comments, complaints, etc . . .
+
+If you think it, say it :laughing:
 
 ## Features
 

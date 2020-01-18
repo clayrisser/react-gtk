@@ -1,6 +1,6 @@
 # react-gtk
 
-[![GitHub stars](https://img.shields.io/github/stars/codejamninja/react-gtk.svg?style=social&label=Stars)](https://github.com/codejamninja/react-gtk)
+[![Financial Contributors on Open Collective](https://opencollective.com/reactgtk/all/badge.svg?label=financial+contributors)](https://opencollective.com/reactgtk) [![GitHub stars](https://img.shields.io/github/stars/codejamninja/react-gtk.svg?style=social&label=Stars)](https://github.com/codejamninja/react-gtk)
 
 > cross-platform react native desktop applications
 
@@ -76,6 +76,36 @@ Submit an [issue](https://github.com/codejamninja/react-gtk/issues/new)
 
 Review the [guidelines for contributing](https://github.com/codejamninja/react-gtk/blob/master/CONTRIBUTING.md)
 
+
+## Contributors
+
+### Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/codejamninja/react-gtk/graphs/contributors"><img src="https://opencollective.com/reactgtk/contributors.svg?width=890&button=false" /></a>
+
+### Financial Contributors
+
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/reactgtk/contribute)]
+
+#### Individuals
+
+<a href="https://opencollective.com/reactgtk"><img src="https://opencollective.com/reactgtk/individuals.svg?width=890"></a>
+
+#### Organizations
+
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/reactgtk/contribute)]
+
+<a href="https://opencollective.com/reactgtk/organization/0/website"><img src="https://opencollective.com/reactgtk/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/reactgtk/organization/1/website"><img src="https://opencollective.com/reactgtk/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/reactgtk/organization/2/website"><img src="https://opencollective.com/reactgtk/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/reactgtk/organization/3/website"><img src="https://opencollective.com/reactgtk/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/reactgtk/organization/4/website"><img src="https://opencollective.com/reactgtk/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/reactgtk/organization/5/website"><img src="https://opencollective.com/reactgtk/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/reactgtk/organization/6/website"><img src="https://opencollective.com/reactgtk/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/reactgtk/organization/7/website"><img src="https://opencollective.com/reactgtk/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/reactgtk/organization/8/website"><img src="https://opencollective.com/reactgtk/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/reactgtk/organization/9/website"><img src="https://opencollective.com/reactgtk/organization/9/avatar.svg"></a>
 
 ## License
 

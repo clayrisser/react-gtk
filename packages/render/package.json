@@ -47,6 +47,7 @@
     "core-js": "^3.6.5",
     "gnumake": "^0.1.0",
     "node-gtk": "^0.4.0",
+    "prop-types": "^15.7.2",
     "react-reconciler": "^0.25.1"
   },
   "devDependencies": {

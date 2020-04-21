@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { WeakValidationMap } from 'react';
 import { Node, Prop, Props, Meta, Instance, TextInstance } from '../types';
 
@@ -24,7 +25,7 @@ export default class BaseElement<Widget = Gtk.Widget> {
     if (Array.isArray(node)) throw new Error('cannot be array');
     this.meta = { ...this.meta, ...meta };
     this.node = node;
-    this.props = props;
+    this.props = this.getProps(props);
   }
 
   get isContainer() {
@@ -54,7 +55,7 @@ export default class BaseElement<Widget = Gtk.Widget> {
   commitUpdate(newProps: Props) {
     this.props = {
       ...this.props,
-      ...newProps,
+      ...newProps
     };
     this.update();
   }
@@ -80,5 +81,18 @@ export default class BaseElement<Widget = Gtk.Widget> {
         node[key] = prop;
       }
     });
+  }
+
+  getProps(props: Props): Props {
+    props = { ...props };
+    const { defaultProps, propTypes } = this.constructor as typeof BaseElement;
+    Object.keys(defaultProps).forEach(key => {
+      const defaultProp = defaultProps[key];
+      if (typeof props[key] === 'undefined' || props[key] === null) {
+        props[key] = defaultProp;
+      }
+    });
+    PropTypes.checkPropTypes(propTypes, props, 'prop', this.constructor.name);
+    return props;
   }
 }

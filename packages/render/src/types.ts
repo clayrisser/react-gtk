@@ -31,7 +31,8 @@ export interface Meta {
 }
 
 export interface Options {
-  [key: string]: any;
+  title: string;
+  debug: boolean;
 }
 
 export type BundleType = 0 | 1;

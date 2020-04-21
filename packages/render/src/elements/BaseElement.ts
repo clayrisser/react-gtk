@@ -8,7 +8,7 @@ export default class BaseElement<Widget = Gtk.Widget> {
 
   private _isContainer: boolean;
 
-  meta: Meta;
+  meta: Meta = {};
 
   node: Node<Widget>;
 
@@ -19,15 +19,10 @@ export default class BaseElement<Widget = Gtk.Widget> {
   constructor(
     node: Node<Widget> | Node<Widget>[],
     props: Props = {},
-    meta?: Partial<Meta>
+    meta: Partial<Meta> = {}
   ) {
     if (Array.isArray(node)) throw new Error('cannot be array');
-    if (meta) {
-      this.meta = {
-        ...this.meta,
-        ...meta,
-      };
-    }
+    this.meta = { ...this.meta, ...meta };
     this.node = node;
     this.props = props;
   }

@@ -1,5 +1,11 @@
 import { BaseNode, Node, Instance, Props } from '../types';
 
+export interface IElement {
+  new (props?: Props): BaseElement;
+  propTypes: object;
+  defaultProps: Props;
+}
+
 export default class BaseElement implements Instance {
   static defaultProps: Props = {};
 

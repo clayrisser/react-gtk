@@ -7,5 +7,6 @@
     "bulma",
     "roboto",
     "zipcodes"
-  ]
+  ],
+  "ignorePaths": ["src/@types/generated"]
 }

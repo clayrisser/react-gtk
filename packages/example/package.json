@@ -1,12 +1,12 @@
 {
-  "name": "@react-gtk/generate",
+  "name": "@react-gtk/example",
   "version": "0.0.1",
-  "description": "react-gtk generate",
+  "description": "react-gtk example",
   "keywords": [
     "react-gtk",
-    "generate"
+    "example"
   ],
-  "homepage": "https://github.com/codejamninja/react-gtk/packages/generate",
+  "homepage": "https://github.com/codejamninja/react-gtk/packages/example",
   "bugs": {
     "url": "https://github.com/codejamninja/react-gtk/issues",
     "email": "jam@codejam.ninja"
@@ -33,6 +33,7 @@
     "build": "make -s build",
     "clean": "make -s clean",
     "format": "make -s format",
+    "generate": "make -s generate",
     "inc": "npm version patch --git=false 2>/dev/null || true",
     "lint": "make -s lint",
     "make": "make --version",
@@ -43,13 +44,9 @@
     "test:watch": "make -s test-watch"
   },
   "dependencies": {
-    "@babel/runtime": "^7.9.2",
-    "@oclif/command": "^1.5.19",
-    "@oclif/config": "^1.14.0",
-    "@oclif/errors": "^1.2.2",
-    "@oclif/parser": "^3.8.4",
     "core-js": "^3.6.5",
-    "gnumake": "^0.1.0"
+    "gnumake": "^0.1.0",
+    "node-gtk": "^0.4.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -61,7 +58,6 @@
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-typescript": "^7.9.0",
-    "@oclif/dev-cli": "^1.22.2",
     "@types/core-js": "^2.5.3",
     "@types/jest": "^25.2.1",
     "@types/node": "^13.11.1",
@@ -72,6 +68,7 @@
     "jest-sonar-reporter": "^2.0.0",
     "prettier": "^2.0.4",
     "regenerator-runtime": "^0.13.5",
+    "ts-for-gir": "^1.0.1",
     "typescript": "^3.8.3"
   },
   "engines": {
@@ -83,13 +80,6 @@
   "jest": {
     "testRegex": "tests(/|/.*/)[^_/]*[jt]sx?$",
     "verbose": true
-  },
-  "oclif": {
-    "commands": "./lib/commands",
-    "bin": "react-gtk",
-    "hooks": {
-      "init": "./lib/hooks/init"
-    }
   },
   "jestSonar": {
     "reportPath": "node_modules/.tmp/reports",

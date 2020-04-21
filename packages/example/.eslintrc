@@ -1,0 +1,3 @@
+{
+  "extends": ["reactant/typescript/base"]
+}

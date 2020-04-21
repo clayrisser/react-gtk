@@ -54,6 +54,10 @@ lint: node_modules/.make/spellcheck
 node_modules/.tmp/eslintReport.json: $(shell $(GIT) ls-files | grep -E "\.(j|t)sx?$$")
 	-@$(MAKE) -s lint
 
+.PHONY: generate
+generate:
+	@ts-for-gir generate
+
 .PHONY: test
 test: node_modules/.tmp/eslintReport.json
 	@jest --json --outputFile=node_modules/.tmp/jestTestResults.json --coverage --coverageDirectory=node_modules/.tmp/coverage --testResultsProcessor=jest-sonar-reporter --collectCoverageFrom='["src/**/*.{js,jsx,ts,tsx}","!src/**/*.story.{js,jsx,ts,tsx}"]' $(ARGS)
@@ -69,18 +73,18 @@ test-watch: node_modules/.tmp/eslintReport.json
 	@jest --watch --collectCoverageFrom='["src/**/*.{js,jsx,ts,tsx}","!src/**/*.story.{js,jsx,ts,tsx}"]' $(ARGS)
 
 .PHONY: test-ui
-test-ui: src/generated/apollo.tsx node_modules
+test-ui: src/exampled/apollo.tsx node_modules
 	@majestic $(ARGS)
 
 .PHONY: clean
 clean:
 	-@jest --clearCache
 	@git clean -fXd \
-		-e \!/packages/generate/node_modules \
-		-e \!/packages/generate/node_modules/**/* \
-		-e \!/packages/generate/package-lock.json \
-		-e \!/packages/generate/pnpm-lock.yaml \
-		-e \!/packages/generate/yarn.lock
+		-e \!/packages/example/node_modules \
+		-e \!/packages/example/node_modules/**/* \
+		-e \!/packages/example/package-lock.json \
+		-e \!/packages/example/pnpm-lock.yaml \
+		-e \!/packages/example/yarn.lock
 	-@rm -rf node_modules/.cache || true
 	-@rm -rf node_modules/.make || true
 	-@rm -rf node_modules/.tmp || true
@@ -99,7 +103,7 @@ lib: node_modules/.tmp/coverage/lcov.info $(shell $(GIT) ls-files)
 
 .PHONY: start
 start: node_modules
-	@babel-node --extensions '.ts,.tsx' src/bin start $(ARGS)
+	@babel-node --extensions '.ts,.tsx' src $(ARGS)
 
 .PHONY: purge
 purge: clean

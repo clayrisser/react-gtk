@@ -1,34 +1,53 @@
-import { ParserOptions } from '@babel/parser';
-import { Node, Instance, Props } from '../types';
+import { WeakValidationMap } from 'react';
+import { Node, Props, Meta, Instance, TextInstance } from '../types';
 
-export interface IElement<Widget = any> {
-  new (props?: Props, parserOptions?: ParserOptions): BaseElement<Widget>;
-  propTypes: object;
-  defaultProps: Props;
-}
-
-export default class BaseElement<Widget = globalThis.Gtk.Widget>
-  implements Instance<Widget> {
+export default class BaseElement<Widget = any> {
   static defaultProps: Props = {};
 
-  static propTypes: object = {};
+  static propTypes: WeakValidationMap<any> = {};
+
+  meta: Meta;
 
   node: Node<Widget>;
 
   props: Props;
 
-  children: BaseElement<Widget>[] = [];
+  children: Instance[] = [];
 
-  constructor(node: Node<Widget> | Node<Widget>[], _props: Props = {}) {
+  constructor(
+    node: Node<Widget> | Node<Widget>[],
+    props: Props = {},
+    meta?: Partial<Meta>
+  ) {
     if (Array.isArray(node)) throw new Error('cannot be array');
+    if (meta) {
+      this.meta = {
+        ...this.meta,
+        ...meta
+      };
+    }
     this.node = node;
+    this.props = props;
   }
 
-  appendChild(_child: BaseElement<Widget>) {}
+  appendChild(child: Instance | TextInstance) {
+    // this.update();
+    this.children.push(child);
+    // if (this.isContainer) this.node.add(child.node);
+  }
 
-  removeChild(_child: BaseElement<Widget>) {}
+  removeChild(child: Instance | TextInstance) {
+    this.children.splice(this.children.indexOf(child), 1);
+    // if (this.isContainer) this.node.remove(child.node);
+  }
 
   commitMount() {}
 
-  commitUpdate(_newProps: Props) {}
+  commitUpdate(newProps: Props) {
+    this.props = {
+      ...this.props,
+      ...newProps
+    };
+    // this.update();
+  }
 }

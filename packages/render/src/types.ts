@@ -1,3 +1,20 @@
+import { WeakValidationMap } from 'react';
+
+export class Instance<Widget = any> {
+  static defaultProps: Props = {};
+  static propTypes: WeakValidationMap<any> = {};
+  constructor(_props: Props = {}) {}
+  appendChild(_child: Instance | TextInstance): void {}
+  children: Instance[];
+  commitMount(): void {}
+  commitUpdate(_newProps: Props): void {}
+  node: Node<Widget>;
+  props: Props;
+  removeChild(_child: Instance | TextInstance): void {}
+}
+
+export interface Meta {}
+
 export interface Options {
   [key: string]: any;
 }
@@ -34,16 +51,6 @@ export interface DeepArray<T> extends Array<T | DeepArray<T>> {}
 
 export interface Props {
   [key: string]: Prop;
-}
-
-export interface Instance<Widget = any> {
-  appendChild(child: Instance<Widget> | TextInstance<Widget>): void;
-  children: Instance<Widget>[];
-  commitMount(): void;
-  commitUpdate(newProps: Props): void;
-  node: Node<Widget>;
-  props: Props;
-  removeChild(child: Instance<Widget> | TextInstance<Widget>): void;
 }
 
 export interface Pkg {

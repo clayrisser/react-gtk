@@ -12,7 +12,7 @@ import {
   TextInstance,
   TimeoutHandle,
   Type,
-  UpdatePayload,
+  UpdatePayload
 } from './types';
 
 // eslint-disable-next-line no-console
@@ -214,5 +214,5 @@ export default ReactReconciler<
 
   supportsPersistence: false,
 
-  supportsHydration: false,
+  supportsHydration: false
 });

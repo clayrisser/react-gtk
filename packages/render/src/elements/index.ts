@@ -1,8 +1,8 @@
-import { IElement } from './BaseElement';
+import { Instance } from '../types';
 import Window from './Window';
 
 export interface Elements {
-  [key: string]: IElement;
+  [key: string]: typeof Instance;
 }
 
 export { Window };

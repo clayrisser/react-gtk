@@ -44,7 +44,6 @@
     "test:watch": "make -s test-watch"
   },
   "dependencies": {
-    "@babel/parser": "^7.9.4",
     "core-js": "^3.6.5",
     "gnumake": "^0.1.0",
     "node-gtk": "^0.4.0",
@@ -63,6 +62,7 @@
     "@types/core-js": "^2.5.3",
     "@types/jest": "^25.2.1",
     "@types/node": "^13.11.1",
+    "@types/prop-types": "^15.7.3",
     "@types/react": "^16.9.34",
     "@types/react-reconciler": "^0.18.0",
     "cspell": "^4.0.55",

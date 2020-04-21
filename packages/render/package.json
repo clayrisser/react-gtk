@@ -1,12 +1,12 @@
 {
-  "name": "@react-gtk/example",
+  "name": "@react-gtk/render",
   "version": "0.0.1",
-  "description": "react-gtk example",
+  "description": "react-gtk render",
   "keywords": [
     "react-gtk",
-    "example"
+    "render"
   ],
-  "homepage": "https://github.com/codejamninja/react-gtk/packages/example",
+  "homepage": "https://github.com/codejamninja/react-gtk/packages/render",
   "bugs": {
     "url": "https://github.com/codejamninja/react-gtk/issues",
     "email": "jam@codejam.ninja"
@@ -47,7 +47,7 @@
     "core-js": "^3.6.5",
     "gnumake": "^0.1.0",
     "node-gtk": "^0.4.0",
-    "react": "^16.13.1"
+    "react-reconciler": "^0.25.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -58,13 +58,11 @@
     "@babel/plugin-proposal-optional-chaining": "^7.9.0",
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
-    "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
-    "@react-gtk/render": "workspace:*",
     "@types/core-js": "^2.5.3",
     "@types/jest": "^25.2.1",
     "@types/node": "^13.11.1",
-    "@types/react": "^16.9.34",
+    "@types/react-reconciler": "^0.18.0",
     "cspell": "^4.0.55",
     "eslint": "^6.8.0",
     "eslint-config-reactant": "^0.1.144",

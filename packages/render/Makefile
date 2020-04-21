@@ -33,7 +33,7 @@ prepare:
 
 .PHONY: format
 format: install
-	-@eslint --fix --ext .ts,.tsx . >/dev/null || true
+	-@eslint --fix --ext .ts,.tsx src >/dev/null || true
 	@prettier --write ./**/*.{json,md,scss,yaml,yml,js,jsx,ts,tsx} --ignore-path .gitignore
 	@mkdir -p node_modules/.make && touch -m node_modules/.make/format
 node_modules/.make/format: $(shell $(GIT) ls-files | grep -E "\.(j|t)sx?$$")
@@ -49,8 +49,8 @@ node_modules/.make/spellcheck: $(shell $(GIT) ls-files | grep -E "\.(j|t)sx?$$")
 .PHONY: lint
 lint: node_modules/.make/spellcheck
 	-@tsc --allowJs --noEmit
-	-@eslint --ext .ts,.tsx .
-	@eslint -f json -o node_modules/.tmp/eslintReport.json --ext .ts,.tsx ./
+	-@eslint --ext .ts,.tsx src
+	@eslint -f json -o node_modules/.tmp/eslintReport.json --ext .ts,.tsx src
 node_modules/.tmp/eslintReport.json: $(shell $(GIT) ls-files | grep -E "\.(j|t)sx?$$")
 	-@$(MAKE) -s lint
 
@@ -80,11 +80,11 @@ test-ui: src/renderd/apollo.tsx node_modules
 clean:
 	-@jest --clearCache
 	@git clean -fXd \
-		-e \!/packages/example/node_modules \
-		-e \!/packages/example/node_modules/**/* \
-		-e \!/packages/example/package-lock.json \
-		-e \!/packages/example/pnpm-lock.yaml \
-		-e \!/packages/example/yarn.lock
+		-e \!/packages/render/node_modules \
+		-e \!/packages/render/node_modules/**/* \
+		-e \!/packages/render/package-lock.json \
+		-e \!/packages/render/pnpm-lock.yaml \
+		-e \!/packages/render/yarn.lock
 	-@rm -rf node_modules/.cache || true
 	-@rm -rf node_modules/.make || true
 	-@rm -rf node_modules/.tmp || true

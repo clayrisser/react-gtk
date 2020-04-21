@@ -1,1 +1,1 @@
-# @react-gtk/generate
+# @react-gtk/example

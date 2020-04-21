@@ -7,6 +7,10 @@ export default class Wrapper extends BaseElement {
   static defaultProps: Props;
 
   constructor(props: Props = {}) {
-    super({ cool: 'beans' }, props);
+    super({ greetings: [] }, props);
+  }
+
+  appendChild(child: BaseElement) {
+    this.node.greetings.push(child.node);
   }
 }

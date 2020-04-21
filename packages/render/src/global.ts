@@ -7,6 +7,11 @@ declare global {
         ref?: Ref<any>;
         children?: ReactNode;
       };
+      Label: {
+        children?: string;
+        label?: string;
+        ref?: Ref<any>;
+      };
       Window: {
         ref?: Ref<any>;
         children?: ReactNode;

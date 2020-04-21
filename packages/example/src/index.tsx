@@ -1,11 +1,14 @@
 import React from 'react';
-import render, { Box } from '@react-gtk/render';
+import render, { Label, Box } from '@react-gtk/render';
 import util from 'util';
 
 console.log('======== RECONCILER LIFECYCLE ========');
 const renderedOutput = render(
   <>
-    <Box />
+    <Box>
+      <Label>howdy</Label>
+      hi
+    </Box>
   </>
 );
 

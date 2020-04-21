@@ -1,5 +1,6 @@
 import ReactReconciler from 'react-reconciler';
 import createElement from './createElement';
+import { Label } from './elements';
 import {
   ChildSet,
   Container,
@@ -59,16 +60,19 @@ export default ReactReconciler<
     _hostContext: HostContext
   ): boolean {
     log.debug('finalizeInitialChildren');
-    return false;
+    return true;
   },
 
   createTextInstance(
-    _text: string,
+    text: string,
     _rootContainerInstance: Container,
     _hostContext: HostContext
     // @ts-ignore
   ): TextInstance {
     log.debug('createTextInstance');
+    const label = new Label({ label: text });
+    label.commitMount(); // prob should run at a later point
+    return label;
   },
 
   getPublicInstance(instance: Instance | TextInstance): PublicInstance {
@@ -106,6 +110,7 @@ export default ReactReconciler<
     _newText: string
   ): void {
     log.debug('commitTextUpdate');
+    throw new Error('commitTextUpdate should not be called');
   },
 
   removeChild(
@@ -143,8 +148,9 @@ export default ReactReconciler<
     parentInstance.appendChild(child);
   },
 
-  shouldSetTextContent(_type: Type, _props: Props): boolean {
+  shouldSetTextContent(_type: Type, props: Props): boolean {
     log.debug('shouldSetTextContent');
+    if (typeof props.children === 'string') return true;
     return false;
   },
 
@@ -165,29 +171,37 @@ export default ReactReconciler<
   now: Date.now,
 
   commitUpdate(
-    _instance: Instance,
+    instance: Instance,
     _updatePayload: any,
     _type: string,
     _oldProps: Props,
-    _newProps: Props
+    newProps: Props
   ): void {
     log.debug('commitUpdate');
+    return instance.commitUpdate(newProps);
   },
 
-  commitMount(_instance: Instance, _type: Type, _newProps: Props): void {
+  commitMount(instance: Instance, _type: Type, _newProps: Props): void {
     log.debug('commitMount');
+    instance.commitMount();
   },
 
   shouldDeprioritizeSubtree(): boolean {
     log.debug('shouldDeprioritizeSubtree');
-    return false;
+    return true;
   },
 
   scheduleDeferredCallback(
-    _callback?: () => any,
+    callback?: () => any,
     _options?: { timeout: number }
   ): any {
     log.debug('scheduleDeferredCallback');
+    if (callback) {
+      throw new Error(
+        'Scheduling a callback twice is excessive. Instead, keep track of ' +
+          'whether the callback has already been scheduled.'
+      );
+    }
   },
 
   cancelDeferredCallback(_callbackID: any): void {
@@ -195,14 +209,16 @@ export default ReactReconciler<
   },
 
   setTimeout(
-    _handler: (...args: any[]) => void,
-    _timeout: number
+    handler: (...args: any[]) => void,
+    timeout: number
   ): TimeoutHandle | NoTimeout {
     log.debug('setTimeout');
+    return setTimeout(handler, timeout);
   },
 
-  clearTimeout(_handle: TimeoutHandle | NoTimeout): void {
+  clearTimeout(handle: TimeoutHandle | NoTimeout): void {
     log.debug('clearTimeout');
+    return clearTimeout(handle);
   },
 
   noTimeout: -1 as NoTimeout,

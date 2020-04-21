@@ -76,7 +76,7 @@ export default class BaseElement<Widget = Gtk.Widget> {
     );
     Object.keys(this.props).forEach((key: string) => {
       const prop: Prop = this.props[key];
-      if (typeof prop !== 'undefined' && prop !== null) {
+      if (key !== 'children' && typeof prop !== 'undefined' && prop !== null) {
         node[key] = prop;
       }
     });

@@ -14,7 +14,7 @@ export default function render(
   const completeOptions: Options = {
     debug: true,
     title: 'React GTK',
-    ...options
+    ...options,
   };
   const window = new Window();
   window.node.title = completeOptions.title;
@@ -23,7 +23,7 @@ export default function render(
   reconciler.injectIntoDevTools({
     bundleType: Number(completeOptions.debug) as BundleType,
     rendererPackageName: pkg.name,
-    version: pkg.version
+    version: pkg.version,
   });
   if (!started) {
     started = true;

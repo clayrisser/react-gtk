@@ -1,0 +1,100 @@
+{
+  "name": "@react-gtk/generate",
+  "version": "0.0.367",
+  "description": "react-gtk generate",
+  "keywords": [
+    "react-gtk",
+    "generate"
+  ],
+  "homepage": "https://github.com/codejamninja/react-gtk/packages/generate",
+  "bugs": {
+    "url": "https://github.com/codejamninja/react-gtk/issues",
+    "email": "jam@codejam.ninja"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Jam Risser",
+    "email": "jam@codejam.ninja",
+    "url": "https://codejam.ninja"
+  },
+  "files": [
+    "bin.js",
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "bin": {
+    "react-gtk": "bin.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codejamninja/react-gtk"
+  },
+  "scripts": {
+    "build": "make -s build",
+    "clean": "make -s clean",
+    "format": "make -s format",
+    "inc": "npm version patch --git=false 2>/dev/null || true",
+    "lint": "make -s lint",
+    "make": "make --version",
+    "prepare": "make -s prepare",
+    "purge": "make -s purge",
+    "start": "make -s start",
+    "test": "make -s test",
+    "test:watch": "make -s test-watch"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.9.2",
+    "@oclif/command": "^1.5.19",
+    "@oclif/config": "^1.14.0",
+    "@oclif/errors": "^1.2.2",
+    "@oclif/parser": "^3.8.4",
+    "core-js": "^3.6.5",
+    "gnumake": "^0.1.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/preset-typescript": "^7.9.0",
+    "@oclif/dev-cli": "^1.22.2",
+    "@types/core-js": "^2.5.3",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.11.1",
+    "cspell": "^4.0.55",
+    "eslint": "^6.8.0",
+    "eslint-config-reactant": "^0.1.144",
+    "jest": "^25.3.0",
+    "jest-sonar-reporter": "^2.0.0",
+    "prettier": "^2.0.4",
+    "regenerator-runtime": "^0.13.5",
+    "typescript": "^3.8.3"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "eslintIgnore": [
+    "lib"
+  ],
+  "jest": {
+    "testRegex": "tests(/|/.*/)[^_/]*[jt]sx?$",
+    "verbose": true
+  },
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "react-gtk",
+    "hooks": {
+      "init": "./lib/hooks/init"
+    }
+  },
+  "jestSonar": {
+    "reportPath": "node_modules/.tmp/reports",
+    "reportFile": "test-report.xml",
+    "indent": 4
+  },
+  "gitHead": "55ce13f8a11b23f03127281b53de7876dca13176"
+}

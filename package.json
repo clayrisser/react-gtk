@@ -1,24 +1,22 @@
 {
-  "name": "react-gtk",
-  "description": "cross-platform react native desktop applications",
-  "version": "0.0.1",
+  "name": "reactant",
+  "description": "write once . . . render everywhere",
+  "version": "0.0.367",
   "files": [
     "packages"
   ],
   "scripts": {
-    "bootstrap": "lerna bootstrap && npm run link",
-    "bootstrap:hoist": "lerna bootstrap --hoist && npm run link",
-    "clean": "lerna clean -y",
-    "generate": "cd generate && npm run start && cd ../packages/binding && npm run format",
-    "lerna": "lerna",
-    "link": "lerna link",
-    "ls": "lerna ls",
-    "nuke": "bash generate/nuke.sh",
-    "publish": "lerna publish"
+    "bootstrap": "pnpm install",
+    "build": "pnpm run exec -- build",
+    "clean": "pnpm run exec -- clean",
+    "exec": "pnpm recursive --workspace-concurrency=Infinity run --filter={packages}",
+    "inc": "npm version patch --git=false 2>/dev/null || true && pnpm run exec -- inc && pnpm install -f",
+    "publish": "npm run inc && npm run build && pnpm -r publish --filter={packages} --access=public",
+    "purge": "git clean -fXd",
+    "update": "pnpm -r update -L"
   },
+  "license": "MIT",
   "devDependencies": {
-    "lerna": "^3.2.1",
-    "rimraf": "^2.6.3"
-  },
-  "license": "MIT"
+    "pnpm": "^4.12.5"
+  }
 }

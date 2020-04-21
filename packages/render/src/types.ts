@@ -1,7 +1,3 @@
-export interface BaseNode {
-  [key: string]: any;
-}
-
 export interface Options {
   [key: string]: any;
 }
@@ -16,7 +12,9 @@ export type ContextItem = any;
 
 export type HydratableInstance = any;
 
-export type PublicInstance = Instance | TextInstance;
+export type PublicInstance<Widget = any> =
+  | Instance<Widget>
+  | TextInstance<Widget>;
 
 export type HostContext = Context;
 
@@ -28,9 +26,9 @@ export type TimeoutHandle = any;
 
 export type NoTimeout = any;
 
-export interface Container extends Instance {}
+export interface Container<Widget = any> extends Instance<Widget> {}
 
-export interface TextInstance extends Instance {}
+export interface TextInstance<Widget = any> extends Instance<Widget> {}
 
 export interface DeepArray<T> extends Array<T | DeepArray<T>> {}
 
@@ -38,14 +36,14 @@ export interface Props {
   [key: string]: Prop;
 }
 
-export interface Instance {
-  appendChild(child: Instance | TextInstance): void;
-  children: Instance[];
+export interface Instance<Widget = any> {
+  appendChild(child: Instance<Widget> | TextInstance<Widget>): void;
+  children: Instance<Widget>[];
   commitMount(): void;
   commitUpdate(newProps: Props): void;
-  node: Node;
+  node: Node<Widget>;
   props: Props;
-  removeChild(child: Instance | TextInstance): void;
+  removeChild(child: Instance<Widget> | TextInstance<Widget>): void;
 }
 
 export interface Pkg {
@@ -56,6 +54,4 @@ export interface Context {
   [key: string]: ContextItem;
 }
 
-export interface Node extends BaseNode {
-  body?: BaseNode[];
-}
+export type Node<Widget = Gtk.Widget> = Widget;

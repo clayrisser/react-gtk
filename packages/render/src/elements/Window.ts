@@ -1,12 +1,13 @@
 import BaseElement from './BaseElement';
+import Gtk from '../gtk';
 import { Props } from '../types';
 
-export default class Howdy extends BaseElement {
+export default class Window extends BaseElement<Gtk.Window> {
   static propTypes: object;
 
   static defaultProps: Props;
 
   constructor(props: Props = {}) {
-    super({ howdy: 'texas' }, props);
+    super(new Gtk.Window(), props);
   }
 }

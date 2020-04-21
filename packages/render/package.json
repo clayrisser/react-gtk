@@ -44,6 +44,7 @@
     "test:watch": "make -s test-watch"
   },
   "dependencies": {
+    "@babel/parser": "^7.9.4",
     "core-js": "^3.6.5",
     "gnumake": "^0.1.0",
     "node-gtk": "^0.4.0",

@@ -1,30 +1,32 @@
-import { BaseNode, Node, Instance, Props } from '../types';
+import { ParserOptions } from '@babel/parser';
+import { Node, Instance, Props } from '../types';
 
-export interface IElement {
-  new (props?: Props): BaseElement;
+export interface IElement<Widget = any> {
+  new (props?: Props, parserOptions?: ParserOptions): BaseElement<Widget>;
   propTypes: object;
   defaultProps: Props;
 }
 
-export default class BaseElement implements Instance {
+export default class BaseElement<Widget = globalThis.Gtk.Widget>
+  implements Instance<Widget> {
   static defaultProps: Props = {};
 
   static propTypes: object = {};
 
-  node: Node;
+  node: Node<Widget>;
 
   props: Props;
 
-  children: BaseElement[] = [];
+  children: BaseElement<Widget>[] = [];
 
-  constructor(baseNode: BaseNode | BaseNode[], props: Props = {}) {
-    this.node = baseNode;
-    this.props = props;
+  constructor(node: Node<Widget> | Node<Widget>[], _props: Props = {}) {
+    if (Array.isArray(node)) throw new Error('cannot be array');
+    this.node = node;
   }
 
-  appendChild(_child: BaseElement) {}
+  appendChild(_child: BaseElement<Widget>) {}
 
-  removeChild(_child: BaseElement) {}
+  removeChild(_child: BaseElement<Widget>) {}
 
   commitMount() {}
 

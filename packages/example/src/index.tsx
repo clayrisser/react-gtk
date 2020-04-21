@@ -1,17 +1,12 @@
 import React from 'react';
 import nodeGtk from 'node-gtk';
-import render, { Hello, Howdy } from '@react-gtk/render';
+import render from '@react-gtk/render';
 import util from 'util';
 
 const Gtk = nodeGtk.require('Gtk', '3.0');
 
 console.log('======== RECONCILER LIFECYCLE ========');
-const renderedOutput = render(
-  <>
-    <Hello />
-    <Howdy />
-  </>
-);
+const renderedOutput = render(<></>);
 
 console.log('\n\n======== RENDERED OUTPUT ========');
 console.log(util.inspect(renderedOutput, false, null, true));

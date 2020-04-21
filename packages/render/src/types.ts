@@ -2,18 +2,33 @@ import { WeakValidationMap } from 'react';
 
 export class Instance<Widget = any> {
   static defaultProps: Props = {};
+
   static propTypes: WeakValidationMap<any> = {};
+
   constructor(_props: Props = {}) {}
+
   appendChild(_child: Instance | TextInstance): void {}
+
   children: Instance[];
+
   commitMount(): void {}
+
   commitUpdate(_newProps: Props): void {}
+
   node: Node<Widget>;
+
   props: Props;
+
   removeChild(_child: Instance | TextInstance): void {}
 }
 
-export interface Meta {}
+export interface PropMap {
+  [key: string]: string;
+}
+
+export interface Meta {
+  propMap?: PropMap;
+}
 
 export interface Options {
   [key: string]: any;

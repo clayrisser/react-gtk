@@ -12,7 +12,7 @@ import {
   TextInstance,
   TimeoutHandle,
   Type,
-  UpdatePayload
+  UpdatePayload,
 } from './types';
 
 // eslint-disable-next-line no-console
@@ -44,10 +44,11 @@ export default ReactReconciler<
   },
 
   appendInitialChild(
-    _parentInstance: Instance,
-    _child: Instance | TextInstance
+    parentInstance: Instance,
+    child: Instance | TextInstance
   ): void {
     log.debug('appendInitialChild');
+    parentInstance.appendChild(child);
   },
 
   finalizeInitialChildren(
@@ -137,11 +138,9 @@ export default ReactReconciler<
     container.appendChild(child);
   },
 
-  appendChild(
-    _parentInstance: Instance,
-    _child: Instance | TextInstance
-  ): void {
+  appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
     log.debug('appendChild');
+    parentInstance.appendChild(child);
   },
 
   shouldSetTextContent(_type: Type, _props: Props): boolean {
@@ -214,5 +213,5 @@ export default ReactReconciler<
 
   supportsPersistence: false,
 
-  supportsHydration: false
+  supportsHydration: false,
 });

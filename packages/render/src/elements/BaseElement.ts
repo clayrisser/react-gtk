@@ -1,10 +1,12 @@
 import { WeakValidationMap } from 'react';
-import { Node, Props, Meta, Instance, TextInstance } from '../types';
+import { Node, Prop, Props, Meta, Instance, TextInstance } from '../types';
 
-export default class BaseElement<Widget = any> {
+export default class BaseElement<Widget = Gtk.Widget> {
   static defaultProps: Props = {};
 
   static propTypes: WeakValidationMap<any> = {};
+
+  private _isContainer: boolean;
 
   meta: Meta;
 
@@ -23,31 +25,65 @@ export default class BaseElement<Widget = any> {
     if (meta) {
       this.meta = {
         ...this.meta,
-        ...meta
+        ...meta,
       };
     }
     this.node = node;
     this.props = props;
   }
 
+  get isContainer() {
+    if (typeof this._isContainer !== 'undefined') return this._isContainer;
+    const node = (this.node as unknown) as Gtk.Container;
+    this._isContainer = typeof node.add === 'function';
+    return this._isContainer;
+  }
+
   appendChild(child: Instance | TextInstance) {
-    // this.update();
+    const node = (this.node as unknown) as Gtk.Container;
+    this.update();
     this.children.push(child);
-    // if (this.isContainer) this.node.add(child.node);
+    if (this.isContainer) node.add(child.node);
   }
 
   removeChild(child: Instance | TextInstance) {
+    const node = (this.node as unknown) as Gtk.Container;
     this.children.splice(this.children.indexOf(child), 1);
-    // if (this.isContainer) this.node.remove(child.node);
+    if (this.isContainer) node.remove(child.node);
   }
 
-  commitMount() {}
+  commitMount() {
+    this.update();
+  }
 
   commitUpdate(newProps: Props) {
     this.props = {
       ...this.props,
-      ...newProps
+      ...newProps,
     };
-    // this.update();
+    this.update();
+  }
+
+  update() {
+    const node = (this.node as unknown) as Gtk.Widget;
+    this.updateNode();
+    node.showAll();
+  }
+
+  updateNode() {
+    const node = (this.node as unknown) as { [key: string]: any };
+    Object.entries(this.meta.propMap || {}).forEach(
+      ([reactProp, nodeProp]: [string, string]) => {
+        if (typeof this.props[reactProp] !== 'undefined') {
+          node[nodeProp] = this.props[reactProp];
+        }
+      }
+    );
+    Object.keys(this.props).forEach((key: string) => {
+      const prop: Prop = this.props[key];
+      if (typeof prop !== 'undefined' && prop !== null) {
+        node[key] = prop;
+      }
+    });
   }
 }

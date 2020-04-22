@@ -2,20 +2,22 @@ import _ from 'lodash';
 import Gir, { Class, Method, TypedNode, Type } from './gir';
 
 export interface Options {
-  getSet?: boolean;
-}
-
-export interface ElementOptions {
-  [key: string]: any;
+  getSet: boolean;
+  girPath: string;
 }
 
 export interface ElementClass {
   name: string;
 }
 
+export interface ElementPropType {
+  name: string;
+  type: string;
+  [key: string]: any;
+}
+
 export interface Element {
   klass: ElementClass;
-  options: ElementOptions[];
   propTypes: any;
   methods: ElementMethod[];
 }
@@ -29,8 +31,6 @@ export interface Parameter {
 export interface ElementMethod {
   name: string;
   parameters: Parameter[];
-  typedParameterString: string;
-  parameterString: string;
   returnType: string;
   [key: string]: any;
 }
@@ -38,15 +38,57 @@ export interface ElementMethod {
 export default class GtkGir {
   gir: Gir;
 
-  constructor(girPath = '/usr/share/gir-1.0/Gtk-3.0.gir') {
-    this.gir = new Gir(girPath);
+  options: Options;
+
+  constructor(options?: Options) {
+    this.options = {
+      girPath: '/usr/share/gir-1.0/Gtk-3.0.gir',
+      getSet: false,
+      ...(options || {})
+    };
+    this.gir = new Gir(this.options.girPath);
   }
 
-  getElementPropTypes(klass: Class, options: Options) {
-    return { klass, options };
+  getPropType(typeNode: Type) {
+    const typeName = this.getType(typeNode);
+    if (typeName.substr(typeName.length - 2, typeName.length - 1) === '[]') {
+      return 'array';
+    }
+    return (
+      ((typeName: string) =>
+        (({
+          function: 'func',
+          boolean: 'bool'
+        } as { [key: string]: string })[typeName]))(typeName) || typeName
+    );
   }
 
-  getElements(options: Options = {}): Element[] {
+  getElementPropTypes(
+    klass: Class,
+    previousElementPropTypes: ElementPropType[] = []
+  ): ElementPropType[] {
+    const elementPropTypes = _.uniqBy(
+      [
+        ...previousElementPropTypes,
+        ...this.gir.getProperties(klass).map((propertyNode: TypedNode) => {
+          const elementPropType: ElementPropType = {
+            ...propertyNode.attrs,
+            name: camelCase(propertyNode.attrs.name),
+            type: this.getPropType(propertyNode.type)
+          };
+          return elementPropType;
+        })
+      ],
+      propType => propType.name
+    );
+    const klassParent = klass.getParent();
+    if (klassParent && klassParent.hasParent({ name: 'Widget' })) {
+      return this.getElementPropTypes(klassParent, elementPropTypes);
+    }
+    return elementPropTypes;
+  }
+
+  get elements(): Element[] {
     return this.gir.classes.reduce((elements: Element[], klass: Class) => {
       if (
         klass.hasParent({ name: 'Widget' }) &&
@@ -56,25 +98,15 @@ export default class GtkGir {
           klass: {
             name: klass.attrs.name
           },
-          options: [
-            ...(klass.attrs.name === 'Container' ||
-            klass.hasParent({ name: 'Container' })
-              ? [{ name: 'isContainer', value: 'true' }]
-              : [])
-          ],
-          propTypes: this.getElementPropTypes(klass, options),
-          methods: this.getElementMethods(klass, options)
+          propTypes: this.getElementPropTypes(klass),
+          methods: this.getElementMethods(klass)
         });
       }
       return elements;
     }, []);
   }
 
-  getElementMethods(klass: Class, options: Options): ElementMethod[] {
-    options = {
-      getSet: false,
-      ...options
-    };
+  getElementMethods(klass: Class): ElementMethod[] {
     return this.gir
       .getMethods(klass)
       .reduce((elementMethods: ElementMethod[], method: Method) => {
@@ -89,7 +121,7 @@ export default class GtkGir {
           }
         );
         if (
-          !options.getSet &&
+          !this.options.getSet &&
           (method.attrs.name.substr(0, 3) === 'get' ||
             method.attrs.name.substr(0, 3) === 'set')
         ) {
@@ -99,18 +131,6 @@ export default class GtkGir {
           ...method.attrs,
           name: camelCase(method.attrs.name),
           parameters,
-          typedParameterString: _.map(
-            parameters,
-            (parameter, i) =>
-              `${parameter.name}: ${parameter.type}${
-                i < parameters.length - 1 ? ', ' : ''
-              }`
-          ).join(''),
-          parameterString: _.map(
-            parameters,
-            (parameter, i) =>
-              parameter.name + (i < parameters.length - 1 ? ', ' : '')
-          ).join(''),
           returnType: this.getType(method.returnValue.type)
         };
         elementMethods.push(elementMethod);

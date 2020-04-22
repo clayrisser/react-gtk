@@ -99,7 +99,7 @@ lib: node_modules/.tmp/coverage/lcov.info $(shell $(GIT) ls-files)
 
 .PHONY: start
 start: node_modules
-	@babel-node --extensions '.ts,.tsx' src/bin start $(ARGS)
+	@babel-node --extensions '.ts,.tsx' src/actions/generate $(ARGS)
 
 .PHONY: purge
 purge: clean

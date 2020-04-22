@@ -1,0 +1,190 @@
+// import GtkGir, { Class, Node, TypedNode, Type } from './gtkGir';
+// import _ from 'lodash';
+
+// export interface Params {
+//   [key: string]: any;
+// }
+
+// export interface Method {
+//   name: string;
+//   parameters: Params;
+//   returnType: string;
+// }
+
+// export interface Options {}
+
+// function renderTemplate(...props: any[]): any {
+//   return props;
+// }
+
+// export default class Renderer {
+//   gtkGir = new GtkGir();
+
+//   getPropType(type) {
+//     type = this.getType(type);
+//     if (type.substr(type.length - 2, type.length - 1) === '[]') {
+//       return 'array';
+//     }
+//     return (
+//       (type =>
+//         ({
+//           function: 'func',
+//           boolean: 'bool'
+//         }[type]))(type) || type
+//     );
+//   }
+
+//   getType(typeNode: Type) {
+//     const tsType =
+//       ((typeName: string) =>
+//         (({
+//           'GLib.List': 'object[]',
+//           'GLib.SList': 'string[]',
+//           gboolean: 'boolean',
+//           gdouble: 'number',
+//           gfloat: 'number',
+//           gint: 'number',
+//           glong: 'number',
+//           gsize: 'number',
+//           guint16: 'number',
+//           guint32: 'number',
+//           guint8: 'number',
+//           guint: 'number',
+//           gunichar: 'string',
+//           none: 'null',
+//           utf8: 'string'
+//         } as { [key: string]: string })[typeName]))(typeNode?.attrs?.name) ||
+//       'object';
+//     return (
+//       tsType +
+//       (tsType !== 'null' ? _.times(typeNode?.isArray, () => '[]').join('') : '')
+//     );
+//   }
+
+//   async getData(options = {}) {
+//     if (this._data) return this._data;
+//     const data = [];
+//     await mapSeries(this.gtkGir.classes, async klass => {
+//       if (
+//         klass.hasParent({ name: 'Widget' }) &&
+//         klass.attrs?.abstract !== '1'
+//       ) {
+//         data.push({
+//           klass: {
+//             name: klass.attrs.name
+//           },
+//           options: [
+//             ...(klass.attrs.name === 'Container' ||
+//             klass.hasParent({ name: 'Container' })
+//               ? [{ name: 'isContainer', value: 'true' }]
+//               : [])
+//           ],
+//           propTypes: this.getPropTypes(klass, options),
+//           methods: this.getMethods(klass, options)
+//         });
+//       }
+//     });
+//     this._data = data;
+//     return this._data;
+//   }
+
+//   getPropTypes(klass, options, propTypes = []) {
+//     propTypes = _.uniqBy(
+//       [
+//         ...propTypes,
+//         ..._.map(this.gtkGir.getProperties(klass), property => ({
+//           ...property.attrs,
+//           name: camelCase(property.attrs.name),
+//           type: this.getPropType(property.type)
+//         }))
+//       ],
+//       propType => propType.name
+//     );
+//     const parent = klass.getParent();
+//     if (parent && parent.hasParent({ name: 'Widget' })) {
+//       return this.getPropTypes(parent, options, propTypes);
+//     }
+//     return propTypes;
+//   }
+
+//   getMethods(klass: Class, options: Options, methods: Method[] = []) {
+//     const { getSet = false } = options;
+//     methods = _.uniqBy(
+//       [
+//         ...methods,
+//         ..._.filter(
+//           _.map(this.gtkGir.getMethods(klass), method => {
+//             const parameters = _.map(method.parameters, parameter => ({
+//               ...parameter.attrs,
+//               name: camelCase(parameter.attrs.name),
+//               type: this.getType(parameter.type)
+//             }));
+//             if (
+//               !getSet &&
+//               (method.attrs.name.substr(0, 3) === 'get' ||
+//                 method.attrs.name.substr(0, 3) === 'set')
+//             ) {
+//               return null;
+//             }
+//             return {
+//               ...method.attrs,
+//               name: camelCase(method.attrs.name),
+//               parameters,
+//               typedParameterString: _.map(
+//                 parameters,
+//                 (parameter, i) =>
+//                   `${parameter.name}: ${parameter.type}${
+//                     i < parameters.length - 1 ? ', ' : ''
+//                   }`
+//               ).join(''),
+//               parameterString: _.map(
+//                 parameters,
+//                 (parameter, i) =>
+//                   parameter.name + (i < parameters.length - 1 ? ', ' : '')
+//               ).join(''),
+//               returnType: this.getType(method.returnValue.type)
+//             };
+//           }),
+//           method => !_.isNull(method)
+//         )
+//       ],
+//       (method: Method) => method.name
+//     );
+//     const parent = klass.getParent();
+//     if (parent && parent.hasParent({ name: 'Widget' })) {
+//       return this.getMethods(parent, options, methods);
+//     }
+//     return methods;
+//   }
+
+//   async renderElements() {
+//     const data = await this.getData();
+//     await mapSeries(data, async dataItem => {
+//       await renderTemplate(
+//         'elements/Element.ts',
+//         `../../packages/binding/src/elements/${dataItem.klass.name}.ts`,
+//         dataItem
+//       );
+//     });
+//     await renderTemplate(
+//       'elements/index.ts',
+//       '../../packages/binding/src/elements/index.ts',
+//       {
+//         data
+//       }
+//     );
+//   }
+
+//   async renderIndex() {
+//     const data = await this.getData();
+//     await renderTemplate('index.ts', '../../packages/binding/src/index.ts', {
+//       data
+//     });
+//   }
+// }
+
+// function camelCase(str: string): string {
+//   str = str.replace(/\./g, '_');
+//   const camelCaseStr = _.camelCase(str);
+//   return camelCaseStr.length ? camelCaseStr : str;
+// }

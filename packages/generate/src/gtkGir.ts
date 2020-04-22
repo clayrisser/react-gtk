@@ -1,231 +1,156 @@
-import fs from 'fs-extra';
-import path from 'path';
-import { DOMParser } from 'xmldom';
+import _ from 'lodash';
+import Gir, { Class, Method, TypedNode, Type } from './gir';
 
-export interface Where {
+export interface Options {
+  getSet?: boolean;
+}
+
+export interface ElementOptions {
   [key: string]: any;
 }
 
-export interface Namespace {
-  classes: Class[];
+export interface ElementClass {
+  name: string;
 }
 
-export interface Class extends Node {
-  getParent(): Class | null;
-  hasParent(where?: Where): boolean;
-  methods: Method[];
-  properties: TypedNode[];
+export interface Element {
+  klass: ElementClass;
+  options: ElementOptions[];
+  propTypes: any;
+  methods: ElementMethod[];
 }
 
-export interface Method extends Node {
-  parameters: TypedNode[];
-  returnValue: TypedNode;
+export interface Parameter {
+  name: string;
+  type: string;
+  [key: string]: any;
 }
 
-export interface Node {
-  attrs: Attrs;
-  element: Element;
-  nodeType: string;
-}
-
-export interface TypedNode extends Node {
-  type: Type;
-}
-
-export interface Type extends Node {
-  isArray: boolean;
-}
-
-export interface Attrs {
+export interface ElementMethod {
+  name: string;
+  parameters: Parameter[];
+  typedParameterString: string;
+  parameterString: string;
+  returnType: string;
   [key: string]: any;
 }
 
 export default class GtkGir {
-  girPath: string;
+  gir: Gir;
 
-  dom: HTMLElement;
-
-  constructor(girPath = 'Gtk-3.0.gir') {
-    this.girPath = path.resolve(__dirname, girPath);
-    this.dom = this.createDom();
+  constructor(girPath = '/usr/share/gir-1.0/Gtk-3.0.gir') {
+    this.gir = new Gir(girPath);
   }
 
-  get namespaces() {
-    return this.getNamespaces();
+  getElementPropTypes(klass: Class, options: Options) {
+    return { klass, options };
   }
 
-  get classes() {
-    return this.getClasses();
-  }
-
-  get methods() {
-    return this.getMethods();
-  }
-
-  get parameters() {
-    return this.getParameters();
-  }
-
-  get properties() {
-    return this.getProperties();
-  }
-
-  get types() {
-    return this.getTypes();
-  }
-
-  get returnValues() {
-    return this.getReturnValues();
-  }
-
-  getNamespaces() {
-    return this.getNodes('namespace').map((node: Node) => {
-      const ns: Namespace = {
-        classes: this.getClasses(node)
-      };
-      return ns;
-    });
-  }
-
-  getClasses(nsNode?: Node): Class[] {
-    return this.getNodes('class', nsNode).map((node: Node) => {
-      const self = this;
-      const klass: Class = {
-        ...node,
-        methods: this.getMethods(node),
-        properties: this.getProperties(node),
-        ...createClassNodeMethods(nsNode!, node, self)
-      };
-      return klass;
-    });
-  }
-
-  getClass(nsNode?: Node, where: Where = {}): Class | null {
-    const node = this.getNode('class', nsNode, where);
-    const self = this;
-    if (node) {
-      const klass: Class = {
-        ...node,
-        methods: this.getMethods(node),
-        properties: this.getProperties(node),
-        ...createClassNodeMethods(nsNode!, node, self)
-      };
-      return klass;
-    }
-    return null;
-  }
-
-  getMethods(klass?: Node): Method[] {
-    return this.getNodes('method', klass).map((node: Node) => {
-      const method: Method = {
-        ...node,
-        parameters: this.getParameters(node),
-        returnValue: this.getReturnValues(node)?.[0]
-      };
-      return method;
-    });
-  }
-
-  getParameters(method?: Node): TypedNode[] {
-    return this.getNodes('parameter', method).map((node: Node) => {
-      const parameters: TypedNode = {
-        ...node,
-        type: this.getTypes(node)?.[0]
-      };
-      return parameters;
-    });
-  }
-
-  getTypes(node?: Node): Type[] {
-    return this.getNodes('type', node).map((node: Node) => {
-      const parentNode: any = node.element.parentNode;
-      const typeNode: Type = {
-        ...node,
-        isArray: parentNode?.tagName === 'array'
-      };
-      return typeNode;
-    });
-  }
-
-  getProperties(klass?: Node): TypedNode[] {
-    return this.getNodes('property', klass).map((node: Node) => {
-      const property: TypedNode = {
-        ...node,
-        type: this.getTypes(node)?.[0]
-      };
-      return property;
-    });
-  }
-
-  getReturnValues(method?: Node): TypedNode[] {
-    return this.getNodes('return-value', method).map((node: Node) => {
-      const returnValue: TypedNode = {
-        ...node,
-        type: this.getTypes(node)?.[0]
-      };
-      return returnValue;
-    });
-  }
-
-  getNodes(nodeType: string, node?: Node): Node[] {
-    const element = node ? node.element : this.dom;
-    return Object.values(element.getElementsByTagName(nodeType)).map(
-      (element: Element) => {
-        const node: Node = {
-          attrs: this.getAttrs(element),
-          element,
-          nodeType
-        };
-        return node;
-      }
-    );
-  }
-
-  getNode(nodeType: string, node?: Node, where: Where = {}): Node | null {
-    return (
-      this.getNodes(nodeType, node).find((node: Node) => {
-        return !!Object.entries(where).find(([key, value]: [string, any]) => {
-          return node.attrs[key] === value;
+  getElements(options: Options = {}): Element[] {
+    return this.gir.classes.reduce((elements: Element[], klass: Class) => {
+      if (
+        klass.hasParent({ name: 'Widget' }) &&
+        klass.attrs?.abstract !== '1'
+      ) {
+        elements.push({
+          klass: {
+            name: klass.attrs.name
+          },
+          options: [
+            ...(klass.attrs.name === 'Container' ||
+            klass.hasParent({ name: 'Container' })
+              ? [{ name: 'isContainer', value: 'true' }]
+              : [])
+          ],
+          propTypes: this.getElementPropTypes(klass, options),
+          methods: this.getElementMethods(klass, options)
         });
-      }) || null
-    );
+      }
+      return elements;
+    }, []);
   }
 
-  getAttrs(element: Element): Attrs {
-    return Object.values(element.attributes).reduce(
-      (attrs: Attrs, attribute: Attr) => {
-        if (attribute.name) {
-          attrs[attribute.name] = element.getAttribute(attribute.name);
+  getElementMethods(klass: Class, options: Options): ElementMethod[] {
+    options = {
+      getSet: false,
+      ...options
+    };
+    return this.gir
+      .getMethods(klass)
+      .reduce((elementMethods: ElementMethod[], method: Method) => {
+        const parameters: Parameter[] = method.parameters.map(
+          (parameterNode: TypedNode) => {
+            const parameter: Parameter = {
+              ...parameterNode.attrs,
+              name: camelCase(parameterNode.attrs.name),
+              type: this.getType(parameterNode.type)
+            };
+            return parameter;
+          }
+        );
+        if (
+          !options.getSet &&
+          (method.attrs.name.substr(0, 3) === 'get' ||
+            method.attrs.name.substr(0, 3) === 'set')
+        ) {
+          return elementMethods;
         }
-        return attrs;
-      },
-      {}
-    );
+        const elementMethod: ElementMethod = {
+          ...method.attrs,
+          name: camelCase(method.attrs.name),
+          parameters,
+          typedParameterString: _.map(
+            parameters,
+            (parameter, i) =>
+              `${parameter.name}: ${parameter.type}${
+                i < parameters.length - 1 ? ', ' : ''
+              }`
+          ).join(''),
+          parameterString: _.map(
+            parameters,
+            (parameter, i) =>
+              parameter.name + (i < parameters.length - 1 ? ', ' : '')
+          ).join(''),
+          returnType: this.getType(method.returnValue.type)
+        };
+        elementMethods.push(elementMethod);
+        return elementMethods;
+      }, []);
   }
 
-  createDom() {
-    const xml = fs.readFileSync(this.girPath).toString();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(xml, 'text/xml');
-    return doc.documentElement;
+  getType(typeNode: Type) {
+    const tsType =
+      ((typeName: string) =>
+        (({
+          'GLib.List': 'object[]',
+          'GLib.SList': 'string[]',
+          gboolean: 'boolean',
+          gdouble: 'number',
+          gfloat: 'number',
+          gint: 'number',
+          glong: 'number',
+          gsize: 'number',
+          guint16: 'number',
+          guint32: 'number',
+          guint8: 'number',
+          guint: 'number',
+          gunichar: 'string',
+          none: 'null',
+          utf8: 'string'
+        } as { [key: string]: string })[typeName]))(typeNode?.attrs?.name) ||
+      'object';
+    return (
+      tsType +
+      (tsType !== 'null'
+        ? // TODO: improve code
+          _.times(Number(typeNode?.isArray), () => '[]').join('')
+        : '')
+    );
   }
 }
 
-function createClassNodeMethods(nsNode: Node, node: Node, self: GtkGir) {
-  return {
-    getParent(): Class | null {
-      return self.getClass(nsNode, { name: node.attrs.parent });
-    },
-    hasParent(where: Where = {}) {
-      const parent = this.getParent();
-      if (!parent) return false;
-      const foundParent = !!Object.entries(where).find(
-        ([key, value]: [string, any]) => {
-          return parent.attrs[key] === value;
-        }
-      );
-      if (foundParent) return true;
-      return parent.hasParent(where);
-    }
-  };
+function camelCase(str: string): string {
+  str = str.replace(/\./g, '_');
+  const camelCaseStr = _.camelCase(str);
+  return camelCaseStr.length ? camelCaseStr : str;
 }

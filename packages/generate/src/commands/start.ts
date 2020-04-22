@@ -1,4 +1,5 @@
 import { Command, flags } from '@oclif/command';
+import { generate } from '../actions';
 
 export default class Start extends Command {
   static description = 'start platform';
@@ -15,6 +16,6 @@ export default class Start extends Command {
   static args = [];
 
   async run() {
-    console.log('generating');
+    await generate();
   }
 }

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { WeakValidationMap } from 'react';
-import { Node, Prop, Props, Meta, Instance, TextInstance } from '../types';
+import { Node, Prop, Props, Meta, Instance, TextInstance } from './types';
 
 export default class BaseElement<Widget = Gtk.Widget> {
   static defaultProps: Props = {};
@@ -55,7 +55,7 @@ export default class BaseElement<Widget = Gtk.Widget> {
   commitUpdate(newProps: Props) {
     this.props = {
       ...this.props,
-      ...newProps
+      ...newProps,
     };
     this.update();
   }
@@ -86,7 +86,7 @@ export default class BaseElement<Widget = Gtk.Widget> {
   getProps(props: Props): Props {
     props = { ...props };
     const { defaultProps, propTypes } = this.constructor as typeof BaseElement;
-    Object.keys(defaultProps).forEach(key => {
+    Object.keys(defaultProps).forEach((key) => {
       const defaultProp = defaultProps[key];
       if (typeof props[key] === 'undefined' || props[key] === null) {
         props[key] = defaultProp;

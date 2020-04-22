@@ -44,6 +44,8 @@
     "test:watch": "make -s test-watch"
   },
   "dependencies": {
+    "@react-gtk/core": "workspace:*",
+    "@react-gtk/elements": "workspace:*",
     "core-js": "^3.6.5",
     "gnumake": "^0.1.0",
     "node-gtk": "^0.4.0",

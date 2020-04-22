@@ -25,6 +25,7 @@
 /.vscode
 /lib
 /pnpm-lock.yaml
+/report.*.json
 /src/@types/generated
 \#*\#
 bower_components

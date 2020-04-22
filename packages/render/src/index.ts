@@ -1,8 +1,7 @@
-import Gtk from './gtk';
+import { Options, BundleType, Gtk } from '@react-gtk/core';
+import { createElement, Window } from '@react-gtk/elements';
 import pkg from '../package.json';
 import reconciler from './reconciler';
-import { BundleType, Options } from './types';
-import { Window } from './elements';
 
 let started = false;
 
@@ -16,7 +15,7 @@ export default function render(
     title: 'React GTK',
     ...options,
   };
-  const window = new Window();
+  const window = createElement(Window, {});
   window.node.title = completeOptions.title;
   const root = reconciler.createContainer(window, false, false);
   reconciler.updateContainer(jsx, root, null, () => {});
@@ -32,7 +31,3 @@ export default function render(
     Gtk.main();
   }
 }
-
-export * from './constants';
-export * from './global';
-export * from './types';

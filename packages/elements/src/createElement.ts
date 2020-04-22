@@ -1,5 +1,5 @@
-import elements from './elements';
-import { Instance } from './types';
+import { Instance } from '@react-gtk/core';
+import elements from '.';
 
 export default function createElement(elementType: string, props: any) {
   const Element: typeof Instance = elements[elementType];

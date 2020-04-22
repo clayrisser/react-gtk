@@ -1,6 +1,5 @@
 import ReactReconciler from 'react-reconciler';
-import createElement from './createElement';
-import { Label } from './elements';
+import { createElement, Label } from '@react-gtk/elements';
 import {
   ChildSet,
   Container,
@@ -14,7 +13,7 @@ import {
   TimeoutHandle,
   Type,
   UpdatePayload,
-} from './types';
+} from '@react-gtk/core';
 
 // eslint-disable-next-line no-console
 const log = console;
@@ -70,7 +69,7 @@ export default ReactReconciler<
     // @ts-ignore
   ): TextInstance {
     log.debug('createTextInstance');
-    const label = new Label({ label: text });
+    const label = createElement(Label, { label: text });
     label.commitMount(); // prob should run at a later point
     return label;
   },

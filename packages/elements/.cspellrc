@@ -1,9 +1,6 @@
 {
   "language": "en",
   "version": "0.1",
-  "words": [
-    "deprioritize",
-    "lifecycle"
-  ],
+  "words": [],
   "ignorePaths": ["src/@types/generated/**/*"]
 }

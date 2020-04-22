@@ -2,5 +2,5 @@
   "language": "en",
   "version": "0.1",
   "words": [],
-  "ignorePaths": ["src/@types/generated"]
+  "ignorePaths": ["src/@types/generated/*/**"]
 }

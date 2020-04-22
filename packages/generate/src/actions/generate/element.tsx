@@ -1,30 +1,46 @@
 import React from 'react';
 import {
-  ClassDeclaration,
-  ClassMethod,
   CallExpression,
-  Param,
+  ClassDeclaration,
   ClassProperty,
+  Constructor,
+  ExportDefaultDeclaration,
+  ImportDeclaration,
+  Literal,
+  Param,
   render
 } from 'react-ast';
 
-export default async function generateElement(name: string) {
-  const code = render(
+export default function generateElement(name: string): string {
+  return render(
     <>
-      <ClassDeclaration name={name} superClassName="BaseElement">
-        <ClassProperty name="defaultProps" type="Props">
-          a{'{}'}
-        </ClassProperty>
-        <ClassProperty name="defaultProps" type="WeakValidationMap<any>">
-          a{'{}'}
-        </ClassProperty>
-        <ClassMethod
-          name="constructor"
-          params={[<Param type="Props">props</Param>]}
-        >
-          <CallExpression name="super" />
-        </ClassMethod>
-      </ClassDeclaration>
+      <ImportDeclaration exports={['WeakValidationMap']} source="react" />
+      <ImportDeclaration
+        exports={['BaseElement', 'Gtk', 'Props']}
+        source="@react-gtk/core"
+      />
+      <ExportDefaultDeclaration>
+        <ClassDeclaration name={name} superClassName="BaseElement<Gtk.Box>">
+          <ClassProperty static name="defaultProps" type="Props">
+            <Literal>{{}}</Literal>
+          </ClassProperty>
+          <ClassProperty static name="propTypes" type="WeakValidationMap<any>">
+            <Literal>{{}}</Literal>
+          </ClassProperty>
+          <Constructor
+            params={[
+              <Param type="Props" default={<Literal>{{}}</Literal>}>
+                props
+              </Param>
+            ]}
+          >
+            <CallExpression
+              name="super"
+              arguments={['new Gtk.Box()', 'props']}
+            />
+          </Constructor>
+        </ClassDeclaration>
+      </ExportDefaultDeclaration>
     </>,
     {
       parserOptions: {
@@ -35,18 +51,4 @@ export default async function generateElement(name: string) {
       }
     }
   );
-  console.log(code);
 }
-
-/* import { WeakValidationMap } from 'react';
- * import { BaseElement, Gtk, Props } from '@react-gtk/core';
- *
- * export default class Box extends BaseElement<Gtk.Box> {
- *   static defaultProps: Props = {};
- *
- *   static propTypes: WeakValidationMap<any> = {};
- *
- *   constructor(props: Props = {}) {
- *     super(new Gtk.Box(), props);
- *   }
- * } */

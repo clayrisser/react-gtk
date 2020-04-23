@@ -18,7 +18,7 @@ export interface ElementPropType {
 
 export interface Element {
   klass: ElementClass;
-  propTypes: any;
+  propTypes: ElementPropType[];
   methods: ElementMethod[];
 }
 
@@ -39,6 +39,8 @@ export default class GtkGir {
   gir: Gir;
 
   options: Options;
+
+  _elements: Element[];
 
   constructor(options?: Options) {
     this.options = {
@@ -79,7 +81,7 @@ export default class GtkGir {
           return elementPropType;
         })
       ],
-      propType => propType.name
+      (propType) => propType.name
     );
     const klassParent = klass.getParent();
     if (klassParent && klassParent.hasParent({ name: 'Widget' })) {
@@ -89,21 +91,26 @@ export default class GtkGir {
   }
 
   get elements(): Element[] {
-    return this.gir.classes.reduce((elements: Element[], klass: Class) => {
-      if (
-        klass.hasParent({ name: 'Widget' }) &&
-        klass.attrs?.abstract !== '1'
-      ) {
-        elements.push({
-          klass: {
-            name: klass.attrs.name
-          },
-          propTypes: this.getElementPropTypes(klass),
-          methods: this.getElementMethods(klass)
-        });
-      }
-      return elements;
-    }, []);
+    if (this._elements) return this._elements;
+    this._elements = this.gir.classes.reduce(
+      (elements: Element[], klass: Class) => {
+        if (
+          klass.hasParent({ name: 'Widget' }) &&
+          klass.attrs?.abstract !== '1'
+        ) {
+          elements.push({
+            klass: {
+              name: klass.attrs.name
+            },
+            propTypes: this.getElementPropTypes(klass),
+            methods: this.getElementMethods(klass)
+          });
+        }
+        return elements;
+      },
+      []
+    );
+    return this._elements;
   }
 
   getElementMethods(klass: Class): ElementMethod[] {

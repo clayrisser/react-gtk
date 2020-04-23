@@ -53,7 +53,7 @@
     "gnumake": "^0.1.0",
     "lodash": "^4.17.15",
     "react": "^16.13.1",
-    "react-ast": "^0.1.29",
+    "react-ast": "^0.1.30",
     "xmldom": "^0.3.0"
   },
   "devDependencies": {

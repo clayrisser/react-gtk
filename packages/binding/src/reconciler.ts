@@ -185,8 +185,8 @@ export default ReactReconciler<
   },
 
   scheduleDeferredCallback(
-    callback: () => any,
-    _options: { timeout: number }
+    callback?: () => any,
+    _options?: { timeout: number }
   ): any {
     if (callback) {
       throw new Error(

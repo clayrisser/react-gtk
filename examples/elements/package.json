@@ -41,7 +41,7 @@
     "text": "babel-node src/text"
   },
   "dependencies": {
-    "@react-gtk/binding": "^0.0.8",
+    "@react-gtk/binding": "^0.0.9",
     "react": "^16.8.4"
   },
   "devDependencies": {

@@ -78,7 +78,7 @@ render(<App />, 'My App');
 
 ```sh
 git clone https://github.com/codejamninja/react-gtk.git
-cd examples/elements
+cd react-gtk/examples/elements
 npm install
 npm run start
 ```

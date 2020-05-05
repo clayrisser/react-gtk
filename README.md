@@ -26,13 +26,11 @@ If you think it, say it :laughing:
 * supports native linux desktop
 * supports native windows desktop
 
-
 ## Installation
 
 ```sh
 npm install --save @react-gtk/binding
 ```
-
 
 ## Dependencies
 
@@ -40,6 +38,21 @@ npm install --save @react-gtk/binding
 * [GTK](https://www.gtk.org)
 * [GObject Introspection](https://wiki.gnome.org/Projects/GObjectIntrospection)
 
+### Gtk 3
+
+Make sure you have gtk 3 installed on your operating system.
+
+#### Ubuntu
+
+```sh
+sudo apt install libgtk-3-dev
+```
+
+#### OSX
+
+```sh
+brew install gtk+3
+```
 
 ## Usage
 
@@ -61,6 +74,14 @@ class App extends Component {
 render(<App />, 'My App');
 ```
 
+## Example
+
+```sh
+git clone https://github.com/codejamninja/react-gtk.git
+cd examples/elements
+npm install
+npm run start
+```
 
 ## Support
 

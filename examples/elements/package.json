@@ -55,6 +55,7 @@
     "eslint-config-jam": "^0.1.6",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",
+    "prettier": "^2.0.5",
     "yo": "^2.0.5"
   },
   "engines": {

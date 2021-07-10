@@ -8,11 +8,12 @@ Please ★ this repo if you found it useful ★ ★ ★
 
 Built with [Node GTK](https://github.com/romgrk/node-gtk)
 
-## Built by Silicon Hills LLC
+## GTK 4.0 Support Coming Soon!
 
-[![index](https://user-images.githubusercontent.com/6234038/71054254-f284ad80-2116-11ea-9013-d68306726854.jpeg)](https://nuevesolutions.com)
-
-Silicon Hills offers premium Node and React develpoment and support services. Get in touch at [nuevesolutions.com](https://nuevesolutions.com).
+After a few years away from this project, I have finally returned. I will
+be refactoring the entire project from scratch to reach general availablilty.
+The new refactor will support [GTK 4.0](https://blog.gtk.org/2020/12/16/gtk-4-0/)
+and CSS using [Yoga](https://yogalayout.com).
 
 ## [FILE ISSUE](https://github.com/codejamninja/react-gtk/issues/new)
 This project is under active development. Please help by sharing your

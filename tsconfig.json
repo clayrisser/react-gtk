@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "incremental": false,
+    "lib": ["esnext"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "outDir": "lib",
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es6",
+    "paths": {
+      "~/*": ["src/*"],
+      "~tests/*": ["tests/*"]
+    }
+  },
+  "include": ["src", "tests", ".eslintrc.js", "webpack.config.js"]
+}

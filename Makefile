@@ -3,7 +3,7 @@
 # File Created: 10-07-2021 17:57:27
 # Author: Clay Risser <email@clayrisser.com>
 # -----
-# Last Modified: 10-07-2021 18:12:08
+# Last Modified: 10-07-2021 21:01:19
 # Modified By: Clay Risser <email@clayrisser.com>
 # -----
 # Silicon Hills LLC (c) Copyright 2021
@@ -103,7 +103,6 @@ es/index.js:
 lib/index.js:
 	@$(MAKE) -s $(ACTION)/^build
 $(ACTION)/^build:
-	@$(WEBPACK)
 	@$(BABEL) --env-name umd src -d lib --extensions '.js,.jsx,.ts,.tsx' --source-maps
 	@$(BABEL) --env-name esm src -d es --extensions '.js,.jsx,.ts,.tsx' --source-maps
 	@$(TSC) -p tsconfig.app.json -d --emitDeclarationOnly
@@ -161,6 +160,12 @@ start: ~format
 +start:
 	@$(BABEL_NODE) --extensions '.ts,.tsx' src $(ARGS)
 
+.PHONY: generate +generate
+generate: ~format
+	@$(MAKE) -s +generate
++generate:
+	@$(BABEL_NODE) --extensions '.ts,.tsx' src/generate $(ARGS)
+
 .PHONY: clean
 clean:
 	-@$(call clean)
@@ -198,3 +203,6 @@ CACHE_ENVS += \
 	TMP_DIR \
 	TSC \
 	WEBPACK
+
+examples/hello: examples/hello.c
+	@$(CC) `pkg-config --cflags gtk4` -o $@ $^ `pkg-config --libs gtk4`

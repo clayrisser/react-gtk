@@ -7,9 +7,13 @@ indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{js,jsx,json}]
+[*.{js,jsx,ts,tsx,json}]
 charset = utf-8
 
 [*.md]
 charset = utf-8
 trim_trailing_whitespace = false
+
+[{M,m}akefile{,.*}]
+charset = utf-8
+indent_style = tab

@@ -1,10 +1,10 @@
 /**
- * File: /src/index.ts
+ * File: /src/@types/nodeGtk.d.ts
  * Project: react-gtk
- * File Created: 10-07-2021 17:57:27
+ * File Created: 10-07-2021 20:35:08
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 10-07-2021 20:40:26
+ * Last Modified: 10-07-2021 20:35:11
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * Silicon Hills LLC (c) Copyright 2021
@@ -22,19 +22,14 @@
  * limitations under the License.
  */
 
-import gi from 'node-gtk';
+declare type Gtk = any;
 
-const Gtk = gi.require('Gtk', '3.0');
+declare class NodeGtk {
+  static require(library: string, version: string): Gtk;
 
-gi.startLoop();
-Gtk.init();
+  static startLoop(): any;
+}
 
-const win = new Gtk.Window();
-win.on('destroy', () => Gtk.mainQuit());
-win.on('delete-event', () => false);
-
-win.setDefaultSize(200, 80);
-win.add(new Gtk.Label({ label: 'Hello Gtk+' }));
-
-win.showAll();
-Gtk.main();
+declare module 'node-gtk' {
+  export = NodeGtk;
+}

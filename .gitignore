@@ -32,7 +32,6 @@ yarn-error.log*
 
 # application
 .tern-port
-/dist
 /es
 /lib
 package-lock.json

@@ -4,7 +4,7 @@
  * File Created: 10-07-2021 17:57:27
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 10-07-2021 18:03:24
+ * Last Modified: 10-07-2021 20:52:43
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * Silicon Hills LLC (c) Copyright 2021
@@ -127,6 +127,7 @@ module.exports = {
           '**/*.test.jsx',
           '**/*.test.ts',
           '**/*.test.tsx',
+          'src/generate/**/*',
           'storybook/**/*.js',
           'storybook/**/*.jsx',
           'storybook/**/*.ts',

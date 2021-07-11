@@ -1,10 +1,10 @@
 /**
- * File: /src/index.ts
+ * File: /src/generate/gir/index.ts
  * Project: react-gtk
- * File Created: 10-07-2021 17:57:27
+ * File Created: 10-07-2021 21:06:11
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 10-07-2021 20:40:26
+ * Last Modified: 10-07-2021 21:07:49
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * Silicon Hills LLC (c) Copyright 2021
@@ -22,19 +22,6 @@
  * limitations under the License.
  */
 
-import gi from 'node-gtk';
+import GtkGir from './gtk';
 
-const Gtk = gi.require('Gtk', '3.0');
-
-gi.startLoop();
-Gtk.init();
-
-const win = new Gtk.Window();
-win.on('destroy', () => Gtk.mainQuit());
-win.on('delete-event', () => false);
-
-win.setDefaultSize(200, 80);
-win.add(new Gtk.Label({ label: 'Hello Gtk+' }));
-
-win.showAll();
-Gtk.main();
+export { GtkGir };

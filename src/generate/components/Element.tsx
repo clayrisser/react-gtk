@@ -1,6 +1,14 @@
 import React, { FC } from 'react';
 import camelcase from 'lodash.camelcase';
-import { Class, ClassMethod, ClassProperty } from 'react-ast';
+import {
+  Class,
+  ClassMethod,
+  TypeParameterInstantiation,
+  TypeReference,
+  ClassProperty,
+  Export,
+  TypeAnnotation
+} from 'react-ast';
 import { Klass, Method, Property } from '~/generate/types';
 import { lookupTable, lookupType } from '~/generate/typeLookup';
 
@@ -40,10 +48,29 @@ const Element: FC<ElementProps> = (props: ElementProps) => {
   }
 
   return (
-    <Class name={props.klass.name || ''}>
-      {renderProperties()}
-      {renderMethods()}
-    </Class>
+    <Export default>
+      <Class name={props.klass.name || ''} extends="Element">
+        <ClassProperty
+          id="defaultProps"
+          typeAnnotation={
+            <TypeAnnotation>
+              <TypeReference name="Partial">
+                <TypeParameterInstantiation>
+                  <TypeReference
+                    name={`JSX.IntrinsicElement['${props.klass.name}']`}
+                  />
+                </TypeParameterInstantiation>
+              </TypeReference>
+            </TypeAnnotation>
+          }
+        >
+          {{}}
+        </ClassProperty>
+
+        {renderProperties()}
+        {renderMethods()}
+      </Class>
+    </Export>
   );
 };
 

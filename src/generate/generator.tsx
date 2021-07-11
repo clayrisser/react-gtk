@@ -28,8 +28,6 @@ import { GtkGir } from './gir';
 import { Klass, Namespace } from './types';
 import { Element } from './components';
 
-const logger = console;
-
 export default class Generator {
   private generatorConfig: GeneratorConfig;
 

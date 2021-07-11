@@ -1,10 +1,10 @@
 /**
- * File: /src/generate/index.ts
+ * File: /src/generate/typeLookup.ts
  * Project: react-gtk
- * File Created: 10-07-2021 20:50:30
+ * File Created: 10-07-2021 23:46:21
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 10-07-2021 23:38:26
+ * Last Modified: 10-07-2021 23:48:47
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * Silicon Hills LLC (c) Copyright 2021
@@ -22,11 +22,13 @@
  * limitations under the License.
  */
 
-import Generator from './generator';
+import { HashMap } from '~/types';
 
-export async function generate() {
-  const generator = await Generator.create();
-  console.log((await generator.generate()).join('\n'));
+export function lookupType(type?: string | null) {
+  if (!type) return 'void';
+  return lookupTable[type] || type;
 }
 
-export { Generator };
+export const lookupTable: HashMap<string> = {
+  none: 'void'
+};

@@ -8,6 +8,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "incremental": false,
+    "jsx": "react",
     "lib": ["dom", "esnext"],
     "module": "commonjs",
     "moduleResolution": "node",

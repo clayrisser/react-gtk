@@ -4,7 +4,7 @@
  * File Created: 10-07-2021 21:16:21
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 10-07-2021 22:28:56
+ * Last Modified: 10-07-2021 23:44:55
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * Silicon Hills LLC (c) Copyright 2021
@@ -27,6 +27,7 @@ import { HashMap } from '~/types';
 export interface Node {
   attrs: Attrs;
   element: Element;
+  name: string | null;
   nodeType: NodeType;
 }
 
@@ -50,7 +51,7 @@ export interface Klass extends Node {
 }
 
 export interface Property extends Node {
-  type: Type;
+  type?: Type;
 }
 
 export interface Type extends Node {
@@ -70,4 +71,6 @@ export interface Method extends Node {
 
 export interface Parameter extends Node {}
 
-export interface ReturnValue extends Node {}
+export interface ReturnValue extends Node {
+  type?: Type;
+}

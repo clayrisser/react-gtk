@@ -1,10 +1,10 @@
 /**
- * File: /src/generate/index.ts
+ * File: /src/generate/components/index.ts
  * Project: react-gtk
- * File Created: 10-07-2021 20:50:30
+ * File Created: 10-07-2021 23:17:43
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 10-07-2021 23:38:26
+ * Last Modified: 10-07-2021 23:17:59
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * Silicon Hills LLC (c) Copyright 2021
@@ -22,11 +22,8 @@
  * limitations under the License.
  */
 
-import Generator from './generator';
+import Element from './Element';
 
-export async function generate() {
-  const generator = await Generator.create();
-  console.log((await generator.generate()).join('\n'));
-}
+export * from './Element';
 
-export { Generator };
+export { Element };

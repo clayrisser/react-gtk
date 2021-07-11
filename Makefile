@@ -3,7 +3,7 @@
 # File Created: 10-07-2021 17:57:27
 # Author: Clay Risser <email@clayrisser.com>
 # -----
-# Last Modified: 10-07-2021 21:01:19
+# Last Modified: 10-07-2021 22:36:43
 # Modified By: Clay Risser <email@clayrisser.com>
 # -----
 # Silicon Hills LLC (c) Copyright 2021
@@ -164,7 +164,7 @@ start: ~format
 generate: ~format
 	@$(MAKE) -s +generate
 +generate:
-	@$(BABEL_NODE) --extensions '.ts,.tsx' src/generate $(ARGS)
+	@$(BABEL_NODE) --extensions '.ts,.tsx' src/generate/run $(ARGS)
 
 .PHONY: clean
 clean:

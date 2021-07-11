@@ -4,7 +4,7 @@
  * File Created: 10-07-2021 20:50:56
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 10-07-2021 22:32:19
+ * Last Modified: 10-07-2021 22:47:07
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * Silicon Hills LLC (c) Copyright 2021
@@ -85,11 +85,15 @@ export default class Gir {
   getNodes(nodeType: NodeType, node?: Node): Node[] {
     const element = node ? node.element : this.dom;
     return Array.from(element.getElementsByTagName(nodeType.toString())).map(
-      (element: Element) => ({
-        attrs: this.getAttrs(element),
-        element,
-        nodeType
-      })
+      (element: Element) => {
+        const attrs = this.getAttrs(element);
+        return {
+          attrs,
+          element,
+          name: attrs.name,
+          nodeType
+        };
+      }
     );
   }
 

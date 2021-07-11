@@ -26,7 +26,7 @@ import React from 'react';
 import { render } from 'react-ast';
 import { GtkGir } from './gir';
 import { Klass, Namespace } from './types';
-import { Element } from './components';
+import { Element, IntrinsicElements } from './components';
 
 export default class Generator {
   private generatorConfig: GeneratorConfig;
@@ -45,21 +45,27 @@ export default class Generator {
   }
 
   async generate() {
-    return (
-      await Promise.all(
-        this.gtkGir.namespaces.map(async (namespace: Namespace) => {
-          return Promise.all(
-            namespace.klasses.map(async (klass: Klass) => {
-              return this.generateKlass(klass);
-            })
-          );
-        })
-      )
-    ).flat();
+    return this.gtkGir.namespaces
+      .map((namespace: Namespace) => [
+        ...namespace.klasses.map((klass: Klass) => {
+          return this.generateElement(klass);
+        }),
+        this.generateIntrinsicElements(namespace.klasses)
+      ])
+      .flat();
   }
 
-  async generateKlass(klass: Klass) {
+  generateElement(klass: Klass) {
     return render(<Element klass={klass} />, {
+      prettier: { parser: 'babel' },
+      parserOptions: {
+        plugins: ['jsx', 'classProperties', 'typescript']
+      }
+    });
+  }
+
+  generateIntrinsicElements(klasses: Klass[]) {
+    return render(<IntrinsicElements klasses={klasses} />, {
       prettier: { parser: 'babel' },
       parserOptions: {
         plugins: ['jsx', 'classProperties', 'typescript']

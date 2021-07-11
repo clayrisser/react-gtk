@@ -52,7 +52,8 @@
     "core-js": "^3.15.2"
   },
   "peerDependencies": {
-    "node-gtk": "^0.9.0"
+    "node-gtk": "^0.9.0",
+    "react": "^17.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.5",
@@ -93,7 +94,7 @@
     "node-gtk": "^0.9.0",
     "prettier": "^2.3.2",
     "react": "^17.0.2",
-    "react-ast": "^0.2.7",
+    "react-ast": "^0.3.1",
     "typescript": "^4.3.5",
     "xmldom": "^0.6.0"
   },

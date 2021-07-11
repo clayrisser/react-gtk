@@ -4,7 +4,7 @@
  * File Created: 10-07-2021 23:17:43
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 10-07-2021 23:17:59
+ * Last Modified: 11-07-2021 05:06:46
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * Silicon Hills LLC (c) Copyright 2021
@@ -23,7 +23,9 @@
  */
 
 import Element from './Element';
+import IntrinsicElements from './IntrinsicElement';
 
 export * from './Element';
+export * from './IntrinsicElement';
 
-export { Element };
+export { Element, IntrinsicElements };

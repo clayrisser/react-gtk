@@ -3,14 +3,14 @@ import camelcase from 'lodash.camelcase';
 import {
   Class,
   ClassMethod,
-  TypeParameterInstantiation,
-  TypeReference,
   ClassProperty,
   Export,
-  TypeAnnotation
+  TypeAnnotation,
+  TypeParameterInstantiation,
+  TypeReference
 } from 'react-ast';
 import { Klass, Method, Property } from '~/generate/types';
-import { lookupTable, lookupType } from '~/generate/typeLookup';
+import { lookupType } from '~/generate/typeLookup';
 
 export interface ElementProps {
   klass: Klass;
@@ -51,6 +51,7 @@ const Element: FC<ElementProps> = (props: ElementProps) => {
     <Export default>
       <Class name={props.klass.name || ''} extends="Element">
         <ClassProperty
+          static
           id="defaultProps"
           typeAnnotation={
             <TypeAnnotation>

@@ -20,5 +20,9 @@
     "lerna": "^3.2.1",
     "rimraf": "^2.6.3"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "packageManager": "yarn@3.7.0",
+  "dependencies": {
+    "node-gtk": "^0.12.0"
+  }
 }

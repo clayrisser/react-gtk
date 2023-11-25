@@ -48,7 +48,7 @@ Make sure you have gtk 3 installed on your operating system.
 #### Ubuntu
 
 ```sh
-sudo apt install libgtk-3-dev
+sudo apt install libgtk-3-dev libgirepository1.0-dev
 ```
 
 #### OSX

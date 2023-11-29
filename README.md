@@ -18,16 +18,17 @@ and CSS using [Yoga](https://yogalayout.com).
 You can follow the development in the [refactor](https://github.com/silicon-hills/react-gtk/tree/refactor) branch.
 
 ## [FILE ISSUE](https://github.com/codejamninja/react-gtk/issues/new)
+
 This project is under active development. Please help by sharing your
-expirience, bugs, comments, complaints, etc . . .
+experience, bugs, comments, complaints, etc . . .
 
 If you think it, say it :laughing:
 
 ## Features
 
-* supports native osx desktop
-* supports native linux desktop
-* supports native windows desktop
+- supports native osx desktop
+- supports native linux desktop
+- supports native windows desktop
 
 ## Installation
 
@@ -37,9 +38,9 @@ npm install --save @react-gtk/binding
 
 ## Dependencies
 
-* [NodeJS](https://nodejs.org)
-* [GTK](https://www.gtk.org)
-* [GObject Introspection](https://wiki.gnome.org/Projects/GObjectIntrospection)
+- [NodeJS](https://nodejs.org)
+- [GTK](https://www.gtk.org)
+- [GObject Introspection](https://wiki.gnome.org/Projects/GObjectIntrospection)
 
 ### Gtk 3
 
@@ -90,16 +91,13 @@ npm run start
 
 Submit an [issue](https://github.com/codejamninja/react-gtk/issues/new)
 
-
 ## Screenshots
 
 [Contribute](https://github.com/codejamninja/react-gtk/blob/master/CONTRIBUTING.md) a screenshot
 
-
 ## Contributing
 
 Review the [guidelines for contributing](https://github.com/codejamninja/react-gtk/blob/master/CONTRIBUTING.md)
-
 
 ## Contributors
 
@@ -137,16 +135,13 @@ Support this project with your organization. Your logo will show up here with a 
 
 [Jam Risser](https://codejam.ninja) © 2019
 
-
 ## Changelog
 
 Review the [changelog](https://github.com/codejamninja/react-gtk/blob/master/CHANGELOG.md)
 
-
 ## Credits
 
-* [Jam Risser](https://codejam.ninja) - Author
-
+- [Jam Risser](https://codejam.ninja) - Author
 
 ## Support on Liberapay
 

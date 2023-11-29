@@ -47,7 +47,6 @@ module.exports = {
   },
   ignorePatterns: ['!.storybook'],
   rules: {
-    '@typescript-eslint/consistent-type-imports': 'error',
     '@typescript-eslint/lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
     'max-lines': ['error', 999],
     'react/jsx-no-useless-fragment': ['error', { allowExpressions: true }],
@@ -78,6 +77,7 @@ module.exports = {
       },
     ],
     '@typescript-eslint/consistent-type-assertions': 'off',
+    '@typescript-eslint/consistent-type-imports': 'off',
     '@typescript-eslint/explicit-member-accessibility': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/no-require-imports': 'off',

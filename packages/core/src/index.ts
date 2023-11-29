@@ -1,7 +1,7 @@
 /*
- *  File: /src/elements/Window.ts
+ *  File: /src/index.ts
  *  Project: @react-gtk/core
- *  File Created: 28-11-2023 23:41:23
+ *  File Created: 29-11-2023 00:26:45
  *  Author: Clay Risser
  *  -----
  *  BitSpur (c) Copyright 2017 - 2023
@@ -19,13 +19,12 @@
  *  limitations under the License.
  */
 
-import { Element } from './Element';
+import { LabelProps } from './elements/Label';
+import { WindowProps } from './elements/Window';
 
-export interface WindowProps {}
+export const Label = 'Label';
+export const Window = 'Window';
 
-export class Window extends Element {
-  constructor(props: WindowProps) {
-    // TODO: initialize a Gtk.Window node
-    super({} as any, props);
-  }
-}
+export type { LabelProps, WindowProps };
+
+export * from './render';

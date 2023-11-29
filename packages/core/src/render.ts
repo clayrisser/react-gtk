@@ -27,8 +27,8 @@ import { Window } from './elements/Window';
 
 let hasStarted = false;
 
-export default function render(element: JSX.Element, title = 'React Gtk') {
-  const window = new Window();
+export function render(element: JSX.Element, title = 'React Gtk') {
+  const window = new Window({});
   window.node.title = title;
   const root = Renderer.createContainer(window, 0, null, false, null, 'react_gtk_', (_err: Error) => undefined, null);
   Renderer.updateContainer(element, root, null, () => undefined);

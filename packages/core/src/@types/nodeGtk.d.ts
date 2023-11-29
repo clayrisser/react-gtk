@@ -1,7 +1,7 @@
 /*
- *  File: /src/elements/Window.ts
+ *  File: /src/@types/node-gtk.d.ts
  *  Project: @react-gtk/core
- *  File Created: 28-11-2023 23:41:23
+ *  File Created: 28-11-2023 22:32:06
  *  Author: Clay Risser
  *  -----
  *  BitSpur (c) Copyright 2017 - 2023
@@ -19,13 +19,14 @@
  *  limitations under the License.
  */
 
-import { Element } from './Element';
+declare type Gtk = any;
 
-export interface WindowProps {}
+declare class NodeGtk {
+  static require(library: string, version: string): Gtk;
 
-export class Window extends Element {
-  constructor(props: WindowProps) {
-    // TODO: initialize a Gtk.Window node
-    super({} as any, props);
-  }
+  static startLoop(): any;
+}
+
+declare module 'node-gtk' {
+  export = NodeGtk;
 }

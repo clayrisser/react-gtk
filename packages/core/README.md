@@ -8,24 +8,18 @@ Please ★ this repo if you found it useful ★ ★ ★
 
 Built with [Node GTK](https://github.com/romgrk/node-gtk)
 
-## Built by Silicon Hills LLC
-
-[![index](https://user-images.githubusercontent.com/6234038/71054254-f284ad80-2116-11ea-9013-d68306726854.jpeg)](https://nuevesolutions.com)
-
-Silicon Hills offers premium Node and React develpoment and support services. Get in touch at [nuevesolutions.com](https://nuevesolutions.com).
-
 ## [FILE ISSUE](https://github.com/codejamninja/react-gtk/issues/new)
+
 This project is under active development. Please help by sharing your
-expirience, bugs, comments, complaints, etc . . .
+experience, bugs, comments, complaints, etc . . .
 
 If you think it, say it :laughing:
 
 ## Features
 
-* supports native osx desktop
-* supports native linux desktop
-* supports native windows desktop
-
+- supports native osx desktop
+- supports native linux desktop
+- supports native windows desktop
 
 ## Installation
 
@@ -33,13 +27,11 @@ If you think it, say it :laughing:
 npm install --save @react-gtk/binding
 ```
 
-
 ## Dependencies
 
-* [NodeJS](https://nodejs.org)
-* [GTK](https://www.gtk.org)
-* [GObject Introspection](https://wiki.gnome.org/Projects/GObjectIntrospection)
-
+- [NodeJS](https://nodejs.org)
+- [GTK](https://www.gtk.org)
+- [GObject Introspection](https://wiki.gnome.org/Projects/GObjectIntrospection)
 
 ## Usage
 
@@ -61,21 +53,17 @@ class App extends Component {
 render(<App />, 'My App');
 ```
 
-
 ## Support
 
 Submit an [issue](https://github.com/codejamninja/react-gtk/issues/new)
-
 
 ## Screenshots
 
 [Contribute](https://github.com/codejamninja/react-gtk/blob/master/CONTRIBUTING.md) a screenshot
 
-
 ## Contributing
 
 Review the [guidelines for contributing](https://github.com/codejamninja/react-gtk/blob/master/CONTRIBUTING.md)
-
 
 ## Contributors
 
@@ -113,16 +101,13 @@ Support this project with your organization. Your logo will show up here with a 
 
 [Jam Risser](https://codejam.ninja) © 2019
 
-
 ## Changelog
 
 Review the [changelog](https://github.com/codejamninja/react-gtk/blob/master/CHANGELOG.md)
 
-
 ## Credits
 
-* [Jam Risser](https://codejam.ninja) - Author
-
+- [Jam Risser](https://codejam.ninja) - Author
 
 ## Support on Liberapay
 

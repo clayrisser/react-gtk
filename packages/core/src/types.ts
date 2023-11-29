@@ -19,6 +19,8 @@
  *  limitations under the License.
  */
 
+import type { Gtk } from '@girs/node-gtk-4.0';
+
 export type BundleType = 0 | 1;
 
 export type Type = string;
@@ -55,8 +57,13 @@ export interface Context {
   [key: string]: ContextItem;
 }
 
+export type AddNode = (child: Gtk.Widget, ...args: any[]) => void;
+
+export type RemoveNode = (child: Gtk.Widget, ...args: any[]) => void;
+
 export interface ElementMeta {
-  isContainer?: boolean;
+  addNode?: AddNode;
+  removeNode?: RemoveNode;
   mapChildren?: string;
 }
 
@@ -70,6 +77,10 @@ export interface Instance {
   removeChild: (child: Instance | TextInstance) => void;
 }
 
-export interface GtkNode {
-  [key: string]: any;
+export type GtkNode = Gtk.Widget;
+
+export enum ContainerType {
+  None = 0,
+  Child = 1,
+  Children = 2,
 }

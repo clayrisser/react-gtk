@@ -20,7 +20,7 @@
  */
 
 import PropTypes from 'prop-types';
-import type { Instance, GtkNode, Prop, Props, ElementMeta } from '../types';
+import { Instance, GtkNode, Props, ElementMeta, AddNode, RemoveNode } from '../types';
 
 export class Element implements Instance {
   static defaultProps: Props = {};
@@ -29,7 +29,9 @@ export class Element implements Instance {
 
   props: Props;
 
-  isContainer: boolean;
+  addNode?: AddNode;
+
+  removeNode?: RemoveNode;
 
   mapChildren?: string;
 
@@ -40,21 +42,22 @@ export class Element implements Instance {
     props: Props = {},
     meta: ElementMeta = {},
   ) {
-    const { isContainer = false, mapChildren }: ElementMeta = meta;
-    this.isContainer = isContainer;
+    const { addNode, removeNode, mapChildren }: ElementMeta = meta;
+    if (addNode) this.addNode = addNode;
+    if (removeNode) this.removeNode = removeNode;
     this.mapChildren = mapChildren;
     this.props = this.getProps(props);
   }
 
   appendChild(child: Instance) {
-    this.update();
+    // this.update();
     this.children.push(child);
-    if (this.isContainer) this.node.add(child.node);
+    if (this.addNode) this.addNode(child.node);
   }
 
   removeChild(child: Instance) {
     this.children.splice(this.children.indexOf(child), 1);
-    if (this.isContainer) this.node.remove(child.node);
+    if (this.removeNode) this.removeNode(child.node);
   }
 
   commitMount() {
@@ -71,19 +74,19 @@ export class Element implements Instance {
 
   update() {
     this.updateNode();
-    this.node.showAll();
+    // this.node.showAll();
   }
 
   updateNode() {
-    if (this.mapChildren && typeof this.props.children !== 'undefined' && this.props.children !== null) {
-      this.node[this.mapChildren] = this.props.children;
-    }
-    Object.keys(this.props).forEach((key: string) => {
-      const prop: Prop = this.props[key];
-      if (typeof prop !== 'undefined' && prop !== null) {
-        this.node[key] = prop;
-      }
-    });
+    // if (this.mapChildren && typeof this.props.children !== 'undefined' && this.props.children !== null) {
+    //   this.node[this.mapChildren] = this.props.children;
+    // }
+    // Object.keys(this.props).forEach((key: string) => {
+    //   const prop: Prop = this.props[key];
+    //   if (typeof prop !== 'undefined' && prop !== null) {
+    //     this.node[key] = prop;
+    //   }
+    // });
   }
 
   getProps(props: Props): Props {

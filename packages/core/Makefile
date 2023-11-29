@@ -59,6 +59,11 @@ $(ACTION)/build: $(call git_deps,\.([jt]sx?)$$)
 	@NODE_OPTIONS='--max-old-space-size=16384' $(TSUP)
 	@$(call done,$@)
 
+.PHONY: dev
+dev: ~build +dev
++dev:
+	@$(NODE) lib/example.js
+
 .PHONY: count
 count:
 	@$(CLOC) $(shell ($(GIT) ls-files && ($(GIT) lfs ls-files | $(CUT) -d' ' -f3)) | $(SORT) | $(UNIQ) -u)

@@ -23,5 +23,5 @@
     "tsBuildInfoFile": ".tsbuildinfo",
     "lib": ["DOM", "DOM.Iterable", "ES2022", "ScriptHost", "WebWorker", "WebWorker.ImportScripts", "Webworker.Iterable"]
   },
-  "include": ["src", "tests"]
+  "include": ["src", "tests", "*.ts", "*.js", "@girs/node-gtk-4.0"]
 }

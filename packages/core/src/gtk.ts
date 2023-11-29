@@ -19,6 +19,7 @@
  *  limitations under the License.
  */
 
+// @ts-ignore
 import nodeGtk from 'node-gtk';
 
 let initialized = false;

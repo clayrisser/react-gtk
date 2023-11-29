@@ -25,7 +25,7 @@ import transpileModules from './transpileModules';
 export default defineConfig({
   bundle: true,
   clean: true,
-  dts: true,
+  dts: false,
   entry: ['src/**/*.ts?(x)'],
   entryPoints: ['src/index.ts'],
   format: ['cjs', 'esm'],

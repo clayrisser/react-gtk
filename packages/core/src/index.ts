@@ -24,6 +24,7 @@ import { WindowProps } from './elements/Window';
 
 export const Label = 'Label';
 export const Window = 'Window';
+export const Button = 'Button';
 
 export type { LabelProps, WindowProps };
 

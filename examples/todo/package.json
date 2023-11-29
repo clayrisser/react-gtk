@@ -1,8 +1,8 @@
 {
-  "name": "elements",
+  "name": "@react-gtk/todo-example",
   "version": "4.0.0",
   "private": true,
-  "description": "react gtk elements example",
+  "description": "react gtk todo example",
   "sideEffects": false,
   "homepage": "https://gitlab.com/bitspur/community/react-gtk",
   "bugs": {

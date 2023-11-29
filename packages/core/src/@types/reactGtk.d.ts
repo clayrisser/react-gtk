@@ -30,5 +30,9 @@ declare namespace JSX {
     Window: {
       ref?: Ref<any>;
     };
+    Button: {
+      ref?: Ref<any>;
+      label?: string;
+    };
   }
 }

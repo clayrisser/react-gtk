@@ -19,28 +19,53 @@
  *  limitations under the License.
  */
 
+import GLib from '@girs/node-glib-2.0';
+import Gtk from '@girs/node-gtk-4.0';
 import Renderer from './reconciler';
-import dev from './dev';
-import type { BundleType } from './types';
-import { Gtk } from './gtk';
+import { BundleType } from 'react-reconciler';
 import { Window } from './elements/Window';
+import { dev } from './util';
 
-let hasStarted = false;
+let hasRun = false;
 
-export function render(element: JSX.Element, title = 'React Gtk') {
-  const window = new Window({});
-  window.node.title = title;
-  const root = Renderer.createContainer(window, 0, null, false, null, 'react_gtk_', (_err: Error) => undefined, null);
-  Renderer.updateContainer(element, root, null, () => undefined);
-  if (!hasStarted) {
-    hasStarted = true;
-    window.node.on('destroy', () => Gtk.mainQuit());
-    window.node.showAll();
-    Gtk.main();
-  }
-  Renderer.injectIntoDevTools({
-    bundleType: Number(dev) as BundleType,
-    rendererPackageName: '@react-gtk/core',
-    version: '4.0.0',
+export async function render(
+  element: JSX.Element,
+  app?: Gtk.Application,
+  applicationId = 'com.example.app',
+  loop = GLib.MainLoop.new(null, false),
+) {
+  return new Promise((resolve) => {
+    if (!app) app = new Gtk.Application(applicationId, 0);
+    app.on('activate', () => {
+      const window = new Window(app!);
+      window.node.on('close-request', () => {
+        app?.quit();
+        loop.quit();
+        return false;
+      });
+      const root = Renderer.createContainer(
+        window,
+        0,
+        null,
+        false,
+        null,
+        'react_gtk_',
+        (_err: Error) => undefined,
+        null,
+      );
+      Renderer.injectIntoDevTools({
+        bundleType: Number(dev) as BundleType,
+        rendererPackageName: '@react-gtk/core',
+        version: '4.0.0',
+      });
+      Renderer.updateContainer(element, root, null, () => undefined);
+      window.node.show();
+      window.node.present();
+      resolve(loop.run());
+    });
+    if (!hasRun) {
+      hasRun = true;
+      app.run([]);
+    }
   });
 }

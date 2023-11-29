@@ -2,9 +2,11 @@ cjs
 cspell
 dts
 esm
+girs
 globals
 gtk
 hydratable
+jsx
 lang
 microtask
 minify
@@ -14,6 +16,7 @@ renderer
 risser
 subtree
 transpile
+tsbuildinfo
 tsup
 txt
 yarnpkg

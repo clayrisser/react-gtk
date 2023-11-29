@@ -19,13 +19,24 @@
  *  limitations under the License.
  */
 
+import Gtk from '@girs/node-gtk-4.0';
 import { Element } from './Element';
 
 export interface WindowProps {}
 
 export class Window extends Element {
-  constructor(props: WindowProps) {
-    // TODO: initialize a Gtk.Window node
-    super({} as any, props);
+  node: Gtk.ApplicationWindow;
+
+  constructor(app: Gtk.Application, props: WindowProps = {}) {
+    const node = new Gtk.ApplicationWindow(app);
+    super(node, props, {
+      addNode: (child: Gtk.Widget) => {
+        node.child = child;
+      },
+      removeNode: () => {
+        node.setChild(null);
+      },
+    });
+    this.node = node;
   }
 }

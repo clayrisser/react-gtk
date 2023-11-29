@@ -1,7 +1,7 @@
 {
-  "name": "@react-gtk/binding",
+  "name": "@react-gtk/core",
   "version": "4.0.0",
-  "description": "react gtk bindings",
+  "description": "react gtk core",
   "sideEffects": false,
   "homepage": "https://gitlab.com/bitspur/community/react-gtk",
   "bugs": {
@@ -60,6 +60,8 @@
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
+    "@types/prop-types": "^15",
+    "@types/react-reconciler": "^0",
     "jest": "^29.7.0",
     "jest-sonar-reporter": "^2.0.0",
     "tsup": "^8.0.1",
@@ -67,5 +69,9 @@
   },
   "engines": {
     "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "prop-types": "^15.8.1",
+    "react-reconciler": "^0.29.0"
   }
 }

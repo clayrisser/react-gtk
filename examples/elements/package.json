@@ -54,7 +54,7 @@
     "indent": 4
   },
   "dependencies": {
-    "@react-gtk/binding": "^4.0.0",
+    "@react-gtk/core": "^4.0.0",
     "react": "^18.2.0"
   },
   "engines": {

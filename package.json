@@ -1,28 +1,23 @@
 {
-  "name": "react-gtk",
-  "description": "cross-platform react native desktop applications",
-  "version": "0.0.1",
-  "files": [
-    "packages"
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "examples/*",
+    "packages/*"
   ],
-  "scripts": {
-    "bootstrap": "lerna bootstrap && npm run link",
-    "bootstrap:hoist": "lerna bootstrap --hoist && npm run link",
-    "clean": "lerna clean -y",
-    "generate": "cd generate && npm run start && cd ../packages/binding && npm run format",
-    "lerna": "lerna",
-    "link": "lerna link",
-    "ls": "lerna ls",
-    "nuke": "bash generate/nuke.sh",
-    "publish": "lerna publish"
-  },
+  "license": "Apache-2.0",
   "devDependencies": {
-    "lerna": "^3.2.1",
-    "rimraf": "^2.6.3"
+    "@changesets/cli": "^2.27.1",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "cspell": "^8.0.0",
+    "eslint": "^8.54.0",
+    "eslint-config-alloy": "^5.1.2",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-spellcheck": "^0.0.20",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.2"
   },
-  "license": "MIT",
   "packageManager": "yarn@3.7.0",
-  "dependencies": {
-    "node-gtk": "^0.12.0"
-  }
+  "prettier": "eslint-config-alloy/.prettierrc.js"
 }

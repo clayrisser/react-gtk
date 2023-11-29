@@ -1,67 +1,63 @@
 {
   "name": "elements",
-  "version": "0.0.8",
+  "version": "4.0.0",
   "private": true,
   "description": "react gtk elements example",
+  "sideEffects": false,
+  "homepage": "https://gitlab.com/bitspur/community/react-gtk",
+  "bugs": {
+    "url": "https://gitlab.com/bitspur/community/react-gtk/issues",
+    "email": "support@bitspur.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/bitspur/community/react-gtk"
+  },
+  "license": "Apache-2.0",
+  "author": "BitSpur <email@clayrisser.com> (https://clayrisser.com)",
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "react-native": "src/index.ts",
+  "source": "src/index.ts",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
   "keywords": [
     "elements",
     "react",
     "gtk"
   ],
-  "homepage": "https://github.com/codejamninja/react-gtk/examples/elements",
-  "bugs": {
-    "url": "https://github.com/codejamninja/react-gtk/issues",
-    "email": "jam@codejam.ninja"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "Jam Risser",
-    "email": "jam@codejam.ninja",
-    "url": "https://codejam.ninja"
-  },
-  "files": [
-    "lib"
-  ],
-  "main": "lib/index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/codejamninja/react-gtk"
-  },
-  "scripts": {
-    "build": "npm run test && babel src -d lib",
-    "button": "babel-node src/button",
-    "clean": "git clean -fXd -e \\!node_modules -e \\!node_modules/**/*",
-    "clean:purge": "git clean -fXd",
-    "entry": "babel-node src/entry",
-    "format": "prettier --write ./src/**/*.js",
-    "lint": "npm run format && eslint ./",
-    "lint:fix": "npm run format && eslint --fix ./",
-    "prepublish": "npm run build",
-    "start": "npm run build && node lib",
-    "test": "npm run lint",
-    "text": "babel-node src/text"
-  },
-  "dependencies": {
-    "@react-gtk/binding": "^0.0.9",
-    "react": "^16.8.4"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.2.0",
-    "@babel/core": "^7.9.6",
-    "@babel/node": "^7.2.0",
-    "@babel/preset-react": "^7.0.0",
-    "babel-preset-jam": "^0.1.0",
-    "eslint": "^5.16.0",
-    "eslint-config-jam": "^0.1.6",
-    "eslint-plugin-jsx-a11y": "^6.2.1",
-    "eslint-plugin-react": "^7.12.4",
-    "prettier": "^2.0.5",
-    "yo": "^2.0.5"
-  },
-  "engines": {
-    "node": ">=6.0.0"
-  },
   "eslintIgnore": [
     "lib"
-  ]
+  ],
+  "jest": {
+    "testRegex": "\\.(spec|test)\\.[cm]?[jt]sx?$",
+    "testEnvironment": "node",
+    "verbose": true,
+    "testResultsProcessor": "jest-sonar-reporter",
+    "testPathIgnorePatterns": [
+      "<rootDir>/lib/"
+    ]
+  },
+  "jestSonar": {
+    "reportPath": ".mkpm/mkpm/.tmp/reports",
+    "reportFile": "test-report.xml",
+    "indent": 4
+  },
+  "dependencies": {
+    "@react-gtk/binding": "^4.0.0",
+    "react": "^18.2.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
 }

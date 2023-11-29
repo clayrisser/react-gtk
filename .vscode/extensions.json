@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "ahmadalli.vscode-nginx-conf",
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode",
+    "mikestead.dotenv",
+    "mkhl.direnv",
+    "ms-azuretools.vscode-docker",
+    "prisma.prisma",
+    "psioniq.psi-header",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}

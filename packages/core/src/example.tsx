@@ -20,10 +20,17 @@
  */
 
 import React from 'react';
-import { render } from './render';
-import { Button } from './index';
+import { render, Box, Button } from './index';
 
 (async () => {
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  await render(<Button label="Click Me" />);
+  await render(
+    <Box>
+      <Button
+        label="Click me!"
+        onClicked={() => {
+          console.log('I was clicked!');
+        }}
+      />
+    </Box>,
+  );
 })();

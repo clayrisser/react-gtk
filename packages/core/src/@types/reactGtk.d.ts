@@ -21,6 +21,7 @@
 
 declare namespace JSX {
   type Ref<T> = import('react').Ref<T>;
+  type ReactNode = import('react').ReactNode;
 
   interface IntrinsicElements {
     Label: {
@@ -30,9 +31,14 @@ declare namespace JSX {
     Window: {
       ref?: Ref<any>;
     };
+    Box: {
+      ref?: Ref<any>;
+      children?: ReactNode;
+    };
     Button: {
       ref?: Ref<any>;
       label?: string;
+      onClicked?: () => void;
     };
   }
 }

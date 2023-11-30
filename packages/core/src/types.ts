@@ -57,14 +57,13 @@ export interface Context {
   [key: string]: ContextItem;
 }
 
-export type AddNode = (child: Gtk.Widget, ...args: any[]) => void;
+export type AppendChild = (child: Gtk.Widget, ...args: any[]) => void;
 
-export type RemoveNode = (child: Gtk.Widget, ...args: any[]) => void;
+export type RemoveChild = (child: Gtk.Widget, ...args: any[]) => void;
 
 export interface ElementMeta {
-  addNode?: AddNode;
-  removeNode?: RemoveNode;
-  mapChildren?: string;
+  appendChild?: AppendChild;
+  removeChild?: RemoveChild;
 }
 
 export interface Instance {
@@ -77,7 +76,9 @@ export interface Instance {
   removeChild: (child: Instance | TextInstance) => void;
 }
 
-export type GtkNode = Gtk.Widget;
+export interface GtkNode extends Gtk.Widget {
+  _element?: Instance;
+}
 
 export enum ContainerType {
   None = 0,

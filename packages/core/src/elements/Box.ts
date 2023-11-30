@@ -1,7 +1,7 @@
 /*
- *  File: /src/index.ts
+ *  File: /src/elements/Box.ts
  *  Project: @react-gtk/core
- *  File Created: 29-11-2023 00:26:45
+ *  File Created: 28-11-2023 23:41:23
  *  Author: Clay Risser
  *  -----
  *  BitSpur (c) Copyright 2017 - 2023
@@ -19,16 +19,20 @@
  *  limitations under the License.
  */
 
-import { ApplicationWindowProps } from './elements/ApplicationWindow';
-import { BoxProps } from './elements/Box';
-import { ButtonProps } from './elements/Button';
-import { LabelProps } from './elements/Label';
+import Gtk from '@girs/node-gtk-4.0';
+import { Element } from './Element';
 
-export const Box = 'Box';
-export const Button = 'Button';
-export const Label = 'Label';
-export const Window = 'Window';
+export type BoxProps = JSX.IntrinsicElements['Box'];
 
-export type { LabelProps, ApplicationWindowProps, ButtonProps, BoxProps };
+export class Box extends Element {
+  node: Gtk.Box;
 
-export * from './render';
+  constructor(props: BoxProps = {}) {
+    const node = new Gtk.Box();
+    super(node, props, {
+      appendChild: (child: Gtk.Widget) => node.append(child),
+      removeChild: (child: Gtk.Widget) => node.remove(child),
+    });
+    this.node = node;
+  }
+}

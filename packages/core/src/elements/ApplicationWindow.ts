@@ -1,5 +1,5 @@
 /*
- *  File: /src/elements/Window.ts
+ *  File: /src/elements/ApplicationWindow.ts
  *  Project: @react-gtk/core
  *  File Created: 28-11-2023 23:41:23
  *  Author: Clay Risser
@@ -22,21 +22,14 @@
 import Gtk from '@girs/node-gtk-4.0';
 import { Element } from './Element';
 
-export interface WindowProps {}
+export interface ApplicationWindowProps {}
 
-export class Window extends Element {
+export class ApplicationWindow extends Element {
   node: Gtk.ApplicationWindow;
 
-  constructor(app: Gtk.Application, props: WindowProps = {}) {
+  constructor(app: Gtk.Application, props: ApplicationWindowProps = {}) {
     const node = new Gtk.ApplicationWindow(app);
-    super(node, props, {
-      addNode: (child: Gtk.Widget) => {
-        node.child = child;
-      },
-      removeNode: () => {
-        node.setChild(null);
-      },
-    });
+    super(node, props);
     this.node = node;
   }
 }

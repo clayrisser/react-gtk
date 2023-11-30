@@ -1,7 +1,7 @@
 /*
- *  File: /src/index.ts
+ *  File: /src/elements/Button.ts
  *  Project: @react-gtk/core
- *  File Created: 29-11-2023 00:26:45
+ *  File Created: 28-11-2023 23:41:23
  *  Author: Clay Risser
  *  -----
  *  BitSpur (c) Copyright 2017 - 2023
@@ -19,16 +19,13 @@
  *  limitations under the License.
  */
 
-import { ApplicationWindowProps } from './elements/ApplicationWindow';
-import { BoxProps } from './elements/Box';
-import { ButtonProps } from './elements/Button';
-import { LabelProps } from './elements/Label';
+import Gtk from '@girs/node-gtk-4.0';
+import { Element } from './Element';
 
-export const Box = 'Box';
-export const Button = 'Button';
-export const Label = 'Label';
-export const Window = 'Window';
+export type ButtonProps = JSX.IntrinsicElements['Button'];
 
-export type { LabelProps, ApplicationWindowProps, ButtonProps, BoxProps };
-
-export * from './render';
+export class Button extends Element {
+  constructor(props: ButtonProps = {}) {
+    super(new Gtk.Button(), props);
+  }
+}

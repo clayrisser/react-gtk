@@ -23,5 +23,12 @@
     "tsBuildInfoFile": ".tsbuildinfo",
     "lib": ["DOM", "DOM.Iterable", "ES2022", "ScriptHost", "WebWorker", "WebWorker.ImportScripts", "Webworker.Iterable"]
   },
+  "ts-node": {
+    "swc": true,
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
   "include": ["src", "tests", "*.ts", "*.js", "@girs/node-gtk-4.0"]
 }

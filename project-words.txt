@@ -4,7 +4,9 @@ dts
 esm
 girs
 globals
+gobject
 gtk
+gtype
 hydratable
 jsx
 lang

@@ -21,9 +21,7 @@
 
 import { Element } from './Element';
 
-export interface LabelProps {
-  label?: string;
-}
+export type LabelProps = JSX.IntrinsicElements['Label'];
 
 export class Label extends Element {
   constructor(props: LabelProps) {

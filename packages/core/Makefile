@@ -25,6 +25,8 @@ include $(MKPM)/envcache
 include $(MKPM)/dotenv
 include $(PROJECT_ROOT)/shared.mk
 
+TS_NODE ?= $(call yarn_binary,ts-node)
+
 ACTIONS += deps
 $(ACTION)/deps: package.json
 	@$(YARN) install $(DEPS_ARGS)
@@ -60,9 +62,9 @@ $(ACTION)/build: $(call git_deps,\.([jt]sx?)$$)
 	@$(call done,$@)
 
 .PHONY: dev
-dev: ~build +dev
+dev: ~deps +dev
 +dev:
-	@$(NODE) lib/example.js
+	@$(TS_NODE) src/example.tsx
 
 .PHONY: count
 count:

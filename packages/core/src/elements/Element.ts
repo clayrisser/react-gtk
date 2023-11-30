@@ -19,8 +19,13 @@
  *  limitations under the License.
  */
 
+import GObject from '@girs/node-gobject-2.0';
 import PropTypes from 'prop-types';
-import { Instance, GtkNode, Props, ElementMeta, AddNode, RemoveNode } from '../types';
+import type Gtk from '@girs/node-gtk-4.0';
+import { Instance, GtkNode, Props, ElementMeta } from '../types';
+
+let _propertyList: string[] | undefined;
+let _signalList: Set<string> | undefined;
 
 export class Element implements Instance {
   static defaultProps: Props = {};
@@ -29,39 +34,47 @@ export class Element implements Instance {
 
   props: Props;
 
-  addNode?: AddNode;
-
-  removeNode?: RemoveNode;
-
-  mapChildren?: string;
-
   children: Instance[] = [];
 
   constructor(
     public node: GtkNode,
     props: Props = {},
-    meta: ElementMeta = {},
+    private meta: ElementMeta = {},
   ) {
-    const { addNode, removeNode, mapChildren }: ElementMeta = meta;
-    if (addNode) this.addNode = addNode;
-    if (removeNode) this.removeNode = removeNode;
-    this.mapChildren = mapChildren;
     this.props = this.getProps(props);
+    this.node._element = this;
   }
 
   appendChild(child: Instance) {
-    // this.update();
+    this.updateNode();
     this.children.push(child);
-    if (this.addNode) this.addNode(child.node);
+    if (this.meta.appendChild) {
+      this.meta.appendChild(child.node);
+    } else if ('setChild' in this.node && typeof this.node.setChild === 'function') {
+      (
+        this.node as {
+          setChild: (child: Gtk.Widget | null) => void;
+        }
+      ).setChild(child.node);
+    }
   }
 
   removeChild(child: Instance) {
+    this.updateNode();
     this.children.splice(this.children.indexOf(child), 1);
-    if (this.removeNode) this.removeNode(child.node);
+    if (this.meta.removeChild) {
+      this.meta.removeChild(child.node);
+    } else if ('setChild' in this.node && typeof this.node.setChild === 'function') {
+      (
+        this.node as {
+          setChild: (child: Gtk.Widget | null) => void;
+        }
+      ).setChild(null);
+    }
   }
 
   commitMount() {
-    this.update();
+    this.updateNode();
   }
 
   commitUpdate(newProps: Props) {
@@ -69,28 +82,53 @@ export class Element implements Instance {
       ...this.props,
       ...newProps,
     };
-    this.update();
-  }
-
-  update() {
     this.updateNode();
-    // this.node.showAll();
   }
 
   updateNode() {
-    // if (this.mapChildren && typeof this.props.children !== 'undefined' && this.props.children !== null) {
-    //   this.node[this.mapChildren] = this.props.children;
-    // }
-    // Object.keys(this.props).forEach((key: string) => {
-    //   const prop: Prop = this.props[key];
-    //   if (typeof prop !== 'undefined' && prop !== null) {
-    //     this.node[key] = prop;
-    //   }
-    // });
+    Object.keys(this.props).forEach((key: string) => {
+      const prop = this.props[key];
+      if (typeof prop !== 'undefined' && prop !== null) {
+        if (/^on[A-Z]/.test(key)) {
+          const signal = key.replace(/^on([A-Z])/, (_, match) => match.toLowerCase());
+          if (this.signalList.has(signal)) this.node.connect(signal, prop);
+        } else if (key in this.node) {
+          (this.node as any)[key] = prop;
+        }
+      }
+    });
   }
 
-  getProps(props: Props): Props {
-    props = { ...props };
+  get propertyList(): string[] {
+    if (_propertyList) return _propertyList;
+    let prototype = Object.getPrototypeOf(this.node);
+    let propertyList: string[] = [];
+    while (prototype) {
+      propertyList = [
+        ...propertyList,
+        ...Object.getOwnPropertyNames(prototype).map((name) => {
+          if (!/^set[A-Z]/.test(name)) return '';
+          return name.replace(/^set([A-Z])/, (_, match) => match.toLowerCase());
+        }),
+      ].filter((key) => key.length);
+      prototype = Object.getPrototypeOf(prototype);
+    }
+    _propertyList = propertyList;
+    return _propertyList;
+  }
+
+  get signalList(): Set<string> {
+    if (_signalList) return _signalList;
+    _signalList = new Set(
+      GObject.signalListIds(this.node.__gtype__ as unknown as GObject.GType)
+        .map((id: number) => GObject.signalName(id))
+        .filter((name: string | null) => name?.length) as string[],
+    );
+    return _signalList;
+  }
+
+  private getProps(props: Props): Props {
+    props = { ...this.props, ...props };
     const { defaultProps, propTypes } = this.constructor as typeof Element;
     Object.keys(defaultProps).forEach((key) => {
       const defaultProp = defaultProps[key];

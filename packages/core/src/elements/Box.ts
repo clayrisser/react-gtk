@@ -26,16 +26,12 @@ export type BoxProps = JSX.IntrinsicElements['Box'];
 export class Box extends Element {
   node: Gtk.Box;
 
-  constructor({ style, ...props }: BoxProps) {
+  constructor(props: BoxProps) {
     const node = new Gtk.Box();
-    super(
-      node,
-      { ...props, ...style },
-      {
-        appendChild: (child: Gtk.Widget) => node.append(child),
-        removeChild: (child: Gtk.Widget) => node.remove(child),
-      },
-    );
+    super(node, props, {
+      appendChild: (child: Gtk.Widget) => node.append(child),
+      removeChild: (child: Gtk.Widget) => node.remove(child),
+    });
     this.node = node;
   }
 }

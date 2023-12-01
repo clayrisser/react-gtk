@@ -31,9 +31,8 @@ export const Example = () => {
         onClicked={() => {
           console.log('I was clicked!');
         }}
-        style={{ opacity: 0.5 }}
       />
-      <Image resourcePath="./assets/test.png" />
+      <Image resource="packages/core/src/assets/test.png" />
       <Label label="Hello World!" />
     </Box>
   );

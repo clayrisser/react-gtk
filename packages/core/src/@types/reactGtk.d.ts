@@ -44,7 +44,7 @@ declare namespace JSX {
     };
     Image: {
       ref?: Ref<any>;
-      resourcePath?: string;
+      resource?: string;
       style?: any;
     };
   }

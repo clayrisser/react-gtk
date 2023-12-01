@@ -19,13 +19,14 @@
  *  limitations under the License.
  */
 
+import Gtk from '@girs/node-gtk-4.0';
 import { Element } from './Element';
 
 export type LabelProps = JSX.IntrinsicElements['Label'];
 
 export class Label extends Element {
-  constructor(props: LabelProps) {
-    // TODO: initialize a Gtk.Window node
-    super({} as any, props);
+  constructor(props: LabelProps = {}) {
+    const node = new Gtk.Label();
+    super(node, props);
   }
 }

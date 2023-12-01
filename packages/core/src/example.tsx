@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { render, Box, Button, Image } from './index';
+import { render, Box, Button, Image, Label } from './index';
 import Gtk from '@girs/node-gtk-4.0';
 
 export const Example = () => {
@@ -34,6 +34,7 @@ export const Example = () => {
         style={{ opacity: 0.5 }}
       />
       <Image resourcePath="./assets/test.png" />
+      <Label label="Hello World!" />
     </Box>
   );
 };

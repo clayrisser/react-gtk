@@ -33,7 +33,7 @@ export const Example = () => {
         }}
         style={{ opacity: 0.5 }}
       />
-      <Image resourcePath="./assets/test.png" />
+      <Image style={{ pixelSize: 200, isDrawable: true }} resource="packages/core/src/assets/test.png" />
       <Label label="Hello World!" />
     </Box>
   );

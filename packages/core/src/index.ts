@@ -23,12 +23,14 @@ import { ApplicationWindowProps } from './elements/ApplicationWindow';
 import { BoxProps } from './elements/Box';
 import { ButtonProps } from './elements/Button';
 import { LabelProps } from './elements/Label';
+import { ImageProps } from './elements/Image';
 
 export const Box = 'Box';
 export const Button = 'Button';
 export const Label = 'Label';
 export const Window = 'Window';
+export const Image = 'Image';
 
-export type { LabelProps, ApplicationWindowProps, ButtonProps, BoxProps };
+export type { LabelProps, ApplicationWindowProps, ButtonProps, BoxProps, ImageProps };
 
 export * from './render';

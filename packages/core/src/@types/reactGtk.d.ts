@@ -34,6 +34,7 @@ declare namespace JSX {
     Box: {
       ref?: Ref<any>;
       children?: ReactNode;
+      style?: any;
     };
     Button: {
       ref?: Ref<any>;

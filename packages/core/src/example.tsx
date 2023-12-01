@@ -20,11 +20,12 @@
  */
 
 import React from 'react';
-import { render, Box, Button, Label } from './index';
+import { render, Box, Button, Image, Label } from './index';
+import Gtk from '@girs/node-gtk-4.0';
 
 (async () => {
   await render(
-    <Box>
+    <Box style={{ orientation: Gtk.Orientation.VERTICAL, marginTop: 100 }}>
       <Button
         label="Click me!"
         onClicked={() => {

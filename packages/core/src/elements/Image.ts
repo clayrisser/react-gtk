@@ -1,8 +1,8 @@
 /*
- *  File: /src/elements/Box.ts
+ *  File: /src/elements/Image.ts
  *  Project: @react-gtk/core
- *  File Created: 28-11-2023 23:41:23
- *  Author: Clay Risser
+ *  File Created: 01-12-2023 09:58:18
+ *  Author: dharmendra
  *  -----
  *  BitSpur (c) Copyright 2017 - 2023
  *
@@ -22,20 +22,10 @@
 import Gtk from '@girs/node-gtk-4.0';
 import { Element } from './Element';
 
-export type BoxProps = JSX.IntrinsicElements['Box'];
-export class Box extends Element {
-  node: Gtk.Box;
+export type ImageProps = JSX.IntrinsicElements['img'];
 
-  constructor({ style, ...props }: BoxProps) {
-    const node = new Gtk.Box();
-    super(
-      node,
-      { ...props, ...style },
-      {
-        appendChild: (child: Gtk.Widget) => node.append(child),
-        removeChild: (child: Gtk.Widget) => node.remove(child),
-      },
-    );
-    this.node = node;
+export class Image extends Element {
+  constructor(props: ImageProps = {}) {
+    super(new Gtk.Image(), props);
   }
 }

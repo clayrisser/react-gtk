@@ -23,11 +23,13 @@ import type { Element } from './Element';
 import { Box } from './Box';
 import { Label } from './Label';
 import { Button } from './Button';
+import { Image } from './Image';
 
 export const elements: Record<string, typeof Element> = {
   Box,
   Button,
   Label,
+  Image,
 };
 
 export * from './ApplicationWindow';
@@ -35,3 +37,4 @@ export * from './Box';
 export * from './Button';
 export * from './Element';
 export * from './Label';
+export * from './Image';

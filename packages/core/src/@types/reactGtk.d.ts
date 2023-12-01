@@ -27,6 +27,15 @@ declare namespace JSX {
     Label: {
       ref?: Ref<any>;
       label?: string;
+      style?: Gtk.LabelProps;
+      halign?: Gtk.Align;
+      justify?: Gtk.justify;
+      tooltip_markup?: Gtk.tooltip_markup;
+      cursor?: Gtk.cursor;
+      marginStart?: Gtk.marginStart;
+      marginTop?: Gtk.marginTop;
+      focus_on_click?: Gtk.focusOnClick;
+      focusable?: Gtk.focusable;
     };
     Window: {
       ref?: Ref<any>;

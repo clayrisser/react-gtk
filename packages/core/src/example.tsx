@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { render, Box, Button, Image, Label } from './index';
+import { render, Box, Button, Label } from './index';
 import Gtk from '@girs/node-gtk-4.0';
 
 (async () => {
@@ -32,7 +32,14 @@ import Gtk from '@girs/node-gtk-4.0';
           console.log('I was clicked!');
         }}
       />
-      <Label label="how are you" />
+      <Label
+        label="Label with markup"
+        halign={4}
+        justify={Gtk.Justification.RIGHT}
+        tooltip_markup="<i>Tooltip</i> with <b>markup</b>"
+        marginStart={10}
+        marginTop={20}
+      />
     </Box>,
   );
 })();

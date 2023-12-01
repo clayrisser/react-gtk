@@ -19,13 +19,14 @@
  *  limitations under the License.
  */
 
+import type { ReactNode } from 'react';
 import Gtk from '@girs/node-gtk-4.0';
 import { Element } from './Element';
 
-export type ButtonProps = JSX.IntrinsicElements['Button'];
+export type ButtonProps = JSX.IntrinsicElements['Button'] & { Children?: ReactNode };
 
 export class Button extends Element {
-  constructor(props: ButtonProps = {}) {
-    super(new Gtk.Button(), props);
+  constructor({ style, ...props }: ButtonProps = {}) {
+    super(new Gtk.Button(), { ...props, ...style });
   }
 }

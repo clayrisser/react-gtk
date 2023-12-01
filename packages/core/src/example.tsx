@@ -23,15 +23,21 @@ import React from 'react';
 import { render, Box, Button, Image } from './index';
 import Gtk from '@girs/node-gtk-4.0';
 
-(async () => {
-  await render(
-    <Box style={{ orientation: Gtk.Orientation.VERTICAL, marginTop: 100 }}>
+export const Example = () => {
+  return (
+    <Box style={{ orientation: Gtk.Orientation.VERTICAL }}>
       <Button
         label="Click me!"
         onClicked={() => {
           console.log('I was clicked!');
         }}
+        style={{ opacity: 0.5 }}
       />
-    </Box>,
+      <Image resourcePath="./assets/test.png" />
+    </Box>
   );
+};
+
+(async () => {
+  await render(<Example />);
 })();

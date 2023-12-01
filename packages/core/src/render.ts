@@ -61,9 +61,6 @@ export async function render(
       Renderer.updateContainer(element, root, null, () => undefined);
       window.node.show();
       window.node.present();
-      new Gtk.Image({
-        file: './assets/test.png',
-      }).show();
       resolve(loop.run());
     });
     if (!hasRun) {

@@ -39,7 +39,13 @@ declare namespace JSX {
     Button: {
       ref?: Ref<any>;
       label?: string;
+      style?: any;
       onClicked?: () => void;
+    };
+    Image: {
+      ref?: Ref<any>;
+      resourcePath?: string;
+      style?: any;
     };
   }
 }

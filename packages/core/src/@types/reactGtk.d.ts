@@ -26,7 +26,7 @@ declare namespace JSX {
   interface IntrinsicElements {
     Label: {
       ref?: Ref<any>;
-      text?: string;
+      label?: string;
     };
     Window: {
       ref?: Ref<any>;

@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { render, Box, Button } from './index';
+import { render, Box, Button, Label } from './index';
 
 (async () => {
   await render(
@@ -31,6 +31,7 @@ import { render, Box, Button } from './index';
           console.log('I was clicked!');
         }}
       />
+      <Label label="how are you" />
     </Box>,
   );
 })();

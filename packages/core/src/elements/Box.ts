@@ -23,16 +23,19 @@ import Gtk from '@girs/node-gtk-4.0';
 import { Element } from './Element';
 
 export type BoxProps = JSX.IntrinsicElements['Box'];
-
 export class Box extends Element {
   node: Gtk.Box;
 
-  constructor(props: BoxProps = {}) {
+  constructor({ style, ...props }: BoxProps) {
     const node = new Gtk.Box();
-    super(node, props, {
-      appendChild: (child: Gtk.Widget) => node.append(child),
-      removeChild: (child: Gtk.Widget) => node.remove(child),
-    });
+    super(
+      node,
+      { ...props, ...style },
+      {
+        appendChild: (child: Gtk.Widget) => node.append(child),
+        removeChild: (child: Gtk.Widget) => node.remove(child),
+      },
+    );
     this.node = node;
   }
 }

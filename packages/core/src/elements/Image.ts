@@ -1,8 +1,8 @@
 /*
- *  File: /src/@types/reactGtk.d.ts
+ *  File: /src/elements/Image.ts
  *  Project: @react-gtk/core
- *  File Created: 29-11-2023 00:28:16
- *  Author: Clay Risser
+ *  File Created: 01-12-2023 09:58:18
+ *  Author: dharmendra
  *  -----
  *  BitSpur (c) Copyright 2017 - 2023
  *
@@ -19,27 +19,13 @@
  *  limitations under the License.
  */
 
-declare namespace JSX {
-  type Ref<T> = import('react').Ref<T>;
-  type ReactNode = import('react').ReactNode;
+import Gtk from '@girs/node-gtk-4.0';
+import { Element } from './Element';
 
-  interface IntrinsicElements {
-    Label: {
-      ref?: Ref<any>;
-      text?: string;
-    };
-    Window: {
-      ref?: Ref<any>;
-    };
-    Box: {
-      ref?: Ref<any>;
-      children?: ReactNode;
-      style?: any;
-    };
-    Button: {
-      ref?: Ref<any>;
-      label?: string;
-      onClicked?: () => void;
-    };
+export type ImageProps = JSX.IntrinsicElements['img'];
+
+export class Image extends Element {
+  constructor(props: ImageProps = {}) {
+    super(new Gtk.Image(), props);
   }
 }

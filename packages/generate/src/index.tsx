@@ -21,16 +21,74 @@
 
 import React from 'react';
 import { render, Code } from 'react-ast';
+import { parseStringPromise } from 'xml2js';
+import { readFile } from 'fs/promises';
+import { resolve } from 'path';
+import { Logger, splitModuleName, cleanString } from '@ts-for-gir/lib';
+
+import type {
+  GenerateConfig,
+  ParsedPackageData,
+  PackageSectionParsed,
+  PackageDataParsed,
+  PackageData,
+} from '@ts-for-gir/lib';
 
 // parse the gir file
 
 // get all namespaces
 // --> get all classes (filter out only widget)
 
-// const code = render(<Code>var a = 0</Code>);
+const code = render(<Code>var a = 0</Code>);
 // write to a file
 
 // ----> get all methods
 // ----> get all properties
 
-// console.log(code);
+function parsePackages(
+  packages: PackageDataParsed[],
+  parentSection?: PackageSectionParsed,
+) {
+  for (const pkg of packages) {
+    console.log(`Found package "${pkg.$.name}"`);
+    if (pkg.$.ignore === 'true' || !pkg.$.gir) {
+      console.warn(`Ignoring package "${pkg.$.name}"`);
+      continue;
+    }
+    // const transPgk = this.transformPackageData(pkg, parentSection);
+    // console.packages.push(transPgk);
+  }
+}
+
+function parseSections(sections: PackageSectionParsed[]) {
+  for (const section of sections) {
+    console.log(`Found section`, section.$.name);
+    if (section.package) {
+      // this.parsePackages(section.package);
+      console.log('section.package', section.package);
+    }
+
+    if (section.section) {
+      // this.parseSections(section.section);
+      console.log('section.section', section.section);
+    }
+  }
+}
+
+function parseNamespace(namespace: any[]) {
+  for (const ns of namespace) {
+    console.log('ns', ns.$);
+  }
+}
+
+async function start() {
+  const filePath = resolve(__dirname, '/usr/share/gir-1.0/Gtk-4.0.gir');
+  console.log(`Parsing ${filePath}...`);
+  const fileContents = await readFile(filePath, 'utf8');
+  // console.log('fileContents', fileContents);
+  const result = (await parseStringPromise(fileContents)) as any;
+  // console.log('result', result.repository.namespace[0]);
+  // parseSections(result.repository.namespace);
+  parseNamespace(result.repository.namespace);
+}
+start();

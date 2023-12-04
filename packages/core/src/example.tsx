@@ -20,26 +20,33 @@
  */
 
 import React from 'react';
-import { render, Box, Button, Label } from './index';
+import { render, Box, Button, Label, Image } from './index';
 import Gtk from '@girs/node-gtk-4.0';
 
-(async () => {
-  await render(
-    <Box style={{ orientation: Gtk.Orientation.VERTICAL, marginTop: 100 }}>
+export const Example = () => {
+  return (
+    <Box style={{ orientation: Gtk.Orientation.VERTICAL }}>
       <Button
         label="Click me!"
         onClicked={() => {
           console.log('I was clicked!');
         }}
+        style={{ opacity: 0.5 }}
       />
       <Label
         label="Label with markup"
         halign={4}
         justify={Gtk.Justification.RIGHT}
         tooltip_markup="<i>Tooltip</i> with <b>markup</b>"
-        marginStart={10}
-        marginTop={20}
+        margin_start={10}
+        margin_top={20}
+        focus_on_click={true}
       />
-    </Box>,
+      <Image resourcePath="./assets/test.png" />
+    </Box>
   );
+};
+
+(async () => {
+  await render(<Example />);
 })();

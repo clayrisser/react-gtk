@@ -60,12 +60,14 @@
     "indent": 4
   },
   "dependencies": {
+    "react-ast": "^0.4.1",
     "xmldom": "^0.6.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
     "jest": "^29.7.0",
     "jest-sonar-reporter": "^2.0.0",
+    "ts-node": "^10.9.1",
     "tsup": "^8.0.1",
     "typescript": "^5.3.2"
   },

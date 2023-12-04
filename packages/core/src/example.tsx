@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { render, Box, Button, Image, Label } from './index';
+import { render, Box, Button, Label, Image } from './index';
 import Gtk from '@girs/node-gtk-4.0';
 
 export const Example = () => {
@@ -32,8 +32,16 @@ export const Example = () => {
           console.log('I was clicked!');
         }}
       />
+      <Label
+        label="Label with markup"
+        halign={4}
+        justify={Gtk.Justification.RIGHT}
+        tooltip_markup="<i>Tooltip</i> with <b>markup</b>"
+        margin_start={10}
+        margin_top={20}
+        focus_on_click={true}
+      />
       <Image resource="packages/core/src/assets/test.png" />
-      <Label label="Hello World!" />
     </Box>
   );
 };

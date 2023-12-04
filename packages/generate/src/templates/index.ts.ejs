@@ -1,9 +1,0 @@
-import render from './render';
-<% for (var i = 0; i < data.length; i++) { var dataItem = data[i]; %>
-const <%- dataItem.klass.name %> = '<%- dataItem.klass.name %>';<% } %>
-
-export {
-  render,<% for (var i = 0; i < data.length; i++) { var dataItem = data[i]; %>
-  <%- dataItem.klass.name -%>
-<% if (i < data.length - 1) { %>,<% }} %>
-};

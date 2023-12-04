@@ -76,8 +76,50 @@ function parseSections(sections: PackageSectionParsed[]) {
 }
 
 function parseNamespace(namespace: any[]) {
+  console.log('==================namespace==================\n\n');
   for (const ns of namespace) {
-    console.log('ns', ns.$);
+    // console.log('ns', ns);
+    getClasses(ns.class);
+    // getRecords(ns.record);
+    // getEnumration(ns.enumeration);
+  }
+}
+
+function getClasses(classes: any[]) {
+  console.log('==================classes==================\n\n');
+  for (const c of classes) {
+    console.log('class', c);
+    if (c.method) getMethods(c.method);
+  }
+}
+
+function getMethods(methods: any[]) {
+  console.log('==================methods==================\n\n');
+  console.log('methods', methods);
+  for (const m of methods) {
+    console.log('method', m);
+    if (m.parameters) getParameters(m.parameters);
+  }
+}
+
+function getParameters(parameters: any[]) {
+  console.log('==================parameters==================\n\n');
+  for (const p of parameters) {
+    console.log('parameter', p);
+  }
+}
+
+function getRecords(records: any[]) {
+  console.log('==================records==================\n\n');
+  for (const r of records) {
+    console.log('record', r);
+  }
+}
+
+function getEnumration(enums: any[]) {
+  console.log('==================enums==================\n\n');
+  for (const e of enums) {
+    console.log('enum', e);
   }
 }
 

@@ -41,7 +41,6 @@ export const Example = () => {
         margin_top={20}
         focus_on_click={true}
       />
-      <Image resourcePath="./assets/test.png" />
       <Image resource="packages/core/src/assets/test.png" />
     </Box>
   );

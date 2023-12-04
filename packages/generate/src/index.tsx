@@ -1,8 +1,8 @@
 /**
  * File: /src/index.tsx
  * Project: @react-gtk/generate
- * File Created: 01-12-2023 06:11:55
- * Author: Clay Risser
+ * File Created: 04-12-2023 12:04:53
+ * Author: dharmendra
  * -----
  * BitSpur (c) Copyright 2017 - 2023
  *
@@ -19,76 +19,91 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import { render, Code } from 'react-ast';
 import { parseStringPromise } from 'xml2js';
-import { readFile } from 'fs/promises';
 import { resolve } from 'path';
-import { Logger, splitModuleName, cleanString } from '@ts-for-gir/lib';
+import { readFile } from 'fs/promises';
 
-import type {
-  GenerateConfig,
-  ParsedPackageData,
-  PackageSectionParsed,
-  PackageDataParsed,
-  PackageData,
-} from '@ts-for-gir/lib';
+export class Generator {
+  public nameSpaces: string[] = [];
+  public classes: string[] = [];
+  public methods: string[] = [];
+  public properties: string[] = [];
 
-// parse the gir file
+  constructor(private girPath: string) {}
 
-// get all namespaces
-// --> get all classes (filter out only widget)
+  async start() {
+    const parsedData = await this.getParsedData();
+    this.getNameSpaces(parsedData);
+    this.getClasses(parsedData);
+    this.getMethods(parsedData);
+    this.getProperties(parsedData);
+  }
 
-const code = render(<Code>var a = 0</Code>);
-// write to a file
+  protected async getParsedData() {
+    const filePath = resolve(__dirname, this.girPath);
+    const fileContents = await readFile(filePath, 'utf8');
+    return await parseStringPromise(fileContents);
+  }
 
-// ----> get all methods
-// ----> get all properties
-
-function parsePackages(
-  packages: PackageDataParsed[],
-  parentSection?: PackageSectionParsed,
-) {
-  for (const pkg of packages) {
-    console.log(`Found package "${pkg.$.name}"`);
-    if (pkg.$.ignore === 'true' || !pkg.$.gir) {
-      console.warn(`Ignoring package "${pkg.$.name}"`);
-      continue;
+  protected getNameSpaces(parsedData: any) {
+    const nameSpaceData = parsedData.repository.namespace;
+    for (const nameSpace of nameSpaceData) {
+      this.nameSpaces.push(nameSpace);
     }
-    // const transPgk = this.transformPackageData(pkg, parentSection);
-    // console.packages.push(transPgk);
+  }
+
+  protected getClasses(parsedData: any) {
+    const nameSpaceData = parsedData.repository.namespace;
+
+    for (const nameSpace of nameSpaceData) {
+      const widgetClasses = nameSpace.class.filter(
+        // (classData: any) => classData.$.name === 'Widget',
+        (classData: any) => classData.$.name.includes('Widget'),
+      );
+
+      this.classes.push(...widgetClasses);
+    }
+  }
+
+  protected async getMethods(parsedData: any) {
+    const nameSpaceData = parsedData.repository.namespace;
+
+    for (const nameSpace of nameSpaceData) {
+      const widgetClasses = nameSpace.class.filter((classData: any) =>
+        classData.$.name.includes('Widget'),
+      );
+
+      const methods = widgetClasses.map((classData: any) => {
+        return classData.method;
+      });
+
+      this.methods.push(...methods);
+    }
+  }
+
+  protected async getProperties(parsedData: any) {
+    const nameSpaceData = parsedData.repository.namespace;
+
+    for (const nameSpace of nameSpaceData) {
+      const widgetClasses = nameSpace.class.filter((classData: any) =>
+        classData.$.name.includes('Widget'),
+      );
+
+      const properties = widgetClasses.map((classData: any) => {
+        return classData.property;
+      });
+
+      this.properties.push(...properties);
+    }
   }
 }
 
-function parseSections(sections: PackageSectionParsed[]) {
-  for (const section of sections) {
-    console.log(`Found section`, section.$.name);
-    if (section.package) {
-      // this.parsePackages(section.package);
-      console.log('section.package', section.package);
-    }
-
-    if (section.section) {
-      // this.parseSections(section.section);
-      console.log('section.section', section.section);
-    }
+class __main__ {
+  static async main() {
+    const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
+    await generator.start();
+    console.log(generator.methods);
   }
 }
 
-function parseNamespace(namespace: any[]) {
-  for (const ns of namespace) {
-    console.log('ns', ns.$);
-  }
-}
-
-async function start() {
-  const filePath = resolve(__dirname, '/usr/share/gir-1.0/Gtk-4.0.gir');
-  console.log(`Parsing ${filePath}...`);
-  const fileContents = await readFile(filePath, 'utf8');
-  // console.log('fileContents', fileContents);
-  const result = (await parseStringPromise(fileContents)) as any;
-  // console.log('result', result.repository.namespace[0]);
-  // parseSections(result.repository.namespace);
-  parseNamespace(result.repository.namespace);
-}
-start();
+__main__.main();

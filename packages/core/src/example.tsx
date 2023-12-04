@@ -31,7 +31,6 @@ export const Example = () => {
         onClicked={() => {
           console.log('I was clicked!');
         }}
-        style={{ opacity: 0.5 }}
       />
       <Label
         label="Label with markup"
@@ -43,6 +42,7 @@ export const Example = () => {
         focus_on_click={true}
       />
       <Image resourcePath="./assets/test.png" />
+      <Image resource="packages/core/src/assets/test.png" />
     </Box>
   );
 };

@@ -113,6 +113,53 @@ declare namespace JSX {
 
     };
     Image: {
+      Properties?: any;
+      accessibleRole: AccessibleRole;
+      canFocus: boolean
+      cssName: string
+      cursor: Gdk.Cursor
+      file: string
+      focusOnClick: boolean
+      focusable: boolean
+      gTypeInstance: TypeInstance
+      gicon: Gio.Icon
+      halign: Gtk.Align
+      hasDefault: boolean
+      hasFocus: boolean
+      hasTooltip: boolean
+      heightRequest: number
+      hexpand: boolean
+      hexpandSet: boolean
+      iconName: string
+      iconSize: Gtk.IconSize
+      layoutManager: Gtk.LayoutManager
+      marginBottom: number
+      marginEnd: number
+      marginStart: number
+      marginTop: number
+      name: string
+      opacity: number
+      overflow: Overflow
+      paintable: Paintable
+      parent: Gtk.Widget
+      parentInstance: InitiallyUnowned
+      pixelSize: number
+      receivesDefault: boolean
+      resource: string
+      root: Gtk.Root
+      scaleFactor: number
+      sensitive: boolean
+      storageType: Gtk.ImageType
+      tooltipMarkup: string
+      tooltipText: string
+      useFallback: boolean
+      valign: Gtk.Align
+      vexpand: boolean
+      vexpandSet: boolean
+      visible: boolean
+      widthRequest: number
+      $gtype: GType<Gtk.Image>
+      name: string
       ref?: Ref<any>;
       resource?: string;
 

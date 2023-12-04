@@ -100,8 +100,17 @@ declare namespace JSX {
     Button: {
       ref?: Ref<any>;
       label?: string;
-      style?: any;
       onClicked?: () => void;
+      accessibleRole: AccessibleRole;
+      actionName: string;
+      actionTarget: GLib.Variant;
+      canFocus: boolean;
+      canTarget: boolean;
+      child: Gtk.Widget;
+      cssClasses: string[];
+      cssName: string;
+
+
     };
     Image: {
       Properties?: any;
@@ -153,7 +162,7 @@ declare namespace JSX {
       name: string
       ref?: Ref<any>;
       resource?: string;
-      style?: any;
+
     };
   }
 }

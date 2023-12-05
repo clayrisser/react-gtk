@@ -59,7 +59,7 @@ export class Generator {
     for (const nameSpace of nameSpaceData) {
       const widgetClasses = nameSpace.class.filter(
         // (classData: any) => classData.$.name === 'Widget',
-        (classData: any) => classData.$.name.includes('Widget'),
+        (classData: any) => classData.$.name === 'Widget',
       );
 
       this.classes.push(...widgetClasses);
@@ -70,8 +70,8 @@ export class Generator {
     const nameSpaceData = parsedData.repository.namespace;
 
     for (const nameSpace of nameSpaceData) {
-      const widgetClasses = nameSpace.class.filter((classData: any) =>
-        classData.$.name.includes('Widget'),
+      const widgetClasses = nameSpace.class.filter(
+        (classData: any) => classData.$.name === 'Widget',
       );
 
       const methods = widgetClasses.map((classData: any) => {
@@ -86,8 +86,8 @@ export class Generator {
     const nameSpaceData = parsedData.repository.namespace;
 
     for (const nameSpace of nameSpaceData) {
-      const widgetClasses = nameSpace.class.filter((classData: any) =>
-        classData.$.name.includes('Widget'),
+      const widgetClasses = nameSpace.class.filter(
+        (classData: any) => classData.$.name === 'Widget',
       );
 
       const properties = widgetClasses.map((classData: any) => {
@@ -124,13 +124,11 @@ export class Generator {
   }
 }
 
-class __main__ {
-  static async main() {
-    const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
-    await generator.start();
-    generator.logger.propertyLogger();
-    console.log(generator.properties);
-  }
-}
+// class __main__ {
+//   static async main() {
+//     const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
+//     await generator.start();
+//   }
+// }
 
-__main__.main();
+// __main__.main();

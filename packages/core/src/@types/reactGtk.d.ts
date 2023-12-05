@@ -93,7 +93,6 @@ declare namespace JSX {
     Box?: {
       ref?: Ref<any>;
       children: ReactNode;
-      style?: any;
       accessibleRole?: AccessibleRole;
       baselinePosition?: Gtk.BaselinePosition;
       canFocus?: boolean;

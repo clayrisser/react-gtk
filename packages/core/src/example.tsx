@@ -25,7 +25,7 @@ import Gtk from '@girs/node-gtk-4.0';
 
 export const Example = () => {
   return (
-    <Box style={{ orientation: Gtk.Orientation.VERTICAL }}>
+    <Box>
       <Button
         label="Click me!"
         onClicked={() => {

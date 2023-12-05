@@ -28,8 +28,9 @@ export class Generator {
   public classes: string[] = [];
   public methods: string[] = [];
   public properties: string[] = [];
+  protected log = console;
 
-  constructor(private girPath: string) {}
+  constructor(private girFilePath: string) {}
 
   async start() {
     const parsedData = await this.getParsedData();
@@ -40,7 +41,7 @@ export class Generator {
   }
 
   protected async getParsedData() {
-    const filePath = resolve(__dirname, this.girPath);
+    const filePath = resolve(__dirname, this.girFilePath);
     const fileContents = await readFile(filePath, 'utf8');
     return await parseStringPromise(fileContents);
   }
@@ -96,13 +97,39 @@ export class Generator {
       this.properties.push(...properties);
     }
   }
+
+  get logger() {
+    return {
+      nameSpaceLogger: () => {
+        this.nameSpaces.forEach((nameSpace: any) => {
+          this.log.log(nameSpace);
+        });
+      },
+      classLogger: () => {
+        this.classes.forEach((classData: any) => {
+          this.log.log(classData);
+        });
+      },
+      methodLogger: () => {
+        this.methods.forEach((methodData: any) => {
+          this.log.log(methodData);
+        });
+      },
+      propertyLogger: () => {
+        this.properties.forEach((propertyData: any) => {
+          this.log.log(propertyData);
+        });
+      },
+    };
+  }
 }
 
 class __main__ {
   static async main() {
     const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
     await generator.start();
-    console.log(generator.classes);
+    generator.logger.propertyLogger();
+    console.log(generator.properties);
   }
 }
 

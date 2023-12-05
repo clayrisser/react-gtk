@@ -28,6 +28,7 @@ export class Generator {
   public classes: string[] = [];
   public methods: string[] = [];
   public properties: string[] = [];
+  protected log = console;
 
   constructor(private girPath: string) {}
 
@@ -96,13 +97,39 @@ export class Generator {
       this.properties.push(...properties);
     }
   }
+
+  get logger() {
+    return {
+      nameSpaceLogger: () => {
+        this.nameSpaces.forEach((nameSpace: any) => {
+          this.log.log(nameSpace);
+        });
+      },
+      classLogger: () => {
+        this.classes.forEach((classData: any) => {
+          this.log.log(classData);
+        });
+      },
+      methodLogger: () => {
+        this.methods.forEach((methodData: any) => {
+          this.log.log(methodData);
+        });
+      },
+      propertyLogger: () => {
+        this.properties.forEach((propertyData: any) => {
+          this.log.log(propertyData);
+        });
+      },
+    };
+  }
 }
 
 class __main__ {
   static async main() {
     const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
     await generator.start();
-    console.log(generator.methods);
+    generator.logger.propertyLogger();
+    console.log(generator.properties);
   }
 }
 

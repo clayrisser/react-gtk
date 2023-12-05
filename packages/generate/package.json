@@ -61,11 +61,13 @@
   },
   "dependencies": {
     "@ts-for-gir/lib": "^3.2.6",
+    "fs-extra": "^11.2.0",
     "react-ast": "^0.4.1",
     "xml2js": "^0.6.2",
     "xmldom": "^0.6.0"
   },
   "devDependencies": {
+    "@types/fs-extra": "^11",
     "@types/node": "^20.10.0",
     "@types/xml2js": "^0",
     "jest": "^29.7.0",

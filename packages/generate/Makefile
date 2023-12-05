@@ -66,6 +66,11 @@ dev: ~deps +dev
 +dev:
 	@$(TS_NODE) src/index.tsx
 
+.PHONY: example
+example: ~deps +example
++example:
+	@$(TS_NODE) src/example.tsx
+
 .PHONY: count
 count:
 	@$(CLOC) $(shell ($(GIT) ls-files && ($(GIT) lfs ls-files | $(CUT) -d' ' -f3)) | $(SORT) | $(UNIQ) -u)

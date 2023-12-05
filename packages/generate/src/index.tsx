@@ -25,7 +25,7 @@ import { readFile } from 'fs/promises';
 
 export class Generator {
   public nameSpaces: string[] = [];
-  public classes: string[] = [];
+  public widgetClasses: string[] = [];
   public methods: string[] = [];
   public properties: string[] = [];
   protected log = console;
@@ -62,7 +62,7 @@ export class Generator {
         (classData: any) => classData.$.name.includes('Widget'),
       );
 
-      this.classes.push(...widgetClasses);
+      this.widgetClasses.push(...widgetClasses);
     }
   }
 
@@ -106,7 +106,7 @@ export class Generator {
         });
       },
       classLogger: () => {
-        this.classes.forEach((classData: any) => {
+        this.widgetClasses.forEach((classData: any) => {
           this.log.log(classData);
         });
       },
@@ -128,8 +128,8 @@ class __main__ {
   static async main() {
     const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
     await generator.start();
-    generator.logger.propertyLogger();
-    console.log(generator.properties);
+    // generator.logger.nameSpaceLogger();
+    // console.log(generator.widgetClasses);
   }
 }
 

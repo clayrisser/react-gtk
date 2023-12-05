@@ -24,13 +24,15 @@ import { BoxProps } from './elements/Box';
 import { ButtonProps } from './elements/Button';
 import { LabelProps } from './elements/Label';
 import { ImageProps } from './elements/Image';
+import { GridProps } from './elements/Grid';
 
 export const Box = 'Box';
 export const Button = 'Button';
 export const Label = 'Label';
 export const Window = 'Window';
 export const Image = 'Image';
+export const Grid = 'Grid';
 
-export type { LabelProps, ApplicationWindowProps, ButtonProps, BoxProps, ImageProps };
+export type { LabelProps, ApplicationWindowProps, ButtonProps, BoxProps, ImageProps, GridProps };
 
 export * from './render';

@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { render, Box, Button, Label, Image } from './index';
+import { render, Box, Button, Label, Image, Grid } from './index';
 import Gtk from '@girs/node-gtk-4.0';
 
 export const Example = () => {
@@ -42,6 +42,10 @@ export const Example = () => {
         focus_on_click={true}
       />
       <Image resource="packages/core/src/assets/test.png" />
+      <Grid columnSpacing={20} rowSpacing={20}>
+        <Label label="Label 1" />
+        <Label label="Label 2" />
+      </Grid>
     </Box>
   );
 };

@@ -102,7 +102,7 @@ class __main__ {
   static async main() {
     const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
     await generator.start();
-    console.log(generator.methods);
+    console.log(generator.classes);
   }
 }
 

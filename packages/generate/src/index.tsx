@@ -30,7 +30,7 @@ export class Generator {
   public properties: string[] = [];
   protected log = console;
 
-  constructor(private girPath: string) {}
+  constructor(private girFilePath: string) {}
 
   async start() {
     const parsedData = await this.getParsedData();
@@ -41,7 +41,7 @@ export class Generator {
   }
 
   protected async getParsedData() {
-    const filePath = resolve(__dirname, this.girPath);
+    const filePath = resolve(__dirname, this.girFilePath);
     const fileContents = await readFile(filePath, 'utf8');
     return await parseStringPromise(fileContents);
   }

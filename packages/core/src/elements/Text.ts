@@ -1,8 +1,8 @@
 /*
- *  File: /src/elements/index.ts
+ *  File: /src/elements/Text.ts
  *  Project: @react-gtk/core
- *  File Created: 28-11-2023 23:43:49
- *  Author: Clay Risser
+ *  File Created: 05-12-2023 15:08:55
+ *  Author: HariKrishna
  *  -----
  *  BitSpur (c) Copyright 2017 - 2023
  *
@@ -19,28 +19,16 @@
  *  limitations under the License.
  */
 
-import type { Element } from './Element';
-import { Box } from './Box';
-import { Label } from './Label';
-import { Button } from './Button';
-import { Image } from './Image';
-import { Grid } from './Grid';
-import { Text } from './Text';
+import Gtk from '@girs/node-gtk-4.0';
+import { Element } from './Element';
 
-export const elements: Record<string, typeof Element> = {
-  Box,
-  Button,
-  Label,
-  Image,
-  Grid,
-  Text,
-};
+export type TextProps = JSX.IntrinsicElements['Text'];
+export class Text extends Element {
+  node: Gtk.Text;
 
-export * from './ApplicationWindow';
-export * from './Box';
-export * from './Button';
-export * from './Element';
-export * from './Label';
-export * from './Image';
-export * from './Grid';
-export * from './Text';
+  constructor(props: TextProps) {
+    const node = new Gtk.Text();
+    super(new Gtk.Text(), props);
+    this.node = node;
+  }
+}

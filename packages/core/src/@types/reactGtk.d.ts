@@ -1,8 +1,8 @@
 /*
  *  File: /src/@types/reactGtk.d.ts
  *  Project: @react-gtk/core
- *  File Created: 29-11-2023 00:28:16
- *  Author: Clay Risser
+ *  File Created: 05-12-2023 09:55:01
+ *  Author: HariKrishna
  *  -----
  *  BitSpur (c) Copyright 2017 - 2023
  *
@@ -19,15 +19,13 @@
  *  limitations under the License.
  */
 
-// import Gtk from '@girs/node-gtk-4.0';
-
 declare namespace JSX {
   type Ref<T> = import('react').Ref<T>;
   type ReactNode = import('react').ReactNode;
   type Gtk = import('@girs/node-gtk-4.0');
 
   interface IntrinsicElements {
-    Label: {
+    Label?: {
       Properties?: any;
       accessible_role?: Gtk.accessible_role;
       attributes?: any;
@@ -49,7 +47,7 @@ declare namespace JSX {
       hexpand?: any;
       hexpand_set?: any;
       justify?: Gtk.Justification;
-      label: string;
+      label?: string;
       layout_manager?: any;
       lines?: number;
       margin_bottom?: number;
@@ -89,80 +87,169 @@ declare namespace JSX {
       name?: string;
       ref?: Ref<any>;
     };
-    Window: {
+    Window?: {
       ref?: Ref<any>;
     };
-    Box: {
+    Box?: {
       ref?: Ref<any>;
-      children?: ReactNode;
+      children: ReactNode;
       style?: any;
+      accessibleRole?: AccessibleRole;
+      baselinePosition?: Gtk.BaselinePosition;
+      canFocus?: boolean;
+      canTarget?: boolean;
+      cssClasses?: string[];
+      cssName?: string;
+      cursor?: Gdk.Cursor;
+      focusOnClick?: boolean;
+      focusable?: boolean;
+      gTypeInstance?: TypeInstance;
+      halign?: Gtk.Align;
+      hasDefault?: boolean;
+      hasFocus?: boolean;
+      hasTooltip?: boolean;
+      heightRequest?: number;
+      hexpand?: boolean;
+      hexpandSet?: boolean;
+      homogeneous?: boolean;
+      layoutManager?: Gtk.LayoutManager;
+      marginBottom?: number;
+      marginEnd?: number;
+      marginStart?: number;
+      marginTop?: number;
+      name?: string;
+      opacity?: number;
+      orientation?: Gtk.Orientation;
+      overflow?: Overflow;
+      parent?: Gtk.Widget;
+      parentInstance?: Gtk.widget;
+      receivesDefault?: boolean;
+      root?: Gtk.Root;
+      scaleFactor?: number;
+      sensitive?: boolean;
+      spacing?: number;
+      tooltipMarkup?: string;
+      tooltipText?: string;
+      valign?: Gtk.Align;
+      vexpand?: boolean;
+      vexpandSet?: boolean;
+      visible?: boolean;
+      widthRequest?: number;
+      $gtype?: GType<Gtk.Box>;
+      name?: string;
     };
-    Button: {
+    Button?: {
       ref?: Ref<any>;
       label?: string;
       onClicked?: () => void;
-      accessibleRole: AccessibleRole;
-      actionName: string;
-      actionTarget: GLib.Variant;
-      canFocus: boolean;
-      canTarget: boolean;
-      child: Gtk.Widget;
-      cssClasses: string[];
-      cssName: string;
-
-
+      accessibleRole?: AccessibleRole;
+      actionName?: string;
+      actionTarget?: GLib.Variant;
+      canFocus?: boolean;
+      canTarget?: boolean;
+      child?: Gtk.Widget;
+      cssClasses?: string[];
+      cssName?: string;
     };
-    Image: {
+    Image?: {
       Properties?: any;
-      accessibleRole: AccessibleRole;
-      canFocus: boolean
-      cssName: string
-      cursor: Gdk.Cursor
-      file: string
-      focusOnClick: boolean
-      focusable: boolean
-      gTypeInstance: TypeInstance
-      gicon: Gio.Icon
-      halign: Gtk.Align
-      hasDefault: boolean
-      hasFocus: boolean
-      hasTooltip: boolean
-      heightRequest: number
-      hexpand: boolean
-      hexpandSet: boolean
-      iconName: string
-      iconSize: Gtk.IconSize
-      layoutManager: Gtk.LayoutManager
-      marginBottom: number
-      marginEnd: number
-      marginStart: number
-      marginTop: number
-      name: string
-      opacity: number
-      overflow: Overflow
-      paintable: Paintable
-      parent: Gtk.Widget
-      parentInstance: InitiallyUnowned
-      pixelSize: number
-      receivesDefault: boolean
-      resource: string
-      root: Gtk.Root
-      scaleFactor: number
-      sensitive: boolean
-      storageType: Gtk.ImageType
-      tooltipMarkup: string
-      tooltipText: string
-      useFallback: boolean
-      valign: Gtk.Align
-      vexpand: boolean
-      vexpandSet: boolean
-      visible: boolean
-      widthRequest: number
-      $gtype: GType<Gtk.Image>
-      name: string
+      accessibleRole?: AccessibleRole;
+      canFocus?: boolean;
+      cssName?: string;
+      cursor?: Gdk.Cursor;
+      file?: string;
+      focusOnClick?: boolean;
+      focusable?: boolean;
+      gTypeInstance?: TypeInstance;
+      gicon?: Gio.Icon;
+      halign?: Gtk.Align;
+      hasDefault?: boolean;
+      hasFocus?: boolean;
+      hasTooltip?: boolean;
+      heightRequest?: number;
+      hexpand?: boolean;
+      hexpandSet?: boolean;
+      iconName?: string;
+      iconSize?: Gtk.IconSize;
+      layoutManager?: Gtk.LayoutManager;
+      marginBottom?: number;
+      marginEnd?: number;
+      marginStart?: number;
+      marginTop?: number;
+      name?: string;
+      opacity?: number;
+      overflow?: Overflow;
+      paintable?: Paintable;
+      parent?: Gtk.Widget;
+      parentInstance?: InitiallyUnowned;
+      pixelSize?: number;
+      receivesDefault?: boolean;
+      resource?: string;
+      root?: Gtk.Root;
+      scaleFactor?: number;
+      sensitive?: boolean;
+      storageType?: Gtk.ImageType;
+      tooltipMarkup?: string;
+      tooltipText?: string;
+      useFallback?: boolean;
+      valign?: Gtk.Align;
+      vexpand?: boolean;
+      vexpandSet?: boolean;
+      visible?: boolean;
+      widthRequest?: number;
+      $gtype?: GType<Gtk.Image>;
+      name?: string;
       ref?: Ref<any>;
       resource?: string;
-
+    };
+    Grid?: {
+      ref?: Ref<any>;
+      children: ReactNode;
+      accessibleRole?: AccessibleRole;
+      baselineRow?: number;
+      canFocus?: boolean;
+      canTarget?: boolean;
+      columnHomogeneous?: boolean;
+      columnSpacing?: number;
+      cssClasses?: string[];
+      cssName?: string;
+      cursor?: Gdk.Cursor;
+      focusOnClick?: boolean;
+      focusable?: boolean;
+      gTypeInstance?: TypeInstance;
+      halign?: Gtk.Align;
+      hasDefault?: boolean;
+      hasFocus?: boolean;
+      hasTooltip?: boolean;
+      heightRequest?: number;
+      hexpand?: boolean;
+      hexpandSet?: boolean;
+      layoutManager?: Gtk.LayoutManager;
+      marginBottom?: number;
+      marginEnd?: number;
+      marginStart?: number;
+      marginTop?: number;
+      name?: string;
+      opacity?: number;
+      orientation?: Gtk.Orientation;
+      overflow?: Overflow;
+      parent?: Gtk.Widget;
+      parentInstance?: InitiallyUnowned;
+      receivesDefault?: boolean;
+      root?: Gtk.Root;
+      rowHomogeneous?: boolean;
+      rowSpacing?: number;
+      scaleFactor?: number;
+      sensitive?: boolean;
+      tooltipMarkup?: string;
+      tooltipText?: string;
+      valign?: Gtk.Align;
+      vexpand?: boolean;
+      vexpandSet?: boolean;
+      visible?: boolean;
+      widthRequest?: number;
+      $gtype?: GType<Gtk.Grid>;
+      name?: string;
     };
   }
 }

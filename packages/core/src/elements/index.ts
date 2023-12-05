@@ -24,12 +24,14 @@ import { Box } from './Box';
 import { Label } from './Label';
 import { Button } from './Button';
 import { Image } from './Image';
+import { Grid } from './Grid';
 
 export const elements: Record<string, typeof Element> = {
   Box,
   Button,
   Label,
   Image,
+  Grid,
 };
 
 export * from './ApplicationWindow';
@@ -38,3 +40,4 @@ export * from './Button';
 export * from './Element';
 export * from './Label';
 export * from './Image';
+export * from './Grid';

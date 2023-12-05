@@ -2,6 +2,7 @@ cjs
 cspell
 dts
 esm
+girPath
 girs
 globals
 gobject
@@ -22,3 +23,5 @@ tsbuildinfo
 tsup
 txt
 yarnpkg
+namespace
+utf8

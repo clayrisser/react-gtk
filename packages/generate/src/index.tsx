@@ -98,59 +98,11 @@ export class Generator {
   }
 }
 
-<<<<<<< HEAD
 class __main__ {
   static async main() {
     const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
     await generator.start();
     console.log(generator.methods);
-=======
-function parseNamespace(namespace: any[]) {
-  console.log('==================namespace==================\n\n');
-  for (const ns of namespace) {
-    // console.log('ns', ns);
-    getClasses(ns.class);
-    // getRecords(ns.record);
-    // getEnumration(ns.enumeration);
-  }
-}
-
-function getClasses(classes: any[]) {
-  console.log('==================classes==================\n\n');
-  for (const c of classes) {
-    console.log('class', c);
-    if (c.method) getMethods(c.method);
-  }
-}
-
-function getMethods(methods: any[]) {
-  console.log('==================methods==================\n\n');
-  console.log('methods', methods);
-  for (const m of methods) {
-    console.log('method', m);
-    if (m.parameters) getParameters(m.parameters);
-  }
-}
-
-function getParameters(parameters: any[]) {
-  console.log('==================parameters==================\n\n');
-  for (const p of parameters) {
-    console.log('parameter', p);
-  }
-}
-
-function getRecords(records: any[]) {
-  console.log('==================records==================\n\n');
-  for (const r of records) {
-    console.log('record', r);
-  }
-}
-
-function getEnumration(enums: any[]) {
-  console.log('==================enums==================\n\n');
-  for (const e of enums) {
-    console.log('enum', e);
->>>>>>> ac60d661e7e58ff64ce7c2ff3085720b5acd3837
   }
 }
 

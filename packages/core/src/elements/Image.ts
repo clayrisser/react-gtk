@@ -25,7 +25,7 @@ import { Element } from './Element';
 export type ImageProps = JSX.IntrinsicElements['img'];
 
 export class Image extends Element {
-  constructor({ style, ...props }: ImageProps = {}) {
-    super(new Gtk.Image(), { ...props, ...style });
+  constructor(props: ImageProps = {}) {
+    super(new Gtk.Image(), props);
   }
 }

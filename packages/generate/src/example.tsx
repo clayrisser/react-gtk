@@ -22,19 +22,35 @@
 import React from 'react';
 import { Generator } from './index';
 import { Code, render } from 'react-ast';
+import path from 'path';
+import fs from 'fs-extra';
+
+export interface GirClass {
+  function: any;
+  method: any;
+}
 
 export const Example = () => {
-  async function JSGenerate() {
+  (async function JSGenerate() {
     const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
     await generator.start();
-    console.log(generator.logger.methodLogger());
+    console.log(generator.widgetClasses);
+    // renderWidgetElement(generator.widgetClasses);
+  })();
+
+  const elementsDirectory = path.resolve(__dirname, '../elements');
+
+  async function renderWidgetElement(girClass: any) {
+    const className = girClass.$.name;
+    const code = render(<></>, {});
+    await fs.mkdirp(elementsDirectory);
+    await fs.writeFile(
+      path.resolve(elementsDirectory, `${className}.tsx`),
+      code,
+    );
   }
-
-  JSGenerate();
-
-  return <Code>{`var a = 'Hello world'`}</Code>;
 };
 
 (async () => {
-  console.log(render(Example()));
+  Example();
 })();

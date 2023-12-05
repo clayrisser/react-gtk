@@ -25,7 +25,7 @@ import { readFile } from 'fs/promises';
 
 export class Generator {
   public nameSpaces: string[] = [];
-  public classes: string[] = [];
+  public widgetClasses: string[] = [];
   public methods: string[] = [];
   public properties: string[] = [];
   protected log = console;
@@ -59,10 +59,10 @@ export class Generator {
     for (const nameSpace of nameSpaceData) {
       const widgetClasses = nameSpace.class.filter(
         // (classData: any) => classData.$.name === 'Widget',
-        (classData: any) => classData.$.name === 'Widget',
+        (classData: any) => classData.$.name.includes('Widget'),
       );
 
-      this.classes.push(...widgetClasses);
+      this.widgetClasses.push(...widgetClasses);
     }
   }
 
@@ -70,8 +70,8 @@ export class Generator {
     const nameSpaceData = parsedData.repository.namespace;
 
     for (const nameSpace of nameSpaceData) {
-      const widgetClasses = nameSpace.class.filter(
-        (classData: any) => classData.$.name === 'Widget',
+      const widgetClasses = nameSpace.class.filter((classData: any) =>
+        classData.$.name.includes('Widget'),
       );
 
       const methods = widgetClasses.map((classData: any) => {
@@ -86,8 +86,8 @@ export class Generator {
     const nameSpaceData = parsedData.repository.namespace;
 
     for (const nameSpace of nameSpaceData) {
-      const widgetClasses = nameSpace.class.filter(
-        (classData: any) => classData.$.name === 'Widget',
+      const widgetClasses = nameSpace.class.filter((classData: any) =>
+        classData.$.name.includes('Widget'),
       );
 
       const properties = widgetClasses.map((classData: any) => {
@@ -106,7 +106,7 @@ export class Generator {
         });
       },
       classLogger: () => {
-        this.classes.forEach((classData: any) => {
+        this.widgetClasses.forEach((classData: any) => {
           this.log.log(classData);
         });
       },
@@ -124,11 +124,13 @@ export class Generator {
   }
 }
 
-// class __main__ {
-//   static async main() {
-//     const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
-//     await generator.start();
-//   }
-// }
+class __main__ {
+  static async main() {
+    const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
+    await generator.start();
+    // generator.logger.nameSpaceLogger();
+    // console.log(generator.widgetClasses);
+  }
+}
 
-// __main__.main();
+__main__.main();

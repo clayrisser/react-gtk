@@ -129,7 +129,7 @@ class __main__ {
     const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
     await generator.start();
     // generator.logger.nameSpaceLogger();
-    console.log(...generator.widgetClasses);
+    // console.log(...generator.widgetClasses);
   }
 }
 

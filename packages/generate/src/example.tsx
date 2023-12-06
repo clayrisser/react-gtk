@@ -21,7 +21,16 @@
 
 import React from 'react';
 import { Generator } from './index';
-import { Code, render } from 'react-ast';
+import {
+  Code,
+  FunctionDeclaration,
+  TypeAnnotation,
+  Var,
+  VariableDeclaration,
+  VariableDeclarationKind,
+  VariableDeclarator,
+  render,
+} from 'react-ast';
 import path from 'path';
 import fs from 'fs-extra';
 
@@ -34,23 +43,34 @@ export const Example = () => {
   (async function JSGenerate() {
     const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
     await generator.start();
-    console.log(generator.widgetClasses);
-    // renderWidgetElement(generator.widgetClasses);
+    // console.log(generator.widgetClasses);
+    renderWidgetElement(generator.widgetClasses);
   })();
 
   const elementsDirectory = path.resolve(__dirname, '../elements');
 
-  async function renderWidgetElement(girClass: any) {
-    const className = girClass.$.name;
-    const code = render(<></>, {});
-    await fs.mkdirp(elementsDirectory);
-    await fs.writeFile(
-      path.resolve(elementsDirectory, `${className}.tsx`),
-      code,
+  async function renderWidgetElement(girClass?: any) {
+    // const className = girClass.$.name;
+
+    const jsx = (
+      <FunctionDeclaration id="test">
+        <VariableDeclaration kind={VariableDeclarationKind.Let}>
+          <VariableDeclarator
+            id="greet"
+            // typeAnnotation={<TypeAnnotation>T</TypeAnnotation>}
+          >
+            Hello World
+          </VariableDeclarator>
+        </VariableDeclaration>
+      </FunctionDeclaration>
     );
+
+    const code = render(jsx, {});
+    await fs.mkdirp(elementsDirectory);
+    await fs.writeFile(path.resolve(elementsDirectory, `hello.tsx`), code);
   }
 };
 
 (async () => {
-  Example();
+  console.log(Example());
 })();

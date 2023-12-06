@@ -1,10 +1,10 @@
 /*
  *  File: /tsup.config.ts
- *  Project: @multiplatform.one/nestjs-keycloak
- *  File Created: 19-09-2023 07:07:18
+ *  Project: @react-gtk/generate
+ *  File Created: 01-12-2023 06:12:24
  *  Author: Clay Risser
  *  -----
- *  BitSpur (c) Copyright 2021 - 2023
+ *  BitSpur (c) Copyright 2017 - 2023
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ export default defineConfig({
   dts: false,
   entry: ['src/**/*.ts?(x)'],
   entryPoints: ['src/index.ts'],
-  format: ['cjs', 'esm'],
+  format: ['esm'],
   minify: false,
   outDir: 'lib',
   publicDir: './public',

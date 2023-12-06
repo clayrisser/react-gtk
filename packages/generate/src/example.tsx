@@ -19,65 +19,67 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import { Generator } from './index';
-import type { GirClassProps } from './types';
-import {
-  Code,
-  FunctionDeclaration,
-  TypeAnnotation,
-  Var,
-  VariableDeclaration,
-  VariableDeclarationKind,
-  VariableDeclarator,
-  render,
-} from 'react-ast';
-import path from 'path';
-import fs from 'fs-extra';
+// import React from 'react';
+// import { Generator } from './index';
+// import type { GirClassProps } from './types';
+// import {
+//   Code,
+//   FunctionDeclaration,
+//   TypeAnnotation,
+//   Var,
+//   VariableDeclaration,
+//   VariableDeclarationKind,
+//   VariableDeclarator,
+//   render,
+// } from 'react-ast';
+// import path from 'path';
+// import fs from 'fs-extra';
 
-export const Example = () => {
-  (async function JSGenerate() {
-    const generator = new Generator('../girs/test.4.0.gir');
-    await generator.start();
-    // console.log(generator.widgetClasses);
+// export const Example = () => {
+//   (async function JSGenerate() {
+//     const generator = new Generator('../girs/test.4.0.gir');
+//     await generator.start();
+//     // console.log(generator.widgetClasses);
 
-    Array.from(generator.widgetClasses).forEach((girClass: any) => {
-      // console.log(JSON.stringify(girClass));
-      renderWidgetElement(girClass);
-    });
-  })();
+//     Array.from(generator.widgetClasses).forEach((girClass: any) => {
+//       // console.log(JSON.stringify(girClass));
+//       renderWidgetElement(girClass);
+//     });
+//   })();
 
-  const elementsDirectory = path.resolve(__dirname, '../elements');
+//   const elementsDirectory = path.resolve(__dirname, '../elements');
 
-  async function renderWidgetElement(girClass: GirClassProps) {
-    const className = girClass.$.name;
+//   async function renderWidgetElement(girClass: GirClassProps) {
+//     const className = girClass.$.name;
 
-    const jsx = (
-      <FunctionDeclaration id="test">
-        <VariableDeclaration kind={VariableDeclarationKind.Const}>
-          <VariableDeclarator
-            id="greet"
-            // typeAnnotation={<TypeAnnotation>String</TypeAnnotation>}
-          >
-            Hello World
-          </VariableDeclarator>
-        </VariableDeclaration>
-      </FunctionDeclaration>
-    );
+//     const jsx = (
+//       <FunctionDeclaration id="test">
+//         <VariableDeclaration kind={VariableDeclarationKind.Const}>
+//           <VariableDeclarator
+//             id="greet"
+//             // typeAnnotation={<TypeAnnotation>String</TypeAnnotation>}
+//           >
+//             Hello World
+//           </VariableDeclarator>
+//         </VariableDeclaration>
+//       </FunctionDeclaration>
+//     );
 
-    const code = render(jsx, {
-      parserOptions: {
-        plugins: ['jsx', 'classProperties', 'typescript'],
-      },
-    });
-    await fs.mkdirp(elementsDirectory);
-    await fs.writeFile(
-      path.resolve(elementsDirectory, `${className}.tsx`),
-      code,
-    );
-  }
-};
+//     const code = render(jsx, {
+//       parserOptions: {
+//         plugins: ['jsx', 'classProperties', 'typescript'],
+//       },
+//     });
+//     await fs.mkdirp(elementsDirectory);
+//     await fs.writeFile(
+//       path.resolve(elementsDirectory, `${className}.tsx`),
+//       code,
+//     );
+//   }
+// };
 
-(async () => {
-  console.log(Example());
-})();
+// (async () => {
+//   console.log(Example());
+// })();
+
+export default null;

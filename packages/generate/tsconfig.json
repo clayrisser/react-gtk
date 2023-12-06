@@ -21,7 +21,15 @@
     "strict": true,
     "target": "ES2022",
     "tsBuildInfoFile": ".tsbuildinfo",
-    "lib": ["DOM", "DOM.Iterable", "ES2022", "ScriptHost", "WebWorker", "WebWorker.ImportScripts", "Webworker.Iterable"]
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022",
+      "ScriptHost",
+      "WebWorker",
+      "WebWorker.ImportScripts",
+      "Webworker.Iterable"
+    ]
   },
   "ts-node": {
     "swc": true,
@@ -30,5 +38,5 @@
       "module": "commonjs"
     }
   },
-  "include": ["src", "tests", "*.ts", "*.js", "@girs/node-gtk-4.0"]
+  "include": ["src", "tests", "*.ts", "*.js"]
 }

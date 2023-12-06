@@ -64,7 +64,9 @@ $(ACTION)/build: $(call git_deps,\.([jt]sx?)$$)
 .PHONY: dev
 dev: ~deps +dev
 +dev:
-	@$(TS_NODE) src/index.tsx
+	@$(TSUP)
+	@$(NODE) lib/index.mjs
+#	@$(TS_NODE) src/index.tsx
 
 .PHONY: example
 example: ~deps +example

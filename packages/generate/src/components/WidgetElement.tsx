@@ -1,8 +1,8 @@
 /**
- * File: /src/renderWidgetElement.tsx
+ * File: /src/components/WidgetElement.tsx
  * Project: @react-gtk/generate
- * File Created: 05-12-2023 16:43:03
- * Author: dharmendra
+ * File Created: 06-12-2023 07:27:49
+ * Author: Clay Risser
  * -----
  * BitSpur (c) Copyright 2017 - 2023
  *
@@ -20,11 +20,13 @@
  */
 
 import React from 'react';
-import { GirClassElement } from '@ts-for-gir/lib';
-import { WidgetElement } from './components/WidgetElement';
 import reactAst from 'react-ast';
-const { render } = reactAst;
+const { Code } = reactAst;
 
-export async function renderWidgetElement(widget: GirClassElement) {
-  return render(<WidgetElement name={widget.$.name} />, { prettier: true });
+export interface WidgetElementProps {
+  name: string;
+}
+
+export function WidgetElement(props: WidgetElementProps) {
+  return <Code>{`var ${props.name} = 0`}</Code>;
 }

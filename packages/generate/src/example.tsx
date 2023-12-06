@@ -41,9 +41,9 @@ export interface GirClass {
 
 export const Example = () => {
   (async function JSGenerate() {
-    const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
+    const generator = new Generator('../girs/test.4.0.gir');
     await generator.start();
-    // console.log(generator.widgetClasses);
+    console.log(generator.widgetClasses);
     renderWidgetElement(generator.widgetClasses);
   })();
 
@@ -54,10 +54,10 @@ export const Example = () => {
 
     const jsx = (
       <FunctionDeclaration id="test">
-        <VariableDeclaration kind={VariableDeclarationKind.Let}>
+        <VariableDeclaration kind={VariableDeclarationKind.Var}>
           <VariableDeclarator
             id="greet"
-            // typeAnnotation={<TypeAnnotation>T</TypeAnnotation>}
+            // typeAnnotation={<TypeAnnotation>String</TypeAnnotation>}
           >
             Hello World
           </VariableDeclarator>
@@ -65,7 +65,12 @@ export const Example = () => {
       </FunctionDeclaration>
     );
 
-    const code = render(jsx, {});
+    const code = render(jsx, {
+      parserOptions: {
+        prettier: false,
+        plugins: ['jsx', 'classProperties', 'typescript'],
+      },
+    });
     await fs.mkdirp(elementsDirectory);
     await fs.writeFile(path.resolve(elementsDirectory, `hello.tsx`), code);
   }

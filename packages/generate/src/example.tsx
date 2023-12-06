@@ -21,6 +21,7 @@
 
 import React from 'react';
 import { Generator } from './index';
+import type { WidgetClassProps } from './types';
 import {
   Code,
   FunctionDeclaration,
@@ -34,18 +35,13 @@ import {
 import path from 'path';
 import fs from 'fs-extra';
 
-export interface GirClass {
-  function: any;
-  method: any;
-}
-
 export const Example = () => {
   (async function JSGenerate() {
     const generator = new Generator('../girs/test.4.0.gir');
     await generator.start();
     // console.log(generator.widgetClasses);
 
-    Array.from(generator.widgetClasses).forEach((girClass) => {
+    Array.from(generator.widgetClasses).forEach((girClass: any) => {
       // console.log(JSON.stringify(girClass));
       renderWidgetElement(girClass);
     });
@@ -53,7 +49,7 @@ export const Example = () => {
 
   const elementsDirectory = path.resolve(__dirname, '../elements');
 
-  async function renderWidgetElement(girClass: any) {
+  async function renderWidgetElement(girClass: WidgetClassProps) {
     const className = girClass.$.name;
 
     const jsx = (
@@ -71,7 +67,6 @@ export const Example = () => {
 
     const code = render(jsx, {
       parserOptions: {
-        prettier: false,
         plugins: ['jsx', 'classProperties', 'typescript'],
       },
     });

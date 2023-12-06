@@ -1,7 +1,9 @@
+GirClass
 cjs
 cspell
 dts
 esm
+girClass
 girFilePath
 girs
 globals
@@ -13,6 +15,7 @@ jsx
 lang
 microtask
 minify
+mkdirp
 mkpm
 namespace
 reconciler

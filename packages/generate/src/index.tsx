@@ -22,10 +22,11 @@
 import { parseStringPromise } from 'xml2js';
 import { resolve } from 'path';
 import { readFile } from 'fs/promises';
+import { WidgetClassProps } from './types';
 
 export class Generator {
   public nameSpaces: string[] = [];
-  public widgetClasses: string[] = [];
+  public widgetClasses: WidgetClassProps[] = [];
   public methods: string[] = [];
   public properties: string[] = [];
   protected log = console;
@@ -58,8 +59,7 @@ export class Generator {
 
     for (const nameSpace of nameSpaceData) {
       const widgetClasses = nameSpace.class.filter(
-        // (classData: any) => classData.$.name === 'Widget',
-        (classData: any) => classData.$.name.includes('Widget'),
+        (classData: WidgetClassProps) => classData.$.name.includes('Widget'),
       );
 
       this.widgetClasses.push(...widgetClasses);
@@ -70,11 +70,11 @@ export class Generator {
     const nameSpaceData = parsedData.repository.namespace;
 
     for (const nameSpace of nameSpaceData) {
-      const widgetClasses = nameSpace.class.filter((classData: any) =>
-        classData.$.name.includes('Widget'),
+      const widgetClasses = nameSpace.class.filter(
+        (classData: WidgetClassProps) => classData.$.name.includes('Widget'),
       );
 
-      const methods = widgetClasses.map((classData: any) => {
+      const methods = widgetClasses.map((classData: WidgetClassProps) => {
         return classData.method;
       });
 
@@ -86,8 +86,8 @@ export class Generator {
     const nameSpaceData = parsedData.repository.namespace;
 
     for (const nameSpace of nameSpaceData) {
-      const widgetClasses = nameSpace.class.filter((classData: any) =>
-        classData.$.name.includes('Widget'),
+      const widgetClasses = nameSpace.class.filter(
+        (classData: WidgetClassProps) => classData.$.name.includes('Widget'),
       );
 
       const properties = widgetClasses.map((classData: any) => {
@@ -106,7 +106,7 @@ export class Generator {
         });
       },
       classLogger: () => {
-        this.widgetClasses.forEach((classData: any) => {
+        this.widgetClasses.forEach((classData: WidgetClassProps) => {
           this.log.log(classData);
         });
       },
@@ -126,10 +126,10 @@ export class Generator {
 
 class __main__ {
   static async main() {
-    const generator = new Generator('../girs/test.4.0.gir');
+    const generator = new Generator('/usr/share/gir-1.0/Gtk-4.0.gir');
     await generator.start();
     // generator.logger.nameSpaceLogger();
-    // console.log(...generator.widgetClasses);
+    console.log(...generator.widgetClasses);
   }
 }
 

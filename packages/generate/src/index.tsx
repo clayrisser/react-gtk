@@ -24,24 +24,21 @@ import { resolve } from 'path';
 import { readFile } from 'fs/promises';
 
 export class Generator {
-
-  constructor(){
-    public nameSpaces: string[] = [];
+  public nameSpaces: string[] = [];
   public widgetClasses: string[] = [];
   public methods: string[] = [];
   public properties: string[] = [];
-  }
+  protected log = console;
 
+  constructor(private girFilePath: string) {}
 
-  static async start(girFilePath: string) {
+  async start() {
     const parsedData = await this.getParsedData();
     this.getNameSpaces(parsedData);
     this.getClasses(parsedData);
     this.getMethods(parsedData);
     this.getProperties(parsedData);
   }
-
-  protected log = console;
 
   protected async getParsedData() {
     const filePath = resolve(__dirname, this.girFilePath);

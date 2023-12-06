@@ -1,4 +1,5 @@
 GirClass
+GirClassProps
 cjs
 cspell
 dts
@@ -25,6 +26,7 @@ subtree
 transpile
 tsbuildinfo
 tsup
+tsx
 txt
 utf8
 yarnpkg

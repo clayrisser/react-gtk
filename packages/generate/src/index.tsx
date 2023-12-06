@@ -22,10 +22,10 @@
 import { parseStringPromise } from 'xml2js';
 import { resolve } from 'path';
 import { readFile } from 'fs/promises';
-import { GirClassProps } from './types';
+import { GirClassProps, GirNamespaceProps } from './types';
 
 export class Generator {
-  public nameSpaces: string[] = [];
+  public nameSpaces: GirNamespaceProps[] = [];
   public widgetClasses: GirClassProps[] = [];
   public methods: string[] = [];
   public properties: string[] = [];
@@ -101,7 +101,7 @@ export class Generator {
   get logger() {
     return {
       nameSpaceLogger: () => {
-        this.nameSpaces.forEach((nameSpace: any) => {
+        this.nameSpaces.forEach((nameSpace: GirNamespaceProps) => {
           this.log.log(nameSpace);
         });
       },

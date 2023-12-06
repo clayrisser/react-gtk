@@ -76,3 +76,68 @@ export interface GirClassProps {
     }>;
   }>;
 }
+
+export interface GirNamespaceProps {
+  $: {
+    name: string;
+    version: string;
+    'shared-library': string;
+  };
+  class: Array<{
+    $: {
+      name: string;
+      parent: string;
+      'c:symbol-prefix': string;
+      'c:type': string;
+      'glib:type-name': string;
+      'glib:get-type': string;
+    };
+    method: Array<{
+      $: {
+        name: string;
+        'c:identifier': string;
+      };
+      'return-value': Array<{
+        $: {
+          'transfer-ownership': string;
+        };
+        type: Array<{
+          $: {
+            name: string;
+            'c:type': string;
+          };
+        }>;
+      }>;
+    }>;
+    property: Array<{
+      $: {
+        name: string;
+        writable: string;
+        readable: string;
+        'transfer-ownership': string;
+      };
+      type: Array<{
+        $: {
+          name: string;
+          'c:type': string;
+        };
+      }>;
+    }>;
+    signal: Array<{
+      $: {
+        name: string;
+        when: string;
+      };
+      'return-value': Array<{
+        $: {
+          'transfer-ownership': string;
+        };
+        type: Array<{
+          $: {
+            name: string;
+          };
+        }>;
+      }>;
+    }>;
+  }>;
+}

@@ -21,7 +21,7 @@
 
 import React from 'react';
 import { Generator } from './index';
-import type { GirClassProps } from './types';
+import type { GirClassProps, GirNamespaceProps } from './types';
 import {
   Code,
   FunctionDeclaration,
@@ -34,17 +34,23 @@ import {
 } from 'react-ast';
 import path from 'path';
 import fs from 'fs-extra';
+import { forEach } from '../transpileModules';
 
 export const Example = () => {
   (async function JSGenerate() {
     const generator = new Generator('../girs/test.4.0.gir');
     await generator.start();
-    // console.log(generator.widgetClasses);
 
-    Array.from(generator.widgetClasses).forEach((girClass: any) => {
-      // console.log(JSON.stringify(girClass));
-      renderWidgetElement(girClass);
-    });
+    Array.from(generator.nameSpaces).forEach(
+      (girNameSpace: GirNamespaceProps) => {
+        console.log(JSON.stringify(girNameSpace));
+      },
+    );
+
+    // Array.from(generator.widgetClasses).forEach((girClass: GirClassProps) => {
+    //   console.log(JSON.stringify(girClass));
+    //   // renderWidgetElement(girClass);
+    // });
   })();
 
   const elementsDirectory = path.resolve(__dirname, '../elements');
@@ -55,12 +61,7 @@ export const Example = () => {
     const jsx = (
       <FunctionDeclaration id="test">
         <VariableDeclaration kind={VariableDeclarationKind.Const}>
-          <VariableDeclarator
-            id="greet"
-            // typeAnnotation={<TypeAnnotation>String</TypeAnnotation>}
-          >
-            Hello World
-          </VariableDeclarator>
+          <VariableDeclarator id="greet">Hello World</VariableDeclarator>
         </VariableDeclaration>
       </FunctionDeclaration>
     );

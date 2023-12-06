@@ -1,3 +1,3 @@
 function test() {
-  let greet = "Hello World";
+  var greet = "Hello World";
 }

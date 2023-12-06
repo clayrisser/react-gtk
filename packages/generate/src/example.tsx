@@ -43,18 +43,22 @@ export const Example = () => {
   (async function JSGenerate() {
     const generator = new Generator('../girs/test.4.0.gir');
     await generator.start();
-    console.log(generator.widgetClasses);
-    renderWidgetElement(generator.widgetClasses);
+    // console.log(generator.widgetClasses);
+
+    Array.from(generator.widgetClasses).forEach((girClass) => {
+      // console.log(JSON.stringify(girClass));
+      renderWidgetElement(girClass);
+    });
   })();
 
   const elementsDirectory = path.resolve(__dirname, '../elements');
 
-  async function renderWidgetElement(girClass?: any) {
-    // const className = girClass.$.name;
+  async function renderWidgetElement(girClass: any) {
+    const className = girClass.$.name;
 
     const jsx = (
       <FunctionDeclaration id="test">
-        <VariableDeclaration kind={VariableDeclarationKind.Var}>
+        <VariableDeclaration kind={VariableDeclarationKind.Const}>
           <VariableDeclarator
             id="greet"
             // typeAnnotation={<TypeAnnotation>String</TypeAnnotation>}
@@ -72,7 +76,10 @@ export const Example = () => {
       },
     });
     await fs.mkdirp(elementsDirectory);
-    await fs.writeFile(path.resolve(elementsDirectory, `hello.tsx`), code);
+    await fs.writeFile(
+      path.resolve(elementsDirectory, `${className}.tsx`),
+      code,
+    );
   }
 };
 

@@ -19,7 +19,7 @@
  *  limitations under the License.
  */
 
-export interface WidgetClassProps {
+export interface GirClassProps {
   $: {
     name: string;
     parent: string;

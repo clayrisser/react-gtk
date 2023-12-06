@@ -22,11 +22,11 @@
 import { parseStringPromise } from 'xml2js';
 import { resolve } from 'path';
 import { readFile } from 'fs/promises';
-import { WidgetClassProps } from './types';
+import { GirClassProps } from './types';
 
 export class Generator {
   public nameSpaces: string[] = [];
-  public widgetClasses: WidgetClassProps[] = [];
+  public widgetClasses: GirClassProps[] = [];
   public methods: string[] = [];
   public properties: string[] = [];
   protected log = console;
@@ -58,8 +58,8 @@ export class Generator {
     const nameSpaceData = parsedData.repository.namespace;
 
     for (const nameSpace of nameSpaceData) {
-      const widgetClasses = nameSpace.class.filter(
-        (classData: WidgetClassProps) => classData.$.name.includes('Widget'),
+      const widgetClasses = nameSpace.class.filter((classData: GirClassProps) =>
+        classData.$.name.includes('Widget'),
       );
 
       this.widgetClasses.push(...widgetClasses);
@@ -70,11 +70,11 @@ export class Generator {
     const nameSpaceData = parsedData.repository.namespace;
 
     for (const nameSpace of nameSpaceData) {
-      const widgetClasses = nameSpace.class.filter(
-        (classData: WidgetClassProps) => classData.$.name.includes('Widget'),
+      const widgetClasses = nameSpace.class.filter((classData: GirClassProps) =>
+        classData.$.name.includes('Widget'),
       );
 
-      const methods = widgetClasses.map((classData: WidgetClassProps) => {
+      const methods = widgetClasses.map((classData: GirClassProps) => {
         return classData.method;
       });
 
@@ -86,8 +86,8 @@ export class Generator {
     const nameSpaceData = parsedData.repository.namespace;
 
     for (const nameSpace of nameSpaceData) {
-      const widgetClasses = nameSpace.class.filter(
-        (classData: WidgetClassProps) => classData.$.name.includes('Widget'),
+      const widgetClasses = nameSpace.class.filter((classData: GirClassProps) =>
+        classData.$.name.includes('Widget'),
       );
 
       const properties = widgetClasses.map((classData: any) => {
@@ -106,7 +106,7 @@ export class Generator {
         });
       },
       classLogger: () => {
-        this.widgetClasses.forEach((classData: WidgetClassProps) => {
+        this.widgetClasses.forEach((classData: GirClassProps) => {
           this.log.log(classData);
         });
       },

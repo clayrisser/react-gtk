@@ -21,7 +21,7 @@
 
 import React from 'react';
 import { Generator } from './index';
-import type { WidgetClassProps } from './types';
+import type { GirClassProps } from './types';
 import {
   Code,
   FunctionDeclaration,
@@ -49,7 +49,7 @@ export const Example = () => {
 
   const elementsDirectory = path.resolve(__dirname, '../elements');
 
-  async function renderWidgetElement(girClass: WidgetClassProps) {
+  async function renderWidgetElement(girClass: GirClassProps) {
     const className = girClass.$.name;
 
     const jsx = (

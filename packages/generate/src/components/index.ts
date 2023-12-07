@@ -1,10 +1,10 @@
 /*
- *  File: /transpileModules.js
- *  Project: @multiplatform.one/prisma-scripts
- *  File Created: 19-09-2023 14:08:50
+ *  File: /src/components/index.ts
+ *  Project: @react-gtk/generate
+ *  File Created: 07-12-2023 06:01:58
  *  Author: Clay Risser
  *  -----
- *  BitSpur (c) Copyright 2021 - 2023
+ *  BitSpur (c) Copyright 2017 - 2023
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,8 +19,4 @@
  *  limitations under the License.
  */
 
-const logger = console;
-module.exports = [
-  ...new Set([...(require('./package.json').transpileModules || [])]),
-];
-logger.debug('transpileModules:', module.exports.join(', '));
+export * from './WidgetElement';

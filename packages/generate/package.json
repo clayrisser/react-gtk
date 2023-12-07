@@ -28,9 +28,13 @@
     }
   },
   "files": [
+    "bin",
     "lib",
     "src"
   ],
+  "bin": {
+    "react-gtk-generate": "./bin/reactGtkGenerate.mjs"
+  },
   "keywords": [
     "bridge",
     "desktop",
@@ -64,6 +68,7 @@
     "@ts-for-gir/cli": "^3.2.6",
     "@ts-for-gir/generator-typescript": "^3.2.6",
     "@ts-for-gir/lib": "^3.2.6",
+    "commander": "^11.1.0",
     "react-ast": "^0.5.3",
     "xml2js": "^0.6.2"
   },

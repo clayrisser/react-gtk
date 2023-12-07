@@ -25,16 +25,37 @@ import { renderWidgetElement } from './renderWidgetElement';
 import path from 'path';
 import fs from 'fs/promises';
 
+export interface GeneratorOptions {
+  outDir: string;
+  kind: Kind;
+}
+
 export class Generator {
   module!: GirModule;
 
-  outDir = path.resolve(process.cwd(), 'out');
+  outDir: string;
+
+  options: GeneratorOptions;
+
+  constructor(options: Partial<GeneratorOptions> = {}) {
+    this.options = {
+      outDir: path.resolve(process.cwd(), 'out'),
+      kind: Kind.Elements,
+      ...options,
+    };
+    this.outDir = path.resolve(this.options.outDir);
+  }
 
   async load() {
     this.module = await loadGtkModule();
   }
 
   async generate() {
+    if (typeof this.module === 'undefined') await this.load();
+    if (this.options.kind === Kind.Elements) await this.generateElements();
+  }
+
+  async generateElements() {
     if (typeof this.module === 'undefined') await this.load();
     await fs.rm(this.outDir, { recursive: true, force: true });
     const widgets = await this.getWidgets();
@@ -43,11 +64,14 @@ export class Generator {
         this.generateWidget(widget);
       }),
     );
+    console.log(this.options);
+    console.log(this.outDir);
   }
 
   async generateWidget(widget: GirClassElement) {
-    const code = await renderWidgetElement(widget);
-    console.log(code);
+    const code = await renderWidgetElement(widget, {
+      importElementPath: '../../elements/Element',
+    });
     await fs.mkdir(this.outDir, { recursive: true });
     await fs.writeFile(path.resolve(this.outDir, `${widget.$.name}.tsx`), code);
   }
@@ -62,4 +86,9 @@ export class Generator {
     if (typeof this.module === 'undefined') await this.load();
     return this.module.ns.class || [];
   }
+}
+
+export enum Kind {
+  Elements = 'elements',
+  Types = 'types',
 }

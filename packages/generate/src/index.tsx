@@ -19,9 +19,8 @@
  * limitations under the License.
  */
 
-import { Generator } from './generator';
-
-(async () => {
-  const generator = new Generator();
-  await generator.generate();
-})();
+export * from './components';
+export * from './generator';
+export * from './module';
+export * from './renderWidgetElement';
+export * from './types';

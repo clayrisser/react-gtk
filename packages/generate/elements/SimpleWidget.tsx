@@ -1,3 +1,3 @@
 function test() {
-  const greet = "Hello World";
+  const greet = 'Hello World';
 }

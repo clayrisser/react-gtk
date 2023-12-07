@@ -1,3 +1,4 @@
+argv
 ast
 cjs
 cspell
@@ -40,6 +41,7 @@ tsup
 tsx
 txt
 usr
+utf
 utf8
 xml
 yarnpkg

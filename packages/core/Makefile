@@ -26,6 +26,7 @@ include $(MKPM)/dotenv
 include $(PROJECT_ROOT)/shared.mk
 
 TS_NODE ?= $(call yarn_binary,ts-node)
+REACT_GTK_GENERATE ?= $(call yarn_binary,react-gtk-generate)
 
 ACTIONS += deps
 $(ACTION)/deps: package.json
@@ -42,7 +43,12 @@ $(ACTION)/spellcheck: $(call git_deps,\.(md)$$)
 	-@$(call cspell,$?,$(SPELLCHECK_ARGS))
 	@$(call done,$@)
 
-ACTIONS += lint~spellcheck ##
+ACTIONS += generate~spellcheck ##
+$(ACTION)/generate: $(call git_deps,\.([jt]sx?)$$)
+	@$(REACT_GTK_GENERATE) elements --out src/generated/elements
+	@$(call done,$@)
+
+ACTIONS += lint~generate ##
 $(ACTION)/lint: $(call git_deps,\.([jt]sx?)$$)
 	-@$(call eslint,$?,$(LINT_ARGS))
 	@$(call done,$@)

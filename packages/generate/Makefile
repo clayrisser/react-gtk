@@ -62,11 +62,9 @@ $(ACTION)/build: $(call git_deps,\.([jt]sx?)$$)
 	@$(call done,$@)
 
 .PHONY: dev
-dev: ~deps +dev
+dev: ~build +dev
 +dev:
-	@$(TSUP)
-	@$(NODE) lib/index.mjs
-#	@$(TS_NODE) src/index.tsx
+	@$(MAKE) -C $(PROJECT_ROOT)/packages/core +generate
 
 .PHONY: example
 example: ~deps +example

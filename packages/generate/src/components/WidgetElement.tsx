@@ -35,16 +35,18 @@ import {
 export interface WidgetElementProps {
   name: string;
   extendedClass?: string;
+  importElementPath?: string;
 }
 
 export function WidgetElement({
   name,
   extendedClass = 'Element',
+  importElementPath = '@react-gtk/core',
 }: WidgetElementProps) {
-  const interfaceName = name + 'Props';
+  const interfaceName = `${name}Props`;
   return (
     <>
-      <Import from="../../core/src/elements/Element" imports="Element" />
+      <Import from={importElementPath} imports="Element" />
       <Import from="@girs/node-gtk-4.0" default="Gtk" />
       <Export>
         <Interface name={interfaceName} />
@@ -53,7 +55,11 @@ export function WidgetElement({
         <Class name={name} extends={extendedClass}>
           <ClassMethod
             id="constructor"
-            params={[<Identifier key="props">props</Identifier>]}
+            params={[
+              <Identifier key="props" typeAnnotation={interfaceName}>
+                props
+              </Identifier>,
+            ]}
           >
             <Var name="node" kind={VarKind.Const}>
               <Code>{`new Gtk.${name}()`}</Code>

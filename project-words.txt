@@ -2,6 +2,7 @@ ast
 cjs
 cspell
 dts
+declarator
 esm
 flatpak
 gdk

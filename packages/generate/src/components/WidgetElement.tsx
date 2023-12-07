@@ -21,17 +21,54 @@
 
 import React from 'react';
 import reactAst from 'react-ast';
-const { Class, ClassMethod } = reactAst;
+const {
+  Class,
+  ClassMethod,
+  Import,
+  Var,
+  VarKind,
+  Code,
+  ExportNamedDeclaration,
+  ExportSpecifier,
+  Interface,
+  Identifier,
+} = reactAst;
 
 export interface WidgetElementProps {
   name: string;
   extendedClass?: string;
 }
 
-export function WidgetElement({ name, extendedClass }: WidgetElementProps) {
+export function WidgetElement({
+  name,
+  extendedClass = 'Element',
+}: WidgetElementProps) {
+  const interfaceName = name + 'Props';
   return (
-    <Class name={name} extends={extendedClass}>
-      <ClassMethod id="constructor" params={['a', 'b', 'c']} />
-    </Class>
+    <>
+      <Import from="../../core/src/elements/Element" imports="Element" />
+      <Import from="@girs/node-gtk-4.0" default="Gtk" />
+      <Interface name={interfaceName} />
+      <Class name={name} extends={extendedClass}>
+        <ClassMethod
+          id="constructor"
+          params={[<Identifier key="props">props</Identifier>]}
+        >
+          <Var name="node" kind={VarKind.Const}>
+            <Code>{`new Gtk.${name}()`}</Code>
+          </Var>
+          <Code>super(node,props)</Code>
+        </ClassMethod>
+      </Class>
+      <ExportNamedDeclaration
+        specifiers={[
+          <ExportSpecifier key={name}>{name}</ExportSpecifier>,
+          <ExportSpecifier key={interfaceName}>
+            {interfaceName}
+          </ExportSpecifier>,
+        ]}
+        debug
+      />
+    </>
   );
 }

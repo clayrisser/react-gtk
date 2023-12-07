@@ -22,10 +22,25 @@
 import GObject from '@girs/node-gobject-2.0';
 import PropTypes from 'prop-types';
 import type Gtk from '@girs/node-gtk-4.0';
-import { Instance, GtkNode, Props, ElementMeta } from '../types';
+import {
+  Instance,
+  GtkNode,
+  Props,
+  ElementMeta,
+  AppendChildOptions,
+  Stage,
+  SharedOptions,
+  CommitUpdateOptions,
+  CommitMountOptions,
+  RemoveChildOptions,
+  PreparePortalMountOptions,
+  RemoveAllChildrenOptions,
+} from '../types';
 
 let _propertyList: string[] | undefined;
 let _signalList: Set<string> | undefined;
+
+export interface UpdateNodeOptions extends SharedOptions {}
 
 export class Element implements Instance {
   static defaultProps: Props = {};
@@ -45,8 +60,13 @@ export class Element implements Instance {
     this.node._element = this;
   }
 
-  appendChild(child: Instance) {
-    this.updateNode();
+  appendChild(child: Instance, options: Partial<AppendChildOptions> = {}) {
+    const { stage } = {
+      parentIsContainer: false,
+      stage: Stage.Update,
+      ...options,
+    } as AppendChildOptions;
+    this.updateNode({ stage });
     this.children.push(child);
     if (this.meta.appendChild) {
       this.meta.appendChild(child.node);
@@ -59,8 +79,12 @@ export class Element implements Instance {
     }
   }
 
-  removeChild(child: Instance) {
-    this.updateNode();
+  removeChild(child: Instance, options: Partial<RemoveChildOptions> = {}) {
+    const { stage } = {
+      stage: Stage.Update,
+      ...options,
+    } as RemoveChildOptions;
+    this.updateNode({ stage });
     this.children.splice(this.children.indexOf(child), 1);
     if (this.meta.removeChild) {
       this.meta.removeChild(child.node);
@@ -73,19 +97,37 @@ export class Element implements Instance {
     }
   }
 
-  commitMount() {
-    this.updateNode();
+  removeAllChildren(options: Partial<RemoveAllChildrenOptions> = {}) {
+    const { stage } = {
+      stage: Stage.Update,
+      ...options,
+    } as RemoveChildOptions;
+    this.updateNode({ stage });
+    // TODO: implement this
   }
 
-  commitUpdate(newProps: Props) {
+  commitMount(_options: Partial<CommitMountOptions> = {}) {
+    this.updateNode({ stage: Stage.Mount });
+  }
+
+  commitUpdate(newProps: Props, _options: Partial<CommitUpdateOptions> = {}) {
     this.props = {
       ...this.props,
       ...newProps,
     };
-    this.updateNode();
+    this.updateNode({ stage: Stage.Update });
   }
 
-  updateNode() {
+  preparePortalMount(options: Partial<PreparePortalMountOptions> = {}) {
+    const { stage } = {
+      stage: Stage.Update,
+      ...options,
+    } as RemoveChildOptions;
+    this.updateNode({ stage });
+    // TODO: implement this (not for v1)
+  }
+
+  updateNode(_options: UpdateNodeOptions) {
     Object.keys(this.props).forEach((key: string) => {
       const prop = this.props[key];
       if (typeof prop !== 'undefined' && prop !== null) {

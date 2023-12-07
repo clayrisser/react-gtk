@@ -20,6 +20,7 @@
  */
 
 import type { Gtk } from '@girs/node-gtk-4.0';
+import { Text } from './elements/Text';
 
 export type BundleType = 0 | 1;
 
@@ -31,7 +32,7 @@ export type Prop = any;
 
 export type HydratableInstance = any;
 
-export type PublicInstance = Instance | TextInstance;
+export type PublicInstance = GtkNode;
 
 export type HostContext = Context;
 
@@ -45,7 +46,7 @@ export type NoTimeout = any;
 
 export type SuspenseInstance = any;
 
-export interface TextInstance extends Instance {}
+export interface TextInstance extends Text {}
 
 export interface Container extends Instance {}
 
@@ -66,14 +67,34 @@ export interface ElementMeta {
   removeChild?: RemoveChild;
 }
 
+export interface SharedOptions {
+  stage: Stage;
+}
+
+export interface AppendChildOptions extends SharedOptions {
+  parentIsContainer: boolean;
+}
+
+export interface CommitMountOptions extends Omit<SharedOptions, 'stage'> {}
+
+export interface CommitUpdateOptions extends Omit<SharedOptions, 'stage'> {}
+
+export interface RemoveChildOptions extends SharedOptions {}
+
+export interface RemoveAllChildrenOptions extends SharedOptions {}
+
+export interface PreparePortalMountOptions extends Omit<SharedOptions, 'stage'> {}
+
 export interface Instance {
-  appendChild: (child: Instance | TextInstance) => void;
+  appendChild: (child: Instance | TextInstance, options?: Partial<AppendChildOptions>) => void;
   children: Instance[];
-  commitMount: () => void;
-  commitUpdate: (newProps: Props) => void;
+  commitMount: (options?: Partial<CommitMountOptions>) => void;
+  commitUpdate: (newProps: Props, options?: Partial<CommitUpdateOptions>) => void;
   node: GtkNode;
   props: Props;
-  removeChild: (child: Instance | TextInstance) => void;
+  removeChild: (child: Instance | TextInstance, options?: Partial<RemoveChildOptions>) => void;
+  removeAllChildren: (options?: Partial<RemoveAllChildrenOptions>) => void;
+  preparePortalMount: (options?: Partial<PreparePortalMountOptions>) => void;
 }
 
 export interface GtkNode extends Gtk.Widget {
@@ -84,4 +105,9 @@ export enum ContainerType {
   None = 0,
   Child = 1,
   Children = 2,
+}
+
+export enum Stage {
+  Mount = 'mount',
+  Update = 'update',
 }

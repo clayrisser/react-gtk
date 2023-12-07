@@ -24,11 +24,13 @@ import createElement from './createElement';
 import dev from './dev';
 import type { Lane } from 'react-reconciler';
 import { DefaultEventPriority } from 'react-reconciler/constants';
-import { Label } from './elements';
+import { Stage } from './types';
+import { Text } from './elements/Text';
 import { logger } from './util';
 import type {
   ChildSet,
   Container,
+  GtkNode,
   HostContext,
   HydratableInstance,
   Instance,
@@ -45,6 +47,10 @@ import type {
 // https://blog.atulr.com/react-custom-renderer-3
 // https://github.com/nitin42/Making-a-custom-React-renderer/blob/master/part-one.md
 // https://www.youtube.com/watch?v=SXx-CymMjDM
+
+// Container: the root node of the tree
+// Instance: a virtual dom instance
+// Node: a real dom (gtk widget) node
 
 export default ReactReconciler<
   Type,
@@ -73,12 +79,20 @@ export default ReactReconciler<
 
   createInstance(type: Type, props: Props, _rootContainerInstance: Container, _hostContext: HostContext): Instance {
     logger.debug('createInstance');
-    return createElement(type, props);
+    const elementProps = { ...props };
+    delete elementProps.children;
+    const element = createElement(type, elementProps);
+    // TODO: double check type is Text
+    if (type !== 'Text' && typeof props.children === 'string') {
+      const textNode = new Text({ text: props.children });
+      element.appendChild(textNode, { stage: Stage.Mount });
+    }
+    return element;
   },
 
   appendInitialChild(parentInstance: Instance, child: Instance | TextInstance): void {
     logger.debug('appendInitialChild');
-    parentInstance.appendChild(child);
+    parentInstance.appendChild(child, { stage: Stage.Mount });
   },
 
   finalizeInitialChildren(
@@ -94,17 +108,15 @@ export default ReactReconciler<
 
   createTextInstance(text: string, _rootContainerInstance: Container, _hostContext: HostContext): TextInstance {
     logger.debug('createTextInstance');
-    const label = new Label({ label: text });
-    label.commitMount(); // prob should run at a later point
-    return label;
+    return new Text({ text });
   },
 
   getPublicInstance(instance: Instance | TextInstance): PublicInstance {
     logger.debug('getPublicInstance');
-    return instance;
+    return instance.node;
   },
 
-  prepareForCommit(_containerInfo: Container): Record<string, any> | null {
+  prepareForCommit(_rootContainerInstance: Container): Record<string, any> | null {
     logger.debug('prepareForCommit');
     return null;
   },
@@ -121,29 +133,31 @@ export default ReactReconciler<
     return true;
   },
 
-  resetAfterCommit(_containerInfo: Container): void {
+  resetAfterCommit(_rootContainerInstance: Container): void {
     logger.debug('resetAfterCommit');
   },
 
-  resetTextContent(_instance: Instance): void {
+  resetTextContent(textInstance: TextInstance): void {
     logger.debug('resetTextContent');
+    textInstance.resetText();
   },
 
-  commitTextUpdate(_textInstance: TextInstance, _oldText: string, _newText: string): void {
+  commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
     logger.debug('commitTextUpdate');
-    throw new Error('commitTextUpdate should not be called');
+    textInstance.updateText(oldText, newText);
   },
 
   removeChild(parentInstance: Instance, child: Instance | TextInstance): void {
     logger.debug('removeChild');
-    parentInstance.removeChild(child);
+    parentInstance.removeChild(child, { stage: Stage.Update });
   },
 
-  removeChildFromContainer(_container: Container, _child: Instance | TextInstance): void {
+  removeChildFromContainer(rootContainerInstance: Container, child: Instance | TextInstance): void {
     logger.debug('removeChildFromContainer');
-    if (dev) logger.warn("'removeChildFromContainer' not supported");
+    rootContainerInstance.removeChild(child, { stage: Stage.Update });
   },
 
+  // TODO
   insertBefore(
     _parentInstance: Instance,
     _child: Instance | TextInstance,
@@ -153,14 +167,14 @@ export default ReactReconciler<
     if (dev) logger.warn("'insertBefore' not supported");
   },
 
-  appendChildToContainer(container: Container, child: Instance | TextInstance): void {
+  appendChildToContainer(rootContainerInstance: Container, child: Instance | TextInstance): void {
     logger.debug('appendChildToContainer');
-    return container.appendChild(child);
+    rootContainerInstance.appendChild(child, { parentIsContainer: true, stage: Stage.Mount });
   },
 
   appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
     logger.debug('appendChild');
-    return parentInstance.appendChild(child);
+    return parentInstance.appendChild(child, { stage: Stage.Update });
   },
 
   shouldSetTextContent(_type: Type, props: Props): boolean {
@@ -171,18 +185,17 @@ export default ReactReconciler<
 
   getRootHostContext(_rootContainerInstance: Container): HostContext {
     logger.debug('getRootHostContext');
-    if (dev) logger.warn("'getRootHostContext' not supported");
     return {};
   },
 
   getChildHostContext(_parentHostContext: HostContext, _type: Type, _rootContainerInstance: Container): HostContext {
     logger.debug('getChildHostContext');
-    if (dev) logger.warn("'getChildHostContext' not supported");
     return {};
   },
 
   commitUpdate(instance: Instance, _updatePayload: any, _type: string, _oldProps: Props, newProps: Props): void {
-    return instance.commitUpdate(newProps);
+    logger.debug('commitUpdate');
+    instance.commitUpdate(newProps);
   },
 
   commitMount(instance: Instance, _type: Type, _newProps: Props): void {
@@ -197,28 +210,33 @@ export default ReactReconciler<
 
   cancelTimeout(handle: TimeoutHandle | NoTimeout): void {
     logger.debug('clearTimeout');
-    return clearTimeout(handle);
+    clearTimeout(handle);
   },
 
-  preparePortalMount() {
+  preparePortalMount(rootContainerInstance: Container) {
     logger.debug('preparePortalMount');
+    rootContainerInstance.preparePortalMount({ stage: Stage.Mount });
   },
 
   scheduleMicrotask(callback: () => unknown) {
+    logger.debug('scheduleMicrotask');
     queueMicrotask(callback);
   },
 
-  clearContainer(_container: Container) {
+  clearContainer(rootContainerInstance: Container) {
     logger.debug('clearContainer');
+    rootContainerInstance.removeAllChildren({ stage: Stage.Update });
   },
 
   getCurrentEventPriority(): Lane {
+    logger.debug('getCurrentEventPriority');
     return DefaultEventPriority;
   },
 
-  getInstanceFromNode(_node: any) {
+  getInstanceFromNode(node: GtkNode) {
     logger.debug('getInstanceFromNode');
-    return null;
+    // TODO: make sure this doesn't create problems
+    return (node?._element as any) || null;
   },
 
   getInstanceFromScope(scopeInstance: any): null | Instance {

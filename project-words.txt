@@ -4,6 +4,7 @@ cjs
 cspell
 declarator
 dharmendra
+dom
 dts
 esm
 flatpak

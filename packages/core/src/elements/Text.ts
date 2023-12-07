@@ -19,16 +19,31 @@
  *  limitations under the License.
  */
 
-import Gtk from '@girs/node-gtk-4.0';
-import { Element } from './Element';
+import { SharedOptions, Stage } from '../types';
+import { Text as GeneratedText } from '../generated/elements/Text';
 
-export type TextProps = JSX.IntrinsicElements['Text'];
-export class Text extends Element {
-  node: Gtk.Text;
+export interface ResetTextOptions extends SharedOptions {}
 
-  constructor(props: TextProps) {
-    const node = new Gtk.Text();
-    super(new Gtk.Text(), props);
-    this.node = node;
+export interface UpdateTextOptions extends SharedOptions {}
+
+export class Text extends GeneratedText {
+  resetText(options: Partial<ResetTextOptions>) {
+    const { stage } = {
+      parentIsContainer: false,
+      stage: Stage.Update,
+      ...options,
+    } as ResetTextOptions;
+    this.updateNode({ stage });
+    // TODO: implement
+  }
+
+  updateText(_oldText: string, _newText: string, options: Partial<UpdateTextOptions>) {
+    const { stage } = {
+      parentIsContainer: false,
+      stage: Stage.Update,
+      ...options,
+    } as ResetTextOptions;
+    this.updateNode({ stage });
+    // TODO: implement
   }
 }

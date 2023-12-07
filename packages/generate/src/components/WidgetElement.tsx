@@ -20,20 +20,17 @@
  */
 
 import React from 'react';
-import reactAst from 'react-ast';
-const {
+import {
   Class,
   ClassMethod,
   Import,
   Var,
   VarKind,
   Code,
-  ExportNamedDeclaration,
-  ExportSpecifier,
   Interface,
   Identifier,
   Export,
-} = reactAst;
+} from 'react-ast';
 
 export interface WidgetElementProps {
   name: string;

@@ -22,13 +22,8 @@
 import React from 'react';
 import { GirClassElement } from '@ts-for-gir/lib';
 import { WidgetElement } from './components/WidgetElement';
-import reactAst from 'react-ast';
-const { render } = reactAst;
+import { render } from 'react-ast';
 
 export async function renderWidgetElement(widget: GirClassElement) {
-  return render(<WidgetElement name={widget.$.name} />, {
-    parserOptions: {
-      plugins: ['jsx', 'classProperties', 'typescript'],
-    },
-  });
+  return render(<WidgetElement name={widget.$.name} />);
 }

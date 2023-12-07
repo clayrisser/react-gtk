@@ -32,6 +32,7 @@ const {
   ExportSpecifier,
   Interface,
   Identifier,
+  Export,
 } = reactAst;
 
 export interface WidgetElementProps {
@@ -48,27 +49,22 @@ export function WidgetElement({
     <>
       <Import from="../../core/src/elements/Element" imports="Element" />
       <Import from="@girs/node-gtk-4.0" default="Gtk" />
-      <Interface name={interfaceName} />
-      <Class name={name} extends={extendedClass}>
-        <ClassMethod
-          id="constructor"
-          params={[<Identifier key="props">props</Identifier>]}
-        >
-          <Var name="node" kind={VarKind.Const}>
-            <Code>{`new Gtk.${name}()`}</Code>
-          </Var>
-          <Code>super(node,props)</Code>
-        </ClassMethod>
-      </Class>
-      <ExportNamedDeclaration
-        specifiers={[
-          <ExportSpecifier key={name}>{name}</ExportSpecifier>,
-          <ExportSpecifier key={interfaceName}>
-            {interfaceName}
-          </ExportSpecifier>,
-        ]}
-        debug
-      />
+      <Export>
+        <Interface name={interfaceName} />
+      </Export>
+      <Export>
+        <Class name={name} extends={extendedClass}>
+          <ClassMethod
+            id="constructor"
+            params={[<Identifier key="props">props</Identifier>]}
+          >
+            <Var name="node" kind={VarKind.Const}>
+              <Code>{`new Gtk.${name}()`}</Code>
+            </Var>
+            <Code>super(node,props)</Code>
+          </ClassMethod>
+        </Class>
+      </Export>
     </>
   );
 }

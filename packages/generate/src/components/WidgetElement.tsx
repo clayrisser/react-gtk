@@ -21,12 +21,17 @@
 
 import React from 'react';
 import reactAst from 'react-ast';
-const { Code } = reactAst;
+const { Class, ClassMethod } = reactAst;
 
 export interface WidgetElementProps {
   name: string;
+  extendedClass?: string;
 }
 
-export function WidgetElement(props: WidgetElementProps) {
-  return <Code>{`var ${props.name} = 0`}</Code>;
+export function WidgetElement({ name, extendedClass }: WidgetElementProps) {
+  return (
+    <Class name={name} extends={extendedClass}>
+      <ClassMethod id="constructor" params={['a', 'b', 'c']} />
+    </Class>
+  );
 }

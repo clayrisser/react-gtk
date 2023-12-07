@@ -26,5 +26,9 @@ import reactAst from 'react-ast';
 const { render } = reactAst;
 
 export async function renderWidgetElement(widget: GirClassElement) {
-  return render(<WidgetElement name={widget.$.name} />, { prettier: true });
+  return render(<WidgetElement name={widget.$.name} />, {
+    parserOptions: {
+      plugins: ['jsx', 'classProperties', 'typescript'],
+    },
+  });
 }

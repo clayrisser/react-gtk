@@ -168,7 +168,9 @@ export const ExportAllWidgets = ({ widgets }: ExportAllWidgetsProps) => {
       <ExportNamedDeclaration
         exportKind="type"
         specifiers={widgets.map((widget) => (
-          <ExportSpecifier key={widget.$.name}>{widget.$.name}</ExportSpecifier>
+          <ExportSpecifier
+            key={widget.$.name}
+          >{`${widget.$.name}Props`}</ExportSpecifier>
         ))}
       />
 

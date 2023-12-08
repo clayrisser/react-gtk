@@ -23,6 +23,7 @@ import {
   GirModule,
   GirClassElement,
   GirInterfaceElement,
+  GirEnumElement,
 } from '@ts-for-gir/lib';
 import { loadGtkModule } from './module';
 import { renderWidgetElement } from './renderWidgetElement';
@@ -30,6 +31,7 @@ import { renderInterfaceElement } from './renderInterfaceElement';
 import path from 'path';
 import fs from 'fs/promises';
 import { Property } from './components/InterfaceElement';
+import { renderEnumElement } from './renderEmumElements';
 
 export interface GeneratorOptions {
   outDir: string;
@@ -54,12 +56,19 @@ export class Generator {
 
   async load() {
     this.module = await loadGtkModule();
+    // this.module.ns.enumeration?.forEach((enumeration) => {
+    //   console.log('enumeration', enumeration.$.name);
+    // });
+
+    // console.log('this.module', this.module.ns.enumeration.m);
   }
 
   async generate() {
     if (typeof this.module === 'undefined') await this.load();
     if (this.options.kind === Kind.Elements) await this.generateElements();
     await this.generateInterfaces();
+    await this.generateEnums();
+    await this.generateEnums();
   }
 
   async generateElements() {
@@ -135,6 +144,37 @@ export class Generator {
         path.resolve('src/generated/interfaces'),
         `${interface_.$.name}.tsx`,
       ),
+      code,
+    );
+  }
+
+  async generateEnums() {
+    if (typeof this.module === 'undefined') await this.load();
+    const enums = await this.getEnums();
+    await Promise.all(
+      enums.map(async (enum_) => {
+        await this.generateEnum(enum_);
+      }),
+    );
+  }
+
+  async getEnums() {
+    if (typeof this.module === 'undefined') await this.load();
+    return this.module.ns.enumeration || [];
+  }
+
+  async generateEnum(enum_: GirEnumElement) {
+    const members = enum_.member?.map((member) => member.$.name) || [];
+    const code = await renderEnumElement({
+      name: enum_.$.name,
+      members,
+    });
+    console.log({ name: enum_.$.name, members });
+    await fs.mkdir(path.resolve('src/generated/enums'), {
+      recursive: true,
+    });
+    await fs.writeFile(
+      path.resolve(path.resolve('src/generated/enums'), `${enum_.$.name}.tsx`),
       code,
     );
   }

@@ -23,13 +23,16 @@ import {
   GirModule,
   GirClassElement,
   GirInterfaceElement,
+  GirFunctionElement,
 } from '@ts-for-gir/lib';
 import { loadGtkModule } from './module';
 import { renderWidgetElement } from './renderWidgetElement';
+import { renderFunctionElement } from './renderFunctionElement';
 import { renderInterfaceElement } from './renderInterfaceElement';
 import path from 'path';
 import fs from 'fs/promises';
 import { Property } from './components/InterfaceElement';
+import { aborted } from 'util';
 
 export interface GeneratorOptions {
   outDir: string;
@@ -60,6 +63,7 @@ export class Generator {
     if (typeof this.module === 'undefined') await this.load();
     if (this.options.kind === Kind.Elements) await this.generateElements();
     await this.generateInterfaces();
+    await this.generateFunctions();
   }
 
   async generateElements() {
@@ -85,12 +89,38 @@ export class Generator {
     );
   }
 
+  async generateFunctions() {
+    if (typeof this.module === 'undefined') await this.load();
+    const functions = await this.getFunctions();
+    await Promise.all(
+      functions.map(async (function_) => {
+        await this.generateFunction(function_);
+      }),
+    );
+  }
+
   async generateWidget(widget: GirClassElement) {
     const code = await renderWidgetElement(widget, {
       importElementPath: '../../elements/Element',
     });
     await fs.mkdir(this.outDir, { recursive: true });
     await fs.writeFile(path.resolve(this.outDir, `${widget.$.name}.tsx`), code);
+  }
+
+  async generateFunction(function_: GirFunctionElement) {
+    const code = await renderFunctionElement({ name: function_.$.name });
+    await fs.mkdir(path.resolve('src/generated/functions'), {
+      recursive: true,
+    });
+    await fs.writeFile(
+      path.resolve('src/generated/functions', `${function_.$.name}.tsx`),
+      code,
+    );
+  }
+
+  async getFunctions() {
+    if (typeof this.module === 'undefined') await this.load();
+    return this.module.ns.function || [];
   }
 
   async getWidgets() {

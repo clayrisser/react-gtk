@@ -21,7 +21,11 @@
 
 import { GirModule, GirClassElement } from '@ts-for-gir/lib';
 import { loadGtkModule } from './module';
-import { renderWidgetElement } from './renderWidgetElement';
+import {
+  renderExportAllWidgets,
+  renderWidgetElement,
+  renderWidgetElementExports,
+} from './renderWidgetElement';
 import path from 'path';
 import fs from 'fs/promises';
 
@@ -64,16 +68,35 @@ export class Generator {
         this.generateWidget(widget);
       }),
     );
+
+    const generateElementExportsCode =
+      await renderWidgetElementExports(widgets);
+    await fs.writeFile(
+      path.resolve(this.outDir, 'index.ts'),
+      generateElementExportsCode,
+    );
+
+    const generateExportAllWidgetsCode = await renderExportAllWidgets(widgets);
+    await fs.writeFile(
+      path.resolve('src/generated/', 'index.ts'),
+      generateExportAllWidgetsCode,
+    );
+
     console.log(this.options);
     console.log(this.outDir);
   }
 
   async generateWidget(widget: GirClassElement) {
-    const code = await renderWidgetElement(widget, {
+    const generateElementCode = await renderWidgetElement(widget, {
       importElementPath: '../../elements/Element',
     });
+
     await fs.mkdir(this.outDir, { recursive: true });
-    await fs.writeFile(path.resolve(this.outDir, `${widget.$.name}.tsx`), code);
+
+    await fs.writeFile(
+      path.resolve(this.outDir, `${widget.$.name}.tsx`),
+      generateElementCode,
+    );
   }
 
   async getWidgets() {

@@ -82,4 +82,18 @@
 //   console.log(Example());
 // })();
 
-export default null;
+// export default null;
+
+import React from 'react';
+import { ExportNamedDeclaration, render, ExportSpecifier } from 'react-ast';
+
+const jsx = (
+  <ExportNamedDeclaration
+    exportKind="type"
+    specifiers={[<ExportSpecifier key={0}>Hello</ExportSpecifier>]}
+  />
+);
+
+(async () => {
+  console.log(await render(jsx));
+})();

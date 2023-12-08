@@ -27,7 +27,7 @@ declare namespace JSX {
   interface IntrinsicElements {
     Label?: {
       Properties?: any;
-      accessible_role?: Gtk.accessible_role;
+      accessible_role?: Gtk.AccessibleRole;
       attributes?: any;
       can_focus?: boolean;
       can_target?: boolean;

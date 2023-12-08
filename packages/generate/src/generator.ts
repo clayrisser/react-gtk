@@ -19,11 +19,17 @@
  *  limitations under the License.
  */
 
-import { GirModule, GirClassElement } from '@ts-for-gir/lib';
+import {
+  GirModule,
+  GirClassElement,
+  GirInterfaceElement,
+} from '@ts-for-gir/lib';
 import { loadGtkModule } from './module';
 import { renderWidgetElement } from './renderWidgetElement';
+import { renderInterfaceElement } from './renderInterfaceElement';
 import path from 'path';
 import fs from 'fs/promises';
+import { Property } from './components/InterfaceElement';
 
 export interface GeneratorOptions {
   outDir: string;
@@ -53,6 +59,7 @@ export class Generator {
   async generate() {
     if (typeof this.module === 'undefined') await this.load();
     if (this.options.kind === Kind.Elements) await this.generateElements();
+    await this.generateInterfaces();
   }
 
   async generateElements() {
@@ -66,6 +73,16 @@ export class Generator {
     );
     console.log(this.options);
     console.log(this.outDir);
+  }
+
+  async generateTypes() {
+    if (typeof this.module === 'undefined') await this.load();
+    const interfaces = await this.getInterfaces();
+    await Promise.all(
+      interfaces.map(async (interface_) => {
+        this.generateInterface(interface_);
+      }),
+    );
   }
 
   async generateWidget(widget: GirClassElement) {
@@ -85,6 +102,68 @@ export class Generator {
   async getClasses() {
     if (typeof this.module === 'undefined') await this.load();
     return this.module.ns.class || [];
+  }
+
+  async generateInterfaces() {
+    if (typeof this.module === 'undefined') await this.load();
+    const interfaces = await this.getInterfaces();
+    await Promise.all(
+      interfaces.map(async (interface_) => {
+        this.generateInterface(interface_);
+      }),
+    );
+  }
+
+  async getInterfaces() {
+    if (typeof this.module === 'undefined') await this.load();
+    return this.module.ns.interface || [];
+  }
+
+  async generateInterface(interface_: GirInterfaceElement) {
+    const properties = this.getProperties(interface_)?.filter(
+      (property) => property,
+    ) as Property[];
+    const code = await renderInterfaceElement({
+      properties,
+      name: interface_.$.name,
+    });
+    await fs.mkdir(path.resolve('src/generated/interfaces'), {
+      recursive: true,
+    });
+    await fs.writeFile(
+      path.resolve(
+        path.resolve('src/generated/interfaces'),
+        `${interface_.$.name}.tsx`,
+      ),
+      code,
+    );
+  }
+
+  private getProperties(interface_: GirInterfaceElement) {
+    return interface_.property?.map((property) => ({
+      name: property.$.name.replace(/-/g, '_'),
+      type:
+        property.type && property.type[0]?.$.name
+          ? this.getType(property.type[0].$.name)
+          : undefined,
+    }));
+  }
+
+  private getType(type: string) {
+    switch (type) {
+      case 'gchar':
+        return 'string';
+      case 'gint':
+        return 'number';
+      case 'gboolean':
+        return 'boolean';
+      case 'gfloat':
+        return 'number';
+      case 'utf8':
+        return 'string';
+      default:
+        return type;
+    }
   }
 }
 

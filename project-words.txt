@@ -5,6 +5,8 @@ cspell
 declarator
 dharmendra
 dom
+enum
+enums
 dts
 esm
 flatpak
@@ -17,6 +19,10 @@ globals
 gobject
 gsk
 gtk
+gchar
+gint
+gfloat
+gboolean
 gtype
 homedir
 hydratable

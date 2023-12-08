@@ -19,15 +19,25 @@
  *  limitations under the License.
  */
 
-import { GirModule, GirClassElement } from '@ts-for-gir/lib';
+import {
+  GirModule,
+  GirClassElement,
+  GirInterfaceElement,
+  GirFunctionElement,
+  GirEnumElement,
+} from '@ts-for-gir/lib';
 import { loadGtkModule } from './module';
 import {
   renderExportAllWidgets,
   renderWidgetElement,
   renderWidgetElementExports,
 } from './renderWidgetElement';
+import { renderFunctionElement } from './renderFunctionElement';
+import { renderInterfaceElement } from './renderInterfaceElement';
 import path from 'path';
 import fs from 'fs/promises';
+import { Property } from './components/InterfaceElement';
+import { renderEnumElement } from './renderEnumElements';
 
 export interface GeneratorOptions {
   outDir: string;
@@ -57,6 +67,10 @@ export class Generator {
   async generate() {
     if (typeof this.module === 'undefined') await this.load();
     if (this.options.kind === Kind.Elements) await this.generateElements();
+    await this.generateInterfaces();
+    await this.generateFunctions();
+    await this.generateEnums();
+    await this.generateEnums();
   }
 
   async generateElements() {
@@ -86,6 +100,26 @@ export class Generator {
     console.log(this.outDir);
   }
 
+  async generateTypes() {
+    if (typeof this.module === 'undefined') await this.load();
+    const interfaces = await this.getInterfaces();
+    await Promise.all(
+      interfaces.map(async (interface_) => {
+        this.generateInterface(interface_);
+      }),
+    );
+  }
+
+  async generateFunctions() {
+    if (typeof this.module === 'undefined') await this.load();
+    const functions = await this.getFunctions();
+    await Promise.all(
+      functions.map(async (function_) => {
+        await this.generateFunction(function_);
+      }),
+    );
+  }
+
   async generateWidget(widget: GirClassElement) {
     const generateElementCode = await renderWidgetElement(widget, {
       importElementPath: '../../elements/Element',
@@ -99,6 +133,22 @@ export class Generator {
     );
   }
 
+  async generateFunction(function_: GirFunctionElement) {
+    const code = await renderFunctionElement({ name: function_.$.name });
+    await fs.mkdir(path.resolve('src/generated/functions'), {
+      recursive: true,
+    });
+    await fs.writeFile(
+      path.resolve('src/generated/functions', `${function_.$.name}.tsx`),
+      code,
+    );
+  }
+
+  async getFunctions() {
+    if (typeof this.module === 'undefined') await this.load();
+    return this.module.ns.function || [];
+  }
+
   async getWidgets() {
     if (typeof this.module === 'undefined') await this.load();
     const classes = await this.getClasses();
@@ -108,6 +158,99 @@ export class Generator {
   async getClasses() {
     if (typeof this.module === 'undefined') await this.load();
     return this.module.ns.class || [];
+  }
+
+  async generateInterfaces() {
+    if (typeof this.module === 'undefined') await this.load();
+    const interfaces = await this.getInterfaces();
+    await Promise.all(
+      interfaces.map(async (interface_) => {
+        this.generateInterface(interface_);
+      }),
+    );
+  }
+
+  async getInterfaces() {
+    if (typeof this.module === 'undefined') await this.load();
+    return this.module.ns.interface || [];
+  }
+
+  async generateInterface(interface_: GirInterfaceElement) {
+    const properties = this.getProperties(interface_)?.filter(
+      (property) => property,
+    ) as Property[];
+    const code = await renderInterfaceElement({
+      properties,
+      name: interface_.$.name,
+    });
+    await fs.mkdir(path.resolve('src/generated/interfaces'), {
+      recursive: true,
+    });
+    await fs.writeFile(
+      path.resolve(
+        path.resolve('src/generated/interfaces'),
+        `${interface_.$.name}.tsx`,
+      ),
+      code,
+    );
+  }
+
+  async generateEnums() {
+    if (typeof this.module === 'undefined') await this.load();
+    const enums = await this.getEnums();
+    await Promise.all(
+      enums.map(async (enum_) => {
+        await this.generateEnum(enum_);
+      }),
+    );
+  }
+
+  async getEnums() {
+    if (typeof this.module === 'undefined') await this.load();
+    return this.module.ns.enumeration || [];
+  }
+
+  async generateEnum(enum_: GirEnumElement) {
+    const members = enum_.member?.map((member) => member.$.name) || [];
+    const code = await renderEnumElement({
+      name: enum_.$.name,
+      members,
+    });
+    console.log({ name: enum_.$.name, members });
+    await fs.mkdir(path.resolve('src/generated/enums'), {
+      recursive: true,
+    });
+    await fs.writeFile(
+      path.resolve(path.resolve('src/generated/enums'), `${enum_.$.name}.tsx`),
+      code,
+    );
+  }
+
+  private getProperties(interface_: GirInterfaceElement) {
+    return interface_.property?.map((property) => ({
+      name: property.$.name.replace(/-/g, '_'),
+      type:
+        property.type && property.type[0]?.$.name
+          ? this.getType(property.type[0].$.name)
+          : undefined,
+    }));
+  }
+
+  private getType(type: string) {
+    switch (type) {
+      case 'gchar':
+        return 'string';
+      case 'gint':
+        return 'number';
+      case 'gboolean':
+        return 'boolean';
+      case 'gfloat':
+        return 'number';
+      case 'utf8':
+        return 'string';
+      default:
+        return type;
+    }
   }
 }
 

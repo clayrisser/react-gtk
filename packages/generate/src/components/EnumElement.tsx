@@ -1,5 +1,5 @@
 /**
- * File: /src/components/InterfaceElement.tsx
+ * File: /src/components/EnumElement.tsx
  * Project: @react-gtk/generate
  * File Created: 08-12-2023 10:50:11
  * Author: Lalit rajak
@@ -26,22 +26,22 @@ export interface Property {
   type: string;
 }
 
-export interface InterfaceElementProps {
-  properties?: Property[];
+export interface EnumElementProps {
+  members: string[];
   name: string;
 }
 
-export function InterfaceElement({ properties, name }: InterfaceElementProps) {
+export function EnumElement({ members, name }: EnumElementProps) {
   return (
     <>
       {/*  */}
       <Export>
         <Interface name={name}>
-          {properties?.map((property, i) => (
+          {members?.map((member) => (
             <PropertySignature
-              id={property.name}
-              typeAnnotation={property.type}
-              key={property.name}
+              id={member}
+              typeAnnotation="string"
+              key={member}
             />
           ))}
         </Interface>

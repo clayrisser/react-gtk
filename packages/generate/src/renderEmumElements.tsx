@@ -1,7 +1,7 @@
 /**
- * File: /src/components/InterfaceElement.tsx
+ * File: /src/renderEmumElements.tsx
  * Project: @react-gtk/generate
- * File Created: 08-12-2023 10:50:11
+ * File Created: 08-12-2023 14:33:09
  * Author: Lalit rajak
  * -----
  * BitSpur (c) Copyright 2017 - 2023
@@ -19,33 +19,17 @@
  * limitations under the License.
  */
 import React from 'react';
-import { Export, Interface, PropertySignature } from 'react-ast';
+import { render } from 'react-ast';
+import { EnumElement } from './components/EnumElement';
 
-export interface Property {
-  name: string;
-  type: string;
-}
-
-export interface InterfaceElementProps {
-  properties?: Property[];
+export interface RenderInterfaceOptions {
+  members: string[];
   name: string;
 }
 
-export function InterfaceElement({ properties, name }: InterfaceElementProps) {
-  return (
-    <>
-      {/*  */}
-      <Export>
-        <Interface name={name}>
-          {properties?.map((property, i) => (
-            <PropertySignature
-              id={property.name}
-              typeAnnotation={property.type}
-              key={property.name}
-            />
-          ))}
-        </Interface>
-      </Export>
-    </>
-  );
+export async function renderEnumElement({
+  members,
+  name,
+}: RenderInterfaceOptions) {
+  return render(<EnumElement members={members} name={name} />);
 }

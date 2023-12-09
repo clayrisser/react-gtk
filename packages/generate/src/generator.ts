@@ -82,12 +82,14 @@ export class Generator {
       }),
     );
 
+    await fs.mkdir(this.outDir, { recursive: true });
     const generateElementExportsCode =
       await renderWidgetElementExports(widgets);
     await fs.writeFile(
       path.resolve(this.outDir, 'index.ts'),
       generateElementExportsCode,
     );
+    console.log('done');
 
     const generateExportAllWidgetsCode = await renderExportAllWidgets(widgets);
     await fs.writeFile(

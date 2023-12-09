@@ -75,6 +75,7 @@ export class Generator {
   async generateElements() {
     if (typeof this.module === 'undefined') await this.load();
     await fs.rm(this.outDir, { recursive: true, force: true });
+    await fs.mkdir(this.outDir, { recursive: true });
     const widgets = await this.getWidgets();
     await Promise.all(
       widgets.map(async (widget) => {
@@ -82,7 +83,6 @@ export class Generator {
       }),
     );
 
-    await fs.mkdir(this.outDir, { recursive: true });
     const generateElementExportsCode =
       await renderWidgetElementExports(widgets);
     await fs.writeFile(
@@ -125,9 +125,6 @@ export class Generator {
     const generateElementCode = await renderWidgetElement(widget, {
       importElementPath: '../../elements/Element',
     });
-
-    await fs.mkdir(this.outDir, { recursive: true });
-
     await fs.writeFile(
       path.resolve(this.outDir, `${widget.$.name}.tsx`),
       generateElementCode,

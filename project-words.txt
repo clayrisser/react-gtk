@@ -13,6 +13,14 @@ flatpak
 gdk
 gir
 girFilePath
+gpointer
+gdouble
+gulong
+glong
+gshort
+guint
+gsize
+gushort
 girs
 gjs
 globals

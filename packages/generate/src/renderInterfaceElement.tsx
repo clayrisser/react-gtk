@@ -20,16 +20,24 @@
  */
 import React from 'react';
 import { render } from 'react-ast';
-import { InterfaceElement, Property } from './components/InterfaceElement';
+import {
+  InterfaceElement,
+  Method,
+  Property,
+} from './components/InterfaceElement';
 
 export interface RenderInterfaceOptions {
   properties?: Property[];
   name: string;
+  methods?: Method[];
 }
 
 export async function renderInterfaceElement({
   properties,
   name,
+  methods,
 }: RenderInterfaceOptions) {
-  return render(<InterfaceElement properties={properties} name={name} />);
+  return render(
+    <InterfaceElement properties={properties} name={name} methods={methods} />,
+  );
 }

@@ -32,8 +32,7 @@ import { renderFunctionElement } from './renderFunctionElement';
 import { renderInterfaceElement } from './renderInterfaceElement';
 import path from 'path';
 import fs from 'fs/promises';
-import { Property } from './components/InterfaceElement';
-import { aborted } from 'util';
+import { Method, ParamType, Property } from './components/InterfaceElement';
 import { renderEnumElement } from './renderEmumElements';
 
 export interface GeneratorOptions {
@@ -59,11 +58,6 @@ export class Generator {
 
   async load() {
     this.module = await loadGtkModule();
-    // this.module.ns.enumeration?.forEach((enumeration) => {
-    //   console.log('enumeration', enumeration.$.name);
-    // });
-
-    // console.log('this.module', this.module.ns.enumeration.m);
   }
 
   async generate() {
@@ -71,7 +65,6 @@ export class Generator {
     if (this.options.kind === Kind.Elements) await this.generateElements();
     await this.generateInterfaces();
     await this.generateFunctions();
-    await this.generateEnums();
     await this.generateEnums();
   }
 
@@ -159,12 +152,14 @@ export class Generator {
   }
 
   async generateInterface(interface_: GirInterfaceElement) {
+    const methods = this.getMethodsOfInterface(interface_);
     const properties = this.getProperties(interface_)?.filter(
       (property) => property,
     ) as Property[];
     const code = await renderInterfaceElement({
       properties,
       name: interface_.$.name,
+      methods,
     });
     await fs.mkdir(path.resolve('src/generated/interfaces'), {
       recursive: true,
@@ -199,7 +194,6 @@ export class Generator {
       name: enum_.$.name,
       members,
     });
-    console.log({ name: enum_.$.name, members });
     await fs.mkdir(path.resolve('src/generated/enums'), {
       recursive: true,
     });
@@ -219,7 +213,28 @@ export class Generator {
     }));
   }
 
-  private getType(type: string) {
+  private getMethodsOfInterface(interface_: GirInterfaceElement) {
+    const methods: Method[] = [];
+    interface_.method?.forEach((method) => {
+      const params: ParamType[] =
+        method.parameters?.[0].parameter?.map((parameter) => {
+          return {
+            name:
+              parameter.$.name === '...' ? '_' : (parameter.$.name as string),
+            type: this.getType(parameter.type?.[0].$.name),
+          };
+        }) || [];
+      methods.push({
+        name: method.$.name,
+        returnType: this.getType(method['return-value']?.[0].type?.[0].$.name),
+        params,
+      });
+    });
+    return methods;
+  }
+
+  private getType(type: string | undefined) {
+    if (typeof type === 'undefined') return 'unknown';
     switch (type) {
       case 'gchar':
         return 'string';
@@ -227,10 +242,28 @@ export class Generator {
         return 'number';
       case 'gboolean':
         return 'boolean';
+      case 'gpointer':
+        return 'any';
       case 'gfloat':
         return 'number';
       case 'utf8':
         return 'string';
+      case 'gdouble':
+        return 'number';
+      case 'glong':
+        return 'number';
+      case 'gulong':
+        return 'number';
+      case 'gshort':
+        return 'number';
+      case 'gushort':
+        return 'number';
+      case 'guint':
+        return 'number';
+      case 'gsize':
+        return 'number';
+      case 'none':
+        return 'void';
       default:
         return type;
     }

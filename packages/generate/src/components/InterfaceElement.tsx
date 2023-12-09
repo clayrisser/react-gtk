@@ -19,33 +19,63 @@
  * limitations under the License.
  */
 import React from 'react';
-import { Export, Interface, PropertySignature } from 'react-ast';
+import {
+  Export,
+  Identifier,
+  Interface,
+  MethodSignature,
+  PropertySignature,
+} from 'react-ast';
 
 export interface Property {
   name: string;
   type: string;
 }
 
+export type ParamType = Omit<Property, 'type'> &
+  Partial<Pick<Property, 'type'>>;
+
+export interface Method {
+  name: string;
+  params?: ParamType[];
+  returnType: string;
+  optional?: boolean;
+}
+
 export interface InterfaceElementProps {
   properties?: Property[];
+  methods?: Method[];
   name: string;
 }
 
-export function InterfaceElement({ properties, name }: InterfaceElementProps) {
+export function InterfaceElement({
+  properties,
+  name,
+  methods,
+}: InterfaceElementProps) {
   return (
-    <>
-      {/*  */}
-      <Export>
-        <Interface name={name}>
-          {properties?.map((property, i) => (
-            <PropertySignature
-              id={property.name}
-              typeAnnotation={property.type}
-              key={property.name}
-            />
-          ))}
-        </Interface>
-      </Export>
-    </>
+    <Export>
+      <Interface name={name}>
+        {properties?.map((property, i) => (
+          <PropertySignature
+            id={property.name}
+            typeAnnotation={property.type}
+            key={property.name + i}
+          />
+        ))}
+        {methods?.map((method) => (
+          <MethodSignature
+            id={method.name}
+            key={method.name}
+            params={method.params?.map((param, i) => (
+              <Identifier typeAnnotation={param.type} key={param.name + i}>
+                {param.name}
+              </Identifier>
+            ))}
+            returnType={method.returnType}
+          />
+        ))}
+      </Interface>
+    </Export>
   );
 }

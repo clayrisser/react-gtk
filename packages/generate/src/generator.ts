@@ -27,13 +27,17 @@ import {
   GirEnumElement,
 } from '@ts-for-gir/lib';
 import { loadGtkModule } from './module';
-import { renderWidgetElement } from './renderWidgetElement';
+import {
+  renderExportAllWidgets,
+  renderWidgetElement,
+  renderWidgetElementExports,
+} from './renderWidgetElement';
 import { renderFunctionElement } from './renderFunctionElement';
 import { renderInterfaceElement } from './renderInterfaceElement';
 import path from 'path';
 import fs from 'fs/promises';
 import { Method, ParamType, Property } from './components/InterfaceElement';
-import { renderEnumElement } from './renderEmumElements';
+import { renderEnumElement } from './renderEnumElements';
 
 export interface GeneratorOptions {
   outDir: string;
@@ -77,6 +81,20 @@ export class Generator {
         this.generateWidget(widget);
       }),
     );
+
+    const generateElementExportsCode =
+      await renderWidgetElementExports(widgets);
+    await fs.writeFile(
+      path.resolve(this.outDir, 'index.ts'),
+      generateElementExportsCode,
+    );
+
+    const generateExportAllWidgetsCode = await renderExportAllWidgets(widgets);
+    await fs.writeFile(
+      path.resolve('src/generated/', 'index.ts'),
+      generateExportAllWidgetsCode,
+    );
+
     console.log(this.options);
     console.log(this.outDir);
   }
@@ -102,11 +120,16 @@ export class Generator {
   }
 
   async generateWidget(widget: GirClassElement) {
-    const code = await renderWidgetElement(widget, {
+    const generateElementCode = await renderWidgetElement(widget, {
       importElementPath: '../../elements/Element',
     });
+
     await fs.mkdir(this.outDir, { recursive: true });
-    await fs.writeFile(path.resolve(this.outDir, `${widget.$.name}.tsx`), code);
+
+    await fs.writeFile(
+      path.resolve(this.outDir, `${widget.$.name}.tsx`),
+      generateElementCode,
+    );
   }
 
   async generateFunction(function_: GirFunctionElement) {

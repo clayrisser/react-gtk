@@ -21,7 +21,12 @@
 
 import React from 'react';
 import { GirClassElement } from '@ts-for-gir/lib';
-import { WidgetElement, WidgetElementProps } from './components/WidgetElement';
+import {
+  ExportAllWidgets,
+  WidgetElement,
+  WidgetElementExports,
+  WidgetElementProps,
+} from './components/WidgetElement';
 import { render } from 'react-ast';
 
 export interface RenderWidgetElementOptions
@@ -37,4 +42,12 @@ export async function renderWidgetElement(
       importElementPath={options.importElementPath}
     />,
   );
+}
+
+export async function renderWidgetElementExports(widgets: GirClassElement[]) {
+  return render(<WidgetElementExports widgets={widgets} />);
+}
+
+export async function renderExportAllWidgets(widgets: GirClassElement[]) {
+  return render(<ExportAllWidgets widgets={widgets} />);
 }

@@ -19,6 +19,7 @@
  * limitations under the License.
  */
 
+import { GirClassElement } from '@ts-for-gir/lib';
 import React from 'react';
 import {
   Class,
@@ -30,12 +31,31 @@ import {
   Interface,
   Identifier,
   Export,
+  ExportAllDeclaration,
+  VariableDeclaration,
+  StringLiteral,
+  VariableDeclarationKind,
+  ExportNamedDeclaration,
+  VariableDeclarator,
+  ExportSpecifier,
+  ImportDeclaration,
+  TypeAnnotation,
+  TypeParameterInstantiation,
+  TypeReference,
+  ObjectLiteral,
 } from 'react-ast';
 
 export interface WidgetElementProps {
   name: string;
   extendedClass?: string;
   importElementPath?: string;
+}
+export interface WidgetElementExportsProps {
+  widgets: GirClassElement[];
+}
+
+export interface ExportAllWidgetsProps {
+  widgets: GirClassElement[];
 }
 
 export function WidgetElement({
@@ -71,3 +91,90 @@ export function WidgetElement({
     </>
   );
 }
+
+export const WidgetElementExports = ({
+  widgets,
+}: WidgetElementExportsProps) => {
+  const widgetNames = widgets.map((widget) => widget.$.name);
+  return (
+    <>
+      <ImportDeclaration
+        importKind="type"
+        specifiers={['Element']}
+        source="../../elements/Element"
+      />
+      {widgets.map((widget) => (
+        <Import
+          key={widget.$.name}
+          imports={widget.$.name}
+          from={`./${widget.$.name}`}
+        />
+      ))}
+
+      <ExportNamedDeclaration>
+        <VariableDeclaration kind={VariableDeclarationKind.Const}>
+          <VariableDeclarator
+            id="elements"
+            typeAnnotation={
+              <TypeAnnotation debug>
+                <TypeReference name="Record">
+                  <TypeParameterInstantiation>
+                    <TypeReference name="string" />
+                    <TypeReference name="typeof Element" />
+                  </TypeParameterInstantiation>
+                </TypeReference>
+              </TypeAnnotation>
+            }
+          >
+            {/* <ObjectLiteral>{`{${widgetNames}}`}</ObjectLiteral> */}
+            <ObjectLiteral>{`{${widgetNames.join(', ')}}`}</ObjectLiteral>
+          </VariableDeclarator>
+        </VariableDeclaration>
+      </ExportNamedDeclaration>
+
+      {widgets.map((widgets) => (
+        <ExportAllDeclaration
+          key={widgets.$.name}
+          source={`./${widgets.$.name}`}
+        />
+      ))}
+    </>
+  );
+};
+
+export const ExportAllWidgets = ({ widgets }: ExportAllWidgetsProps) => {
+  return (
+    <>
+      {widgets.map((widget) => (
+        <Import
+          key={widget.$.name}
+          imports={`${widget.$.name}Props`}
+          from={`./elements/${widget.$.name}`}
+        />
+      ))}
+      {widgets.map((widget) => (
+        <Export key={widget.$.name}>
+          <VariableDeclaration
+            kind={VariableDeclarationKind.Const}
+            key={widget.$.name}
+          >
+            <VariableDeclarator id={widget.$.name}>
+              <StringLiteral>{widget.$.name}</StringLiteral>
+            </VariableDeclarator>
+          </VariableDeclaration>
+        </Export>
+      ))}
+
+      <ExportNamedDeclaration
+        exportKind="type"
+        specifiers={widgets.map((widget) => (
+          <ExportSpecifier
+            key={widget.$.name}
+          >{`${widget.$.name}Props`}</ExportSpecifier>
+        ))}
+      />
+
+      <ExportAllDeclaration source="../render" />
+    </>
+  );
+};

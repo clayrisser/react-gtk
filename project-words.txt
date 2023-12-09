@@ -42,6 +42,7 @@ minify
 mkdirp
 mkpm
 namespace
+of
 outdir
 promisify
 reconciler
@@ -55,6 +56,7 @@ tsbuildinfo
 tsup
 tsx
 txt
+type
 usr
 utf
 utf8

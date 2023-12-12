@@ -225,16 +225,10 @@ export class Generator {
 
   async generateEnum(enum_: GirEnumElement) {
     const members =
-      enum_.member?.map(
-        (member) =>
-          ({
-            name: member.$.name.toUpperCase(),
-            value:
-              typeof member.$.value === 'string'
-                ? `'${member.$.name}'`
-                : member.$.value,
-          }) as Member,
-      ) || [];
+      (enum_.member?.map((member) => ({
+        name: member.$.name.toUpperCase(),
+        value: member.$.name,
+      })) as Member[]) || [];
     const code = await renderEnumElement({
       name: enum_.$.name,
       members,

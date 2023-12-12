@@ -25,6 +25,7 @@ import {
   Export,
   Interface,
   PropertySignature,
+  StringLiteral,
 } from 'react-ast';
 
 export interface Property {
@@ -48,10 +49,9 @@ export function EnumElement({ members, name }: EnumElementProps) {
       <Export>
         <EnumDeclaration id={name}>
           {members?.map((member) => (
-            <EnumMember
-              key={member.name}
-              member={{ name: member.name, value: member.value }}
-            />
+            <EnumMember key={member.name} name={member.name}>
+              {member.value && <StringLiteral>{member.value}</StringLiteral>}
+            </EnumMember>
           ))}
         </EnumDeclaration>
       </Export>

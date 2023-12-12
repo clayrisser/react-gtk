@@ -215,7 +215,7 @@ export class Generator {
     const members =
       (enum_.member?.map((member) => ({
         name: member.$.name.toUpperCase(),
-        value: `'${member.$.name}'`,
+        value: member.$.name,
       })) as Member[]) || [];
     const code = await renderEnumElement({
       name: enum_.$.name,

@@ -19,7 +19,13 @@
  * limitations under the License.
  */
 import React from 'react';
-import { Export, Interface, PropertySignature } from 'react-ast';
+import {
+  EnumDeclaration,
+  EnumMember,
+  Export,
+  Interface,
+  PropertySignature,
+} from 'react-ast';
 
 export interface Property {
   name: string;
@@ -32,24 +38,25 @@ export interface Member {
 }
 
 export interface EnumElementProps {
-  // members: Member[];
-  members: string[];
+  members: Member[];
   name: string;
 }
 
 export function EnumElement({ members, name }: EnumElementProps) {
   return (
     <>
-      {/*
       <Export>
-         <EnumDeclaration id={name}>
+        <EnumDeclaration id={name}>
           {members?.map((member) => (
-            <EnumMember member={{name:member.name,value:member.value}} />
+            <EnumMember
+              key={member.name}
+              member={{ name: member.name, value: member.value }}
+            />
           ))}
         </EnumDeclaration>
       </Export>
-      */}
-      <Export>
+
+      {/* <Export>
         <Interface name={name}>
           {members?.map((member) => (
             <PropertySignature
@@ -59,7 +66,7 @@ export function EnumElement({ members, name }: EnumElementProps) {
             />
           ))}
         </Interface>
-      </Export>
+      </Export> */}
     </>
   );
 }

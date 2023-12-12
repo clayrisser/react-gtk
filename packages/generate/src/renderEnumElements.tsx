@@ -1,5 +1,5 @@
 /**
- * File: /src/renderEmumElements.tsx
+ * File: /src/renderEnumElements.tsx
  * Project: @react-gtk/generate
  * File Created: 08-12-2023 14:33:09
  * Author: Lalit rajak
@@ -20,10 +20,10 @@
  */
 import React from 'react';
 import { render } from 'react-ast';
-import { EnumElement } from './components/EnumElement';
+import { EnumElement, Member } from './components/EnumElement';
 
 export interface RenderInterfaceOptions {
-  members: string[];
+  members: Member[];
   name: string;
 }
 

@@ -38,6 +38,7 @@ import path from 'path';
 import fs from 'fs/promises';
 import { Method, ParamType, Property } from './components/InterfaceElement';
 import { renderEnumElement } from './renderEnumElements';
+import { Member } from './components/EnumElement';
 
 export interface GeneratorOptions {
   outDir: string;
@@ -211,7 +212,11 @@ export class Generator {
   }
 
   async generateEnum(enum_: GirEnumElement) {
-    const members = enum_.member?.map((member) => member.$.name) || [];
+    const members =
+      (enum_.member?.map((member) => ({
+        name: member.$.name.toUpperCase(),
+        value: `'${member.$.name}'`,
+      })) as Member[]) || [];
     const code = await renderEnumElement({
       name: enum_.$.name,
       members,

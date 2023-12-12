@@ -26,7 +26,13 @@ export interface Property {
   type: string;
 }
 
+export interface Member {
+  name: string;
+  value?: string;
+}
+
 export interface EnumElementProps {
+  // members: Member[];
   members: string[];
   name: string;
 }
@@ -34,7 +40,15 @@ export interface EnumElementProps {
 export function EnumElement({ members, name }: EnumElementProps) {
   return (
     <>
-      {/*  */}
+      {/*
+      <Export>
+         <EnumDeclaration id={name}>
+          {members?.map((member) => (
+            <EnumMember member={{name:member.name,value:member.value}} />
+          ))}
+        </EnumDeclaration>
+      </Export>
+      */}
       <Export>
         <Interface name={name}>
           {members?.map((member) => (

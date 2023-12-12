@@ -31,6 +31,8 @@ import {
   FunctionDeclaration,
   VariableDeclaration,
   VariableDeclarationKind,
+  AwaitExpression,
+  CallExpression,
 } from 'react-ast';
 
 export interface FunctionElementProps {
@@ -59,8 +61,11 @@ export function FunctionElement({ name }: FunctionElementProps) {
             <VariableDeclarator
               id="hello"
               typeAnnotation={<TypeAnnotation>T</TypeAnnotation>}
+              key="await"
             >
-              world
+              <AwaitExpression>
+                <CallExpression name="fetch" arguments={['url']} />
+              </AwaitExpression>
             </VariableDeclarator>
           </VariableDeclaration>
         </FunctionDeclaration>

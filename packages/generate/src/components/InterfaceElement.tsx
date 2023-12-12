@@ -22,10 +22,12 @@ import React from 'react';
 import {
   Export,
   Identifier,
+  Import,
   Interface,
   MethodSignature,
   PropertySignature,
 } from 'react-ast';
+import { Import as ImportType } from '../generator';
 
 export interface Property {
   name: string;
@@ -46,36 +48,47 @@ export interface InterfaceElementProps {
   properties?: Property[];
   methods?: Method[];
   name: string;
+  imports?: ImportType[];
 }
 
 export function InterfaceElement({
   properties,
   name,
   methods,
+  imports,
 }: InterfaceElementProps) {
   return (
-    <Export>
-      <Interface name={name}>
-        {properties?.map((property, i) => (
-          <PropertySignature
-            id={property.name}
-            typeAnnotation={property.type}
-            key={property.name + i}
-          />
-        ))}
-        {methods?.map((method) => (
-          <MethodSignature
-            id={method.name}
-            key={method.name}
-            params={method.params?.map((param, i) => (
-              <Identifier typeAnnotation={param.type} key={param.name + i}>
-                {param.name}
-              </Identifier>
-            ))}
-            returnType={method.returnType}
-          />
-        ))}
-      </Interface>
-    </Export>
+    <>
+      {imports?.map((importItem) => (
+        <Import
+          key={importItem.import}
+          from={importItem.from}
+          imports={[importItem.import]}
+        />
+      ))}
+      <Export>
+        <Interface name={name}>
+          {properties?.map((property, i) => (
+            <PropertySignature
+              id={property.name}
+              typeAnnotation={property.type}
+              key={property.name + i}
+            />
+          ))}
+          {methods?.map((method) => (
+            <MethodSignature
+              id={method.name}
+              key={method.name}
+              params={method.params?.map((param, i) => (
+                <Identifier typeAnnotation={param.type} key={param.name + i}>
+                  {param.name}
+                </Identifier>
+              ))}
+              returnType={method.returnType}
+            />
+          ))}
+        </Interface>
+      </Export>
+    </>
   );
 }

@@ -19,18 +19,7 @@
  * limitations under the License.
  */
 import React from 'react';
-import {
-  EnumDeclaration,
-  EnumMember,
-  Export,
-  Interface,
-  PropertySignature,
-} from 'react-ast';
-
-export interface Property {
-  name: string;
-  type: string;
-}
+import { EnumDeclaration, EnumMember, Export } from 'react-ast';
 
 export interface Member {
   name: string;
@@ -44,29 +33,15 @@ export interface EnumElementProps {
 
 export function EnumElement({ members, name }: EnumElementProps) {
   return (
-    <>
-      <Export>
-        <EnumDeclaration id={name}>
-          {members?.map((member) => (
-            <EnumMember
-              key={member.name}
-              member={{ name: member.name, value: member.value }}
-            />
-          ))}
-        </EnumDeclaration>
-      </Export>
-
-      {/* <Export>
-        <Interface name={name}>
-          {members?.map((member) => (
-            <PropertySignature
-              id={member}
-              typeAnnotation="string"
-              key={member}
-            />
-          ))}
-        </Interface>
-      </Export> */}
-    </>
+    <Export>
+      <EnumDeclaration id={name}>
+        {members?.map((member) => (
+          <EnumMember
+            key={member.name}
+            member={{ name: member.name, value: member.value }}
+          />
+        ))}
+      </EnumDeclaration>
+    </Export>
   );
 }

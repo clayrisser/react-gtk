@@ -25,19 +25,28 @@ import {
   Method,
   Property,
 } from './components/InterfaceElement';
+import { Import } from './generator';
 
 export interface RenderInterfaceOptions {
   properties?: Property[];
   name: string;
   methods?: Method[];
+  imports?: Import[];
 }
 
 export async function renderInterfaceElement({
   properties,
   name,
+  imports,
   methods,
 }: RenderInterfaceOptions) {
+  // console.log('imports', imports);
   return render(
-    <InterfaceElement properties={properties} name={name} methods={methods} />,
+    <InterfaceElement
+      properties={properties}
+      name={name}
+      methods={methods}
+      imports={imports}
+    />,
   );
 }

@@ -74,7 +74,7 @@ export class Generator {
   async generate() {
     if (typeof this.module === 'undefined') await this.load();
     if (this.options.kind === Kind.Elements) await this.generateElements();
-    // await this.generateFunctions();
+    await this.generateFunctions();
     await this.generateEnums();
     await this.generateInterfaces();
   }

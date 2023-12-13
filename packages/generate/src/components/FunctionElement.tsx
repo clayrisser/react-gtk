@@ -22,11 +22,8 @@
 import React from 'react';
 import {
   Export,
-  Var,
-  VarKind,
   Identifier,
   TypeAnnotation,
-  TypeReference,
   VariableDeclarator,
   FunctionDeclaration,
   VariableDeclaration,
@@ -41,35 +38,32 @@ export interface FunctionElementProps {
 
 export function FunctionElement({ name }: FunctionElementProps) {
   return (
-    <>
-      {/*  */}
-      <Export>
-        <FunctionDeclaration
-          id={name}
-          async
-          returnType="T<A, B>"
-          params={[
-            <Identifier typeAnnotation="A" key="A">
-              a
-            </Identifier>,
-            <Identifier typeAnnotation="B" key="B">
-              b
-            </Identifier>,
-          ]}
-        >
-          <VariableDeclaration kind={VariableDeclarationKind.Const}>
-            <VariableDeclarator
-              id="hello"
-              typeAnnotation={<TypeAnnotation>T</TypeAnnotation>}
-              key="await"
-            >
-              <AwaitExpression>
-                <CallExpression name="fetch" arguments={['url']} />
-              </AwaitExpression>
-            </VariableDeclarator>
-          </VariableDeclaration>
-        </FunctionDeclaration>
-      </Export>
-    </>
+    <Export>
+      <FunctionDeclaration
+        id={name}
+        async
+        returnType="T<A, B>"
+        params={[
+          <Identifier typeAnnotation="A" key="A">
+            a
+          </Identifier>,
+          <Identifier typeAnnotation="B" key="B">
+            b
+          </Identifier>,
+        ]}
+      >
+        <VariableDeclaration kind={VariableDeclarationKind.Const}>
+          <VariableDeclarator
+            id="hello"
+            typeAnnotation={<TypeAnnotation>T</TypeAnnotation>}
+            key="await"
+          >
+            <AwaitExpression>
+              <CallExpression name="fetch" arguments={['url']} />
+            </AwaitExpression>
+          </VariableDeclarator>
+        </VariableDeclaration>
+      </FunctionDeclaration>
+    </Export>
   );
 }

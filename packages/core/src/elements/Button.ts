@@ -26,7 +26,11 @@ import { Element } from './Element';
 export type ButtonProps = JSX.IntrinsicElements['Button'] & { Children?: ReactNode };
 
 export class Button extends Element {
+  node: Gtk.Button;
+
   constructor(props: ButtonProps = {}) {
-    super(new Gtk.Button(), props);
+    const node = new Gtk.Button();
+    super(node, props);
+    this.node = node;
   }
 }

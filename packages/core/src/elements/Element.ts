@@ -42,7 +42,7 @@ let _signalList: Set<string> | undefined;
 
 export interface UpdateNodeOptions extends SharedOptions {}
 
-export class Element implements Instance {
+export abstract class Element implements Instance {
   static defaultProps: Props = {};
 
   static propTypes: object = {};
@@ -51,13 +51,15 @@ export class Element implements Instance {
 
   children: Instance[] = [];
 
+  abstract node: GtkNode;
+
   constructor(
-    public node: GtkNode,
+    node: GtkNode,
     props: Props = {},
     private meta: ElementMeta = {},
   ) {
     this.props = this.getProps(props);
-    this.node._element = this;
+    node._element = this;
   }
 
   appendChild(child: Instance, options: Partial<AppendChildOptions> = {}) {
@@ -102,8 +104,12 @@ export class Element implements Instance {
       stage: Stage.Update,
       ...options,
     } as RemoveChildOptions;
+    const children = [...this.children];
+    this.children = [];
     this.updateNode({ stage });
-    // TODO: implement this
+    children.forEach((child) => {
+      this.removeChild(child, { stage });
+    });
   }
 
   commitMount(_options: Partial<CommitMountOptions> = {}) {

@@ -25,8 +25,11 @@ import { Element } from './Element';
 export type LabelProps = JSX.IntrinsicElements['Label'];
 
 export class Label extends Element {
+  node: Gtk.Label;
+
   constructor(props: LabelProps = {}) {
     const node = new Gtk.Label();
     super(node, props);
+    this.node = node;
   }
 }

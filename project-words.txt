@@ -12,6 +12,7 @@ esm
 flatpak
 gdk
 gir
+gio
 girFilePath
 gpointer
 gdouble
@@ -45,6 +46,7 @@ namespace
 of
 outdir
 promisify
+pango
 reconciler
 renderer
 risser

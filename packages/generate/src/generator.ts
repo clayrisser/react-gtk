@@ -277,12 +277,22 @@ export class Generator {
         const params: ParamType[] = await Promise.all(
           method.parameters?.[0].parameter?.map(async (parameter) => {
             const type = this.getType(parameter.type?.[0].$.name);
-            const enum_ = await this.checkEnum(type);
-            if (type === parameter.type?.[0].$.name && enum_) {
-              imports.push({
-                import: type,
-                from: `../enums/${type}`,
-              });
+            if (type === parameter.type?.[0].$.name) {
+              if (await this.checkEnum(type)) {
+                imports.push({
+                  import: type,
+                  from: `../enums/${type}`,
+                });
+              } else if (type.includes('.')) {
+                const import_ = type.split('.')[0];
+                const lib = this.getLibImport(import_);
+                if (lib) {
+                  imports.push({
+                    import: import_,
+                    from: lib,
+                  });
+                }
+              }
             }
             return {
               name:
@@ -291,11 +301,28 @@ export class Generator {
             };
           }) || [],
         );
+        const type = method['return-value']?.[0].type?.[0].$.name;
+        const returnType = this.getType(type);
+        if (returnType === type) {
+          if (await this.checkEnum(returnType)) {
+            imports.push({
+              import: returnType,
+              from: `../enums/${returnType}`,
+            });
+          } else if (returnType.includes('.')) {
+            const import_ = returnType.split('.')[0];
+            const lib = this.getLibImport(import_);
+            if (lib) {
+              imports.push({
+                import: import_,
+                from: lib,
+              });
+            }
+          }
+        }
         methods.push({
           name: method.$.name,
-          returnType: this.getType(
-            method['return-value']?.[0].type?.[0].$.name,
-          ),
+          returnType,
           params,
         });
       }) || [],
@@ -344,6 +371,27 @@ export class Generator {
         return 'void';
       default:
         return type;
+    }
+  }
+
+  private getLibImport(lib: string) {
+    switch (lib) {
+      case 'GLib':
+        return '@girs/node-glib-2.0';
+      case 'GObject':
+        return '@girs/node-gobject-2.0';
+      case 'Gdk':
+        return '@girs/node-gdk-4.0';
+      case 'Gio':
+        return '@girs/node-gio-2.0';
+      case 'Gtk':
+        return '@girs/node-gtk-4.0';
+      case 'Gsk':
+        return '@girs/node-gsk-4.0';
+      case 'Pango':
+        return '@girs/node-pango-1.0';
+      default:
+        return;
     }
   }
 }

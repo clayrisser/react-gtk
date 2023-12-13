@@ -43,6 +43,8 @@ import {
   TypeParameterInstantiation,
   TypeReference,
   ObjectLiteral,
+  ObjectExpression,
+  ObjectProperty,
 } from 'react-ast';
 
 export interface WidgetElementProps {
@@ -126,8 +128,14 @@ export const WidgetElementExports = ({
               </TypeAnnotation>
             }
           >
-            {/* <ObjectLiteral>{`{${widgetNames}}`}</ObjectLiteral> */}
-            <ObjectLiteral>{`{${widgetNames.join(', ')}}`}</ObjectLiteral>
+            {/* <ObjectLiteral>{`{${widgetNames.join(', ')}}`}</ObjectLiteral> */}
+            <ObjectExpression
+              properties={[
+                ...widgetNames.map((widgetName) => (
+                  <ObjectProperty key={widgetName} name={widgetName} />
+                )),
+              ]}
+            />
           </VariableDeclarator>
         </VariableDeclaration>
       </ExportNamedDeclaration>

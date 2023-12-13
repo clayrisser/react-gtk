@@ -85,7 +85,15 @@
 // export default null;
 
 import React from 'react';
-import { ExportNamedDeclaration, render, ExportSpecifier } from 'react-ast';
+import {
+  ExportNamedDeclaration,
+  render,
+  ExportSpecifier,
+  ObjectExpression,
+  ObjectProperty,
+  StringLiteral,
+  renderAst,
+} from 'react-ast';
 
 const jsx = (
   <ExportNamedDeclaration
@@ -94,6 +102,22 @@ const jsx = (
   />
 );
 
+// const objects = { name: 'Hello', age: 'two', greet: 'world' };
+
+// const jsx2 = (
+//   <ObjectExpression
+//     ref={(ref) => console.log(ref.node.properties)}
+//     properties={[
+//       ...Object.keys(objects).map((key) => (
+//         <ObjectProperty key={key} name={key}>
+//           <StringLiteral>{objects[key]}</StringLiteral>
+//         </ObjectProperty>
+//       )),
+//     ]}
+//   />
+// );
+
 (async () => {
   console.log(await render(jsx));
+  // console.log(await renderAst(jsx2).program.body[0].properties[1]);
 })();

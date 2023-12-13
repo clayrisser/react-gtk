@@ -181,8 +181,10 @@ export class Generator {
   async generateInterface(interface_: GirInterfaceElement) {
     const { methods, imports: mImports } =
       await this.getMethodsOfInterface(interface_);
-    let { properties, imports: pImports } =
-      await this.getProperties(interface_);
+    let { properties, imports: pImports } = await this.getPropertiesOfInterface(
+      interface_,
+      mImports,
+    );
     const imports = [...mImports, ...pImports].filter(
       (imp, index, self) =>
         self.findIndex((t) => t.import === imp.import) === index,
@@ -204,6 +206,65 @@ export class Generator {
       ),
       code,
     );
+  }
+
+  async getPropertiesOfInterface(
+    interface_: GirInterfaceElement,
+    imports: Import[] = [],
+  ): Promise<{ properties: Property[]; imports: Import[] }> {
+    const properties: Property[] = [];
+    const enums = await this.getEnums();
+    await Promise.all(
+      interface_.property?.forEach(async (property) => {
+        let type: string | undefined;
+        if (property.type && property.type[0]?.$.name) {
+          type = this.getType(property.type[0].$.name);
+          if (type === property.type[0]?.$.name) {
+            await this.filterAndAddImport(imports, enums, type);
+          }
+        }
+        if (typeof property.$.name !== 'undefined') {
+          properties.push({
+            name: property.$.name.replace(/-/g, '_'),
+            type,
+          } as Property);
+        }
+      }) || [],
+    );
+    return { properties, imports };
+  }
+
+  async getMethodsOfInterface(
+    interface_: GirInterfaceElement,
+    imports: Import[] = [],
+  ) {
+    const methods: Method[] = [];
+    const enums = await this.getEnums();
+    interface_.method?.forEach(async (method) => {
+      const params: ParamType[] =
+        method.parameters?.[0].parameter?.map((parameter) => {
+          const type = this.getType(parameter.type?.[0].$.name);
+          if (type === parameter.type?.[0].$.name) {
+            this.filterAndAddImport(imports, enums, type);
+          }
+          return {
+            name:
+              parameter.$.name === '...' ? '_' : (parameter.$.name as string),
+            type,
+          };
+        }) || [];
+      const type = method['return-value']?.[0].type?.[0].$.name;
+      const returnType = this.getType(type);
+      if (returnType === type) {
+        this.filterAndAddImport(imports, enums, returnType);
+      }
+      methods.push({
+        name: method.$.name,
+        returnType,
+        params,
+      });
+    });
+    return { methods, imports };
   }
 
   async generateEnums() {
@@ -240,102 +301,38 @@ export class Generator {
     );
   }
 
-  async getProperties(
-    interface_: GirInterfaceElement,
-  ): Promise<{ properties: Property[]; imports: Import[] }> {
-    const imports: Import[] = [];
-    const properties: Property[] = [];
-    await Promise.all(
-      interface_.property?.forEach(async (property) => {
-        let type: string | undefined;
-        if (property.type && property.type[0]?.$.name) {
-          type = this.getType(property.type[0].$.name);
-          const enum_ = await this.checkEnum(type);
-          if (type === property.type[0]?.$.name && enum_) {
-            imports.push({
-              import: type,
-              from: `../enums/${type}`,
-            });
-          }
-        }
-        if (typeof property.$.name !== 'undefined') {
-          properties.push({
-            name: property.$.name.replace(/-/g, '_'),
-            type,
-          } as Property);
-        }
-      }) || [],
-    );
-    return { properties, imports };
-  }
-
-  private async getMethodsOfInterface(interface_: GirInterfaceElement) {
-    const methods: Method[] = [];
-    const imports: Import[] = [];
-    await Promise.all(
-      interface_.method?.forEach(async (method) => {
-        const params: ParamType[] = await Promise.all(
-          method.parameters?.[0].parameter?.map(async (parameter) => {
-            const type = this.getType(parameter.type?.[0].$.name);
-            if (type === parameter.type?.[0].$.name) {
-              if (await this.checkEnum(type)) {
-                imports.push({
-                  import: type,
-                  from: `../enums/${type}`,
-                });
-              } else if (type.includes('.')) {
-                const import_ = type.split('.')[0];
-                const lib = this.getLibImport(import_);
-                if (lib) {
-                  imports.push({
-                    import: import_,
-                    from: lib,
-                  });
-                }
-              }
-            }
-            return {
-              name:
-                parameter.$.name === '...' ? '_' : (parameter.$.name as string),
-              type,
-            };
-          }) || [],
-        );
-        const type = method['return-value']?.[0].type?.[0].$.name;
-        const returnType = this.getType(type);
-        if (returnType === type) {
-          if (await this.checkEnum(returnType)) {
-            imports.push({
-              import: returnType,
-              from: `../enums/${returnType}`,
-            });
-          } else if (returnType.includes('.')) {
-            const import_ = returnType.split('.')[0];
-            const lib = this.getLibImport(import_);
-            if (lib) {
-              imports.push({
-                import: import_,
-                from: lib,
-              });
-            }
-          }
-        }
-        methods.push({
-          name: method.$.name,
-          returnType,
-          params,
-        });
-      }) || [],
-    );
-    return { methods, imports };
-  }
-
-  private async checkEnum(type: string) {
-    if (typeof this.module === 'undefined') await this.load();
-    if ((await this.getEnums()).find((enum_) => enum_.$.name === type)) {
+  private checkEnum(enums: GirEnumElement[], type: string) {
+    if (enums.find((enum_) => enum_.$.name === type)) {
       return true;
     }
     return false;
+  }
+
+  private filterAndAddImport(
+    imports: Import[],
+    enums: GirEnumElement[],
+    type: string,
+  ) {
+    if (this.checkEnum(enums, type)) {
+      this.addImport(imports, {
+        import: type,
+        from: `../enums/${type}`,
+      });
+    } else if (type.includes('.')) {
+      const import_ = type.split('.')[0];
+      const lib = this.getLibImport(import_);
+      if (lib) {
+        this.addImport(imports, {
+          import: import_,
+          from: lib,
+        });
+      }
+    }
+  }
+
+  private addImport(imports: Import[], import_: Import) {
+    if (imports.find((imp) => imp.import === import_.import)) return;
+    imports.push(import_);
   }
 
   private getType(type: string | undefined) {

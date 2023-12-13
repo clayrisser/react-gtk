@@ -79,11 +79,18 @@ module.exports = {
     '@typescript-eslint/consistent-type-assertions': 'off',
     '@typescript-eslint/consistent-type-imports': 'off',
     '@typescript-eslint/explicit-member-accessibility': 'off',
-    'eslint-disable @typescript-eslint/method-signature-style': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/no-require-imports': 'off',
     'max-params': 'off',
     'no-param-reassign': 'off',
     'no-promise-executor-return': 'off',
   },
+  overrides: [
+    {
+      files: ['packages/core/src/generated/**/*.tsx', 'packages/core/src/generated/**/*.ts'],
+      rules: {
+        '@typescript-eslint/method-signature-style': 'off',
+      },
+    },
+  ],
 };

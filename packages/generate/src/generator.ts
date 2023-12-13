@@ -96,16 +96,14 @@ export class Generator {
       path.resolve(this.outDir, 'index.ts'),
       generateElementExportsCode,
     );
-    console.log('done');
-
     const generateExportAllWidgetsCode = await renderExportAllWidgets(widgets);
     await fs.writeFile(
       path.resolve('src/generated/', 'index.ts'),
       generateExportAllWidgetsCode,
     );
 
-    // console.log(this.options);
-    // console.log(this.outDir);
+    console.log(this.options);
+    console.log(this.outDir);
   }
 
   async generateTypes() {
@@ -254,7 +252,6 @@ export class Generator {
           type = this.getType(property.type[0].$.name);
           const enum_ = await this.checkEnum(type);
           if (type === property.type[0]?.$.name && enum_) {
-            console.log('type', type);
             imports.push({
               import: type,
               from: `../enums/${type}`,
@@ -275,30 +272,34 @@ export class Generator {
   private async getMethodsOfInterface(interface_: GirInterfaceElement) {
     const methods: Method[] = [];
     const imports: Import[] = [];
-    interface_.method?.forEach(async (method) => {
-      const params: ParamType[] = await Promise.all(
-        method.parameters?.[0].parameter?.map(async (parameter) => {
-          const type = this.getType(parameter.type?.[0].$.name);
-          const enum_ = await this.checkEnum(type);
-          if (type === parameter.type?.[0].$.name && enum_) {
-            imports.push({
-              import: type,
-              from: `../enums/${type}`,
-            });
-          }
-          return {
-            name:
-              parameter.$.name === '...' ? '_' : (parameter.$.name as string),
-            type,
-          };
-        }) || [],
-      );
-      methods.push({
-        name: method.$.name,
-        returnType: this.getType(method['return-value']?.[0].type?.[0].$.name),
-        params,
-      });
-    });
+    await Promise.all(
+      interface_.method?.forEach(async (method) => {
+        const params: ParamType[] = await Promise.all(
+          method.parameters?.[0].parameter?.map(async (parameter) => {
+            const type = this.getType(parameter.type?.[0].$.name);
+            const enum_ = await this.checkEnum(type);
+            if (type === parameter.type?.[0].$.name && enum_) {
+              imports.push({
+                import: type,
+                from: `../enums/${type}`,
+              });
+            }
+            return {
+              name:
+                parameter.$.name === '...' ? '_' : (parameter.$.name as string),
+              type,
+            };
+          }) || [],
+        );
+        methods.push({
+          name: method.$.name,
+          returnType: this.getType(
+            method['return-value']?.[0].type?.[0].$.name,
+          ),
+          params,
+        });
+      }) || [],
+    );
     return { methods, imports };
   }
 

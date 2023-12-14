@@ -19,14 +19,7 @@
  * limitations under the License.
  */
 import React from 'react';
-import {
-  EnumDeclaration,
-  EnumMember,
-  Export,
-  Interface,
-  PropertySignature,
-  StringLiteral,
-} from 'react-ast';
+import { EnumDeclaration, EnumMember, Export, StringLiteral } from 'react-ast';
 
 export interface Property {
   name: string;

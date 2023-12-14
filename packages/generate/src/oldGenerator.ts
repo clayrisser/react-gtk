@@ -1,5 +1,5 @@
 /*
- *  File: /src/generator.ts
+ *  File: /src/oldGenerator.ts
  *  Project: @react-gtk/generate
  *  File Created: 06-12-2023 06:15:12
  *  Author: Clay Risser
@@ -19,9 +19,6 @@
  *  limitations under the License.
  */
 
-import { parseStringPromise } from 'xml2js';
-import { resolve } from 'path';
-import { readFile } from 'fs/promises';
 import { GirClassProps } from './types';
 
 export class Generator {

@@ -20,7 +20,7 @@
  */
 
 import Gtk from '@girs/node-gtk-4.0';
-import { SharedOptions, Stage } from '../types';
+import { SharedOptions } from '../types';
 import { Element } from './Element';
 // import { Text as GeneratedText } from '../generated/elements/Text';
 

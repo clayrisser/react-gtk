@@ -10,6 +10,7 @@ enums
 dts
 esm
 flatpak
+fs
 gdk
 gir
 gio
@@ -33,6 +34,7 @@ gint
 gfloat
 gboolean
 gtype
+hari
 homedir
 hydratable
 jsx
@@ -55,6 +57,7 @@ snapd
 subtree
 transpile
 tsbuildinfo
+typeof
 tsup
 tsx
 txt

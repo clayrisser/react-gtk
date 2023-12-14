@@ -42,7 +42,6 @@ import {
   TypeAnnotation,
   TypeParameterInstantiation,
   TypeReference,
-  ObjectLiteral,
   ObjectExpression,
   ObjectProperty,
 } from 'react-ast';

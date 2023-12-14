@@ -21,11 +21,8 @@
 
 import React from 'react';
 import { render } from 'react-ast';
-import {
-  FunctionElement,
-  FunctionElementProps,
-} from './components/FunctionElement';
-import { GirFunctionElement } from '@ts-for-gir/lib';
+import { FunctionElement } from './components/FunctionElement';
+// import { GirFunctionElement } from '@ts-for-gir/lib';
 
 export interface RenderFunctionElementOptions {
   name: string;

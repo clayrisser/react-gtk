@@ -27,7 +27,6 @@ import {
   Import,
   Var,
   VarKind,
-  Code,
   Interface,
   Identifier,
   Export,
@@ -42,8 +41,8 @@ import {
   TypeAnnotation,
   TypeParameterInstantiation,
   TypeReference,
-  ObjectExpression,
-  ObjectProperty,
+  ObjectLiteral,
+  CallExpression,
   ClassProperty,
   AssignmentExpression,
 } from 'react-ast';
@@ -86,9 +85,9 @@ export function WidgetElement({
             ]}
           >
             <Var name="node" kind={VarKind.Const}>
-              <Code>{`new Gtk.${name}()`}</Code>
+              <CallExpression name={`new Gtk.${name}`} />
             </Var>
-            <Code>super(node,props)</Code>
+            <CallExpression name="super" arguments={['node', 'props']} />
             <AssignmentExpression left="this.node">
               <Identifier>node</Identifier>
             </AssignmentExpression>
@@ -132,14 +131,8 @@ export const WidgetElementExports = ({
               </TypeAnnotation>
             }
           >
-            {/* <ObjectLiteral>{`{${widgetNames.join(', ')}}`}</ObjectLiteral> */}
-            <ObjectExpression
-              properties={[
-                ...widgetNames.map((widgetName) => (
-                  <ObjectProperty key={widgetName} name={widgetName} />
-                )),
-              ]}
-            />
+            {/* <ObjectLiteral>{`{${widgetNames}}`}</ObjectLiteral> */}
+            <ObjectLiteral>{`{${widgetNames.join(', ')}}`}</ObjectLiteral>
           </VariableDeclarator>
         </VariableDeclaration>
       </ExportNamedDeclaration>

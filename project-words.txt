@@ -12,6 +12,7 @@ dts
 esm
 flatpak
 lalit
+fs
 gdk
 gir
 gio
@@ -35,6 +36,7 @@ gint
 gfloat
 gboolean
 gtype
+hari
 homedir
 hydratable
 jsx
@@ -60,6 +62,7 @@ subtree
 scrollable
 transpile
 tsbuildinfo
+typeof
 tsup
 tsx
 txt

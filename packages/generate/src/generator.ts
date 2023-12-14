@@ -40,17 +40,20 @@ import fs from 'fs/promises';
 import { Method, ParamType, Property } from './components/InterfaceElement';
 import { renderEnumElement } from './renderEnumElements';
 import { Member } from './components/EnumElement';
-import { renderRecordElement } from './renderRecordElements';
-import { Field } from './components/RecordElement';
 import { ClassPropertyAccessibility } from 'react-ast';
 import camelCase from 'lodash.camelcase';
+import { Field } from './components/RecordClassElement';
+import {
+  renderRecordClassElement,
+  renderRecordInterfaceElement,
+} from './renderRecordElement';
 
 export interface GeneratorOptions {
   outDir: string;
   kind: Kind;
 }
 
-export interface Import {
+export interface ImportType {
   import: string;
   from: string;
   type?: 'type' | 'default';
@@ -102,39 +105,47 @@ export class Generator {
   }
 
   async getRecordFields(record: GirRecordElement) {
-    return record.field?.map((field) => {
-      const type = this.getType(field.type?.[0].$.name);
-
-      // console.log(field.callback?.[0].parameters?.[0]);
-      return {
-        name: field.$.name,
-        type,
-        accessibility: ClassPropertyAccessibility.Public,
-        ...(field.$.private === '1' && {
-          accessibility: ClassPropertyAccessibility.Private,
-        }),
-      } as Field;
-    });
+    const imports: ImportType[] = [];
+    const enums = await this.getEnums();
+    return {
+      fields: record.field?.map((field) => {
+        const type = this.getType(field.type?.[0].$.name);
+        if (type === field.type?.[0].$.name) {
+          this.filterAndAddImport(imports, enums, type);
+        }
+        return {
+          name: field.$.name,
+          type,
+          accessibility: ClassPropertyAccessibility.Public,
+          ...(field.$.private === '1' && {
+            accessibility: ClassPropertyAccessibility.Private,
+          }),
+        } as Field;
+      }),
+      imports,
+    };
   }
 
   async generateRecord(record: GirRecordElement) {
-    const fields = await this.getRecordFields(record);
-    // if (record.$.name.endsWith('Class')) {
-    //   console.log('class', record);
-    // }
-    // if (record.$.name.endsWith('Interface')) {
-    //   console.log('interface', record);
-    // }
-    // console.log('records', record.$.name);
-    const code = await renderRecordElement({
-      name: record.$.name,
+    const { fields, imports } = await this.getRecordFields(record);
+    let code = '';
+    const name = record.$['glib:is-gtype-struct-for'] || record.$.name;
+    const options = {
+      name,
       fields,
-    });
+      imports,
+    };
+    if (record.$.name.endsWith('Class')) {
+      code = await renderRecordClassElement(options);
+    } else {
+      code = await renderRecordInterfaceElement(options);
+    }
+    console.log(name, record.$.name);
     await fs.mkdir(path.resolve('src/generated/records'), {
       recursive: true,
     });
     await fs.writeFile(
-      path.resolve('src/generated/records', `${record.$.name}.tsx`),
+      path.resolve('src/generated/records', `${name}.tsx`),
       code,
     );
   }
@@ -261,8 +272,8 @@ export class Generator {
 
   async getPropertiesOfInterface(
     interface_: GirInterfaceElement,
-    imports: Import[] = [],
-  ): Promise<{ properties: Property[]; imports: Import[] }> {
+    imports: ImportType[] = [],
+  ): Promise<{ properties: Property[]; imports: ImportType[] }> {
     const properties: Property[] = [];
     const enums = await this.getEnums();
     await Promise.all(
@@ -287,7 +298,7 @@ export class Generator {
 
   async getMethodsOfInterface(
     interface_: GirInterfaceElement,
-    imports: Import[] = [],
+    imports: ImportType[] = [],
   ) {
     const methods: Method[] = [];
     const enums = await this.getEnums();
@@ -360,7 +371,7 @@ export class Generator {
   }
 
   private filterAndAddImport(
-    imports: Import[],
+    imports: ImportType[],
     enums: GirEnumElement[],
     type: string,
   ) {
@@ -381,7 +392,7 @@ export class Generator {
     }
   }
 
-  private addImport(imports: Import[], import_: Import) {
+  private addImport(imports: ImportType[], import_: ImportType) {
     if (imports.find((imp) => imp.import === import_.import)) return;
     imports.push(import_);
   }
@@ -417,6 +428,14 @@ export class Generator {
         return 'number';
       case 'none':
         return 'void';
+      case 'gint64':
+        return 'number';
+      case 'guint64':
+        return 'number';
+      case 'gint16':
+        return 'number';
+      case 'guint16':
+        return 'number';
       default:
         return type;
     }

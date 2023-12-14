@@ -25,13 +25,13 @@ import {
   Method,
   Property,
 } from './components/InterfaceElement';
-import { Import } from './generator';
+import { ImportType } from './generator';
 
 export interface RenderInterfaceOptions {
   properties?: Property[];
   name: string;
   methods?: Method[];
-  imports?: Import[];
+  imports?: ImportType[];
 }
 
 export async function renderInterfaceElement({

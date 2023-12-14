@@ -11,6 +11,7 @@ enums
 dts
 esm
 flatpak
+lalit
 gdk
 gir
 gio
@@ -51,9 +52,12 @@ pango
 reconciler
 renderer
 risser
+rajak
 rmdir
 snapd
+struct
 subtree
+scrollable
 transpile
 tsbuildinfo
 tsup

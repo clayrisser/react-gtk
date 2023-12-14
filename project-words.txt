@@ -2,6 +2,7 @@ argv
 ast
 cjs
 cspell
+camelcase
 declarator
 dharmendra
 dom

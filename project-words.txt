@@ -11,12 +11,9 @@ enums
 dts
 esm
 flatpak
-<<<<<<< HEAD
 finishings
-=======
 lalit
 fs
->>>>>>> acf37822e69fb4f8bb49846992a466d57dba5e43
 gdk
 gir
 gio

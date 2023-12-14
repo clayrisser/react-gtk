@@ -70,14 +70,14 @@ export function InterfaceElement({
         <Interface name={name}>
           {properties?.map((property, i) => (
             <PropertySignature
-              id={property.name}
+              name={property.name}
               typeAnnotation={property.type}
               key={property.name + i}
             />
           ))}
           {methods?.map((method) => (
             <MethodSignature
-              id={method.name}
+              name={method.name}
               key={method.name}
               params={method.params?.map((param, i) => (
                 <Identifier typeAnnotation={param.type} key={param.name + i}>

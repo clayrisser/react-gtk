@@ -75,9 +75,9 @@ export function WidgetElement({
       </Export>
       <Export>
         <Class name={name} extends={extendedClass}>
-          <ClassProperty id="node" typeAnnotation={`Gtk.${name}`} />
+          <ClassProperty name="node" typeAnnotation={`Gtk.${name}`} />
           <ClassMethod
-            id="constructor"
+            name="constructor"
             params={[
               <Identifier key="props" typeAnnotation={interfaceName}>
                 props
@@ -119,7 +119,7 @@ export const WidgetElementExports = ({
       <ExportNamedDeclaration>
         <VariableDeclaration kind={VariableDeclarationKind.Const}>
           <VariableDeclarator
-            id="elements"
+            name="elements"
             typeAnnotation={
               <TypeAnnotation debug>
                 <TypeReference name="Record">
@@ -162,7 +162,7 @@ export const ExportAllWidgets = ({ widgets }: ExportAllWidgetsProps) => {
             kind={VariableDeclarationKind.Const}
             key={widget.$.name}
           >
-            <VariableDeclarator id={widget.$.name}>
+            <VariableDeclarator name={widget.$.name}>
               <StringLiteral>{widget.$.name}</StringLiteral>
             </VariableDeclarator>
           </VariableDeclaration>

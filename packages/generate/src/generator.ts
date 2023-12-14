@@ -142,7 +142,7 @@ export class Generator {
     } else {
       code = await renderRecordInterfaceElement(options);
     }
-    console.log(name, record.$.name);
+
     await fs.mkdir(path.resolve('src/generated/records'), {
       recursive: true,
     });
@@ -174,9 +174,6 @@ export class Generator {
       path.resolve('src/generated/', 'index.ts'),
       generateExportAllWidgetsCode,
     );
-
-    console.log(this.options);
-    console.log(this.outDir);
   }
 
   async generateConstants() {

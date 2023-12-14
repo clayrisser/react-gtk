@@ -40,7 +40,7 @@ export const ConstantElement = ({ constants }: ConstantsProps) => {
   return constants.map((item) => (
     <Export key={item.name}>
       <VariableDeclaration kind={VariableDeclarationKind.Const}>
-        <VariableDeclarator id={item.name}>{item.value}</VariableDeclarator>
+        <VariableDeclarator name={item.name}>{item.value}</VariableDeclarator>
       </VariableDeclaration>
     </Export>
   ));

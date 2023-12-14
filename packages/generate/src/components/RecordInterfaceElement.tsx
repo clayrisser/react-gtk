@@ -53,7 +53,7 @@ export function RecordInterfaceElement({
         <Interface name={name}>
           {fields?.map(({ name, type }) => (
             <PropertySignature
-              id={name}
+              name={name}
               key={name}
               typeAnnotation={<TypeAnnotation>{type}</TypeAnnotation>}
             />

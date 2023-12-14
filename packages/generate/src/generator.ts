@@ -43,6 +43,7 @@ import { Member } from './components/EnumElement';
 import { renderRecordElement } from './renderRecordElements';
 import { Field } from './components/RecordElement';
 import { ClassPropertyAccessibility } from 'react-ast';
+import camelCase from 'lodash.camelcase';
 
 export interface GeneratorOptions {
   outDir: string;
@@ -238,21 +239,12 @@ export class Generator {
   }
 
   async generateInterface(interface_: GirInterfaceElement) {
-    const { methods, imports: mImports } =
-      await this.getMethodsOfInterface(interface_);
-    let { properties, imports: pImports } = await this.getPropertiesOfInterface(
-      interface_,
-      mImports,
-    );
-    const imports = [...mImports, ...pImports].filter(
-      (imp, index, self) =>
-        self.findIndex((t) => t.import === imp.import) === index,
-    );
+    let { properties, imports } =
+      await this.getPropertiesOfInterface(interface_);
     properties = properties.filter((property) => property);
     const code = await renderInterfaceElement({
       properties,
       name: interface_.$.name,
-      methods,
       imports,
     });
     await fs.mkdir(path.resolve('src/generated/interfaces'), {
@@ -284,7 +276,7 @@ export class Generator {
         }
         if (typeof property.$.name !== 'undefined') {
           properties.push({
-            name: property.$.name.replace(/-/g, '_'),
+            name: camelCase(property.$.name),
             type,
           } as Property);
         }

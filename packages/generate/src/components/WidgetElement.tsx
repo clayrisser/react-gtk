@@ -45,6 +45,8 @@ import {
   ObjectLiteral,
   ObjectExpression,
   ObjectProperty,
+  ClassProperty,
+  AssignmentExpression,
 } from 'react-ast';
 
 export interface WidgetElementProps {
@@ -75,6 +77,7 @@ export function WidgetElement({
       </Export>
       <Export>
         <Class name={name} extends={extendedClass}>
+          <ClassProperty id="node" typeAnnotation={`Gtk.${name}`} />
           <ClassMethod
             id="constructor"
             params={[
@@ -86,7 +89,10 @@ export function WidgetElement({
             <Var name="node" kind={VarKind.Const}>
               <Code>{`new Gtk.${name}()`}</Code>
             </Var>
-            <Code>supe(node,props)</Code>
+            <Code>super(node,props)</Code>
+            <AssignmentExpression left="this.node">
+              <Identifier>node</Identifier>
+            </AssignmentExpression>
           </ClassMethod>
         </Class>
       </Export>

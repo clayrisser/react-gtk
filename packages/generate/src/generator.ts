@@ -73,7 +73,7 @@ export class Generator {
 
   async load() {
     this.module = await loadGtkModule();
-    console.log('keys', Object.keys(this.module.ns));
+    // console.log('keys', Object.keys(this.module.ns));
   }
 
   async generate() {
@@ -124,8 +124,7 @@ export class Generator {
     // if (record.$.name.endsWith('Interface')) {
     //   console.log('interface', record);
     // }
-    console.log('records', record.$.name);
-    console.log('');
+    // console.log('records', record.$.name);
     const code = await renderRecordElement({
       name: record.$.name,
       fields,

@@ -46,12 +46,16 @@ import {
   ClassProperty,
   AssignmentExpression,
 } from 'react-ast';
+import { ImportType } from '../generator';
 
 export interface WidgetElementProps {
   name: string;
   extendedClass?: string;
   importElementPath?: string;
+  extendedInterfaces?: string[];
+  imports?: ImportType[];
 }
+
 export interface WidgetElementExportsProps {
   widgets: GirClassElement[];
 }
@@ -64,14 +68,28 @@ export function WidgetElement({
   name,
   extendedClass = 'Element',
   importElementPath = '@react-gtk/core',
+  extendedInterfaces,
+  imports,
 }: WidgetElementProps) {
   const interfaceName = `${name}Props`;
   return (
     <>
       <Import from={importElementPath} imports="Element" />
       <Import from="@girs/node-gtk-4.0" default="Gtk" />
+      {imports?.map((import_) => (
+        <Import
+          key={import_.import}
+          from={import_.from}
+          imports={import_.import}
+        />
+      ))}
       <Export>
-        <Interface name={interfaceName} />
+        <Interface
+          name={interfaceName}
+          extends={extendedInterfaces?.map((extendedInterface) => (
+            <Identifier key={extendedInterface}>{extendedInterface}</Identifier>
+          ))}
+        />
       </Export>
       <Export>
         <Class name={name} extends={extendedClass}>

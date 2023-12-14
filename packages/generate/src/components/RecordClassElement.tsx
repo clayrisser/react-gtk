@@ -1,7 +1,7 @@
 /**
- * File: /src/components/RecordElement.tsx
+ * File: /src/components/RecordClassElement.tsx
  * Project: @react-gtk/generate
- * File Created: 13-12-2023 14:10:30
+ * File Created: 14-12-2023 12:16:44
  * Author: Lalit rajak
  * -----
  * BitSpur (c) Copyright 2017 - 2023
@@ -17,7 +17,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 import React from 'react';
@@ -26,8 +25,10 @@ import {
   ClassProperty,
   ClassPropertyAccessibility,
   Export,
+  Import,
   TypeAnnotation,
 } from 'react-ast';
+import { ImportType } from '../generator';
 
 export interface Field {
   name: string;
@@ -35,24 +36,38 @@ export interface Field {
   accessibility?: ClassPropertyAccessibility;
 }
 
-export interface RecordElementProps {
+export interface RecordClassElementProps {
   name: string;
   fields?: Field[];
+  imports?: ImportType[];
 }
 
-export function RecordElement({ name, fields }: RecordElementProps) {
+export function RecordClassElement({
+  name,
+  fields,
+  imports,
+}: RecordClassElementProps) {
   return (
-    <Export>
-      <Class name={name}>
-        {fields?.map(({ name, type, accessibility }) => (
-          <ClassProperty
-            id={name}
-            key={name}
-            accessibility={accessibility}
-            typeAnnotation={<TypeAnnotation>{type}</TypeAnnotation>}
-          />
-        ))}
-      </Class>
-    </Export>
+    <>
+      {imports?.map((importItem) => (
+        <Import
+          key={importItem.import}
+          from={importItem.from}
+          imports={[importItem.import]}
+        />
+      ))}
+      <Export>
+        <Class name={name}>
+          {fields?.map(({ name, type, accessibility }) => (
+            <ClassProperty
+              id={name}
+              key={name}
+              accessibility={accessibility}
+              typeAnnotation={<TypeAnnotation>{type}</TypeAnnotation>}
+            />
+          ))}
+        </Class>
+      </Export>
+    </>
   );
 }

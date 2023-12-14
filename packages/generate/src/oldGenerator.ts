@@ -19,9 +19,6 @@
  *  limitations under the License.
  */
 
-import { parseStringPromise } from 'xml2js';
-import { resolve } from 'path';
-import { readFile } from 'fs/promises';
 import { GirClassProps } from './types';
 
 export class Generator {

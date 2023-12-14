@@ -27,7 +27,7 @@ import {
   MethodSignature,
   PropertySignature,
 } from 'react-ast';
-import { Import as ImportType } from '../generator';
+import { ImportType } from '../generator';
 
 export interface Property {
   name: string;

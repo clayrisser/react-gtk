@@ -2,6 +2,7 @@ argv
 ast
 cjs
 cspell
+camelcase
 declarator
 dharmendra
 dom
@@ -10,7 +11,12 @@ enums
 dts
 esm
 flatpak
+<<<<<<< HEAD
 finishings
+=======
+lalit
+fs
+>>>>>>> acf37822e69fb4f8bb49846992a466d57dba5e43
 gdk
 gir
 gio
@@ -34,6 +40,7 @@ gint
 gfloat
 gboolean
 gtype
+hari
 homedir
 hydratable
 jsx
@@ -52,11 +59,15 @@ pango
 reconciler
 renderer
 risser
+rajak
 rmdir
 snapd
+struct
 subtree
+scrollable
 transpile
 tsbuildinfo
+typeof
 tsup
 tsx
 txt

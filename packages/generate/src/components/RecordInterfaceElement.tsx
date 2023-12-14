@@ -1,7 +1,7 @@
 /**
- * File: /src/components/EnumElement.tsx
+ * File: /src/components/RecordInterfaceElement.tsx
  * Project: @react-gtk/generate
- * File Created: 08-12-2023 10:50:11
+ * File Created: 14-12-2023 12:18:09
  * Author: Lalit rajak
  * -----
  * BitSpur (c) Copyright 2017 - 2023
@@ -19,47 +19,47 @@
  * limitations under the License.
  */
 import React from 'react';
-import { EnumDeclaration, EnumMember, Export, StringLiteral } from 'react-ast';
+import {
+  Export,
+  Import,
+  Interface,
+  PropertySignature,
+  TypeAnnotation,
+} from 'react-ast';
+import { Field } from './RecordClassElement';
+import { ImportType } from '../generator';
 
-export interface Property {
+export interface RecordInterfaceElementProps {
   name: string;
-  type: string;
+  fields?: Field[];
+  imports?: ImportType[];
 }
 
-export interface Member {
-  name: string;
-  value?: string;
-}
-
-export interface EnumElementProps {
-  members: Member[];
-  name: string;
-}
-
-export function EnumElement({ members, name }: EnumElementProps) {
+export function RecordInterfaceElement({
+  name,
+  fields,
+  imports,
+}: RecordInterfaceElementProps) {
   return (
     <>
+      {imports?.map((import_) => (
+        <Import
+          key={import_.import}
+          from={import_.from}
+          imports={[import_.import]}
+        />
+      ))}
       <Export>
-        <EnumDeclaration id={name}>
-          {members?.map((member) => (
-            <EnumMember key={member.name} name={member.name}>
-              {member.value && <StringLiteral>{member.value}</StringLiteral>}
-            </EnumMember>
-          ))}
-        </EnumDeclaration>
-      </Export>
-
-      {/* <Export>
         <Interface name={name}>
-          {members?.map((member) => (
+          {fields?.map(({ name, type }) => (
             <PropertySignature
-              id={member}
-              typeAnnotation="string"
-              key={member}
+              id={name}
+              key={name}
+              typeAnnotation={<TypeAnnotation>{type}</TypeAnnotation>}
             />
           ))}
         </Interface>
-      </Export> */}
+      </Export>
     </>
   );
 }

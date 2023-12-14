@@ -27,7 +27,6 @@ import {
   Import,
   Var,
   VarKind,
-  Code,
   Interface,
   Identifier,
   Export,
@@ -43,8 +42,9 @@ import {
   TypeParameterInstantiation,
   TypeReference,
   ObjectLiteral,
-  ObjectExpression,
-  ObjectProperty,
+  CallExpression,
+  ClassProperty,
+  AssignmentExpression,
 } from 'react-ast';
 
 export interface WidgetElementProps {
@@ -75,6 +75,7 @@ export function WidgetElement({
       </Export>
       <Export>
         <Class name={name} extends={extendedClass}>
+          <ClassProperty id="node" typeAnnotation={`Gtk.${name}`} />
           <ClassMethod
             id="constructor"
             params={[
@@ -84,9 +85,12 @@ export function WidgetElement({
             ]}
           >
             <Var name="node" kind={VarKind.Const}>
-              <Code>{`new Gtk.${name}()`}</Code>
+              <CallExpression name={`new Gtk.${name}`} />
             </Var>
-            <Code>supe(node,props)</Code>
+            <CallExpression name="super" arguments={['node', 'props']} />
+            <AssignmentExpression left="this.node">
+              <Identifier>node</Identifier>
+            </AssignmentExpression>
           </ClassMethod>
         </Class>
       </Export>
@@ -127,14 +131,8 @@ export const WidgetElementExports = ({
               </TypeAnnotation>
             }
           >
-            {/* <ObjectLiteral>{`{${widgetNames.join(', ')}}`}</ObjectLiteral> */}
-            <ObjectExpression
-              properties={[
-                ...widgetNames.map((widgetName) => (
-                  <ObjectProperty key={widgetName} name={widgetName} />
-                )),
-              ]}
-            />
+            {/* <ObjectLiteral>{`{${widgetNames}}`}</ObjectLiteral> */}
+            <ObjectLiteral>{`{${widgetNames.join(', ')}}`}</ObjectLiteral>
           </VariableDeclarator>
         </VariableDeclaration>
       </ExportNamedDeclaration>

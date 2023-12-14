@@ -1,7 +1,7 @@
 /**
- * File: /src/renderRecordElements.tsx
+ * File: /src/renderRecordElement.tsx
  * Project: @react-gtk/generate
- * File Created: 13-12-2023 14:09:28
+ * File Created: 14-12-2023 12:14:20
  * Author: Lalit rajak
  * -----
  * BitSpur (c) Copyright 2017 - 2023
@@ -19,12 +19,32 @@
  * limitations under the License.
  */
 import React from 'react';
-import { RecordElement, RecordElementProps } from './components/RecordElement';
 import { render } from 'react-ast';
+import {
+  RecordClassElement,
+  RecordClassElementProps,
+} from './components/RecordClassElement';
+import {
+  RecordInterfaceElement,
+  RecordInterfaceElementProps,
+} from './components/RecordInterfaceElement';
 
-export async function renderRecordElement({
+export function renderRecordClassElement({
   name,
   fields,
-}: RecordElementProps) {
-  return render(<RecordElement name={name} fields={fields} />);
+  imports,
+}: RecordClassElementProps) {
+  return render(
+    <RecordClassElement name={name} fields={fields} imports={imports} />,
+  );
+}
+
+export function renderRecordInterfaceElement({
+  name,
+  fields,
+  imports,
+}: RecordInterfaceElementProps) {
+  return render(
+    <RecordInterfaceElement name={name} fields={fields} imports={imports} />,
+  );
 }

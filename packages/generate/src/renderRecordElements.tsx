@@ -1,7 +1,7 @@
 /**
- * File: /src/renderInterfaceElement.tsx
+ * File: /src/renderRecordElements.tsx
  * Project: @react-gtk/generate
- * File Created: 08-12-2023 10:49:42
+ * File Created: 13-12-2023 14:09:28
  * Author: Lalit rajak
  * -----
  * BitSpur (c) Copyright 2017 - 2023
@@ -19,33 +19,12 @@
  * limitations under the License.
  */
 import React from 'react';
+import { RecordElement, RecordElementProps } from './components/RecordElement';
 import { render } from 'react-ast';
-import {
-  InterfaceElement,
-  Method,
-  Property,
-} from './components/InterfaceElement';
-import { Import } from './generator';
 
-export interface RenderInterfaceOptions {
-  properties?: Property[];
-  name: string;
-  methods?: Method[];
-  imports?: Import[];
-}
-
-export async function renderInterfaceElement({
-  properties,
+export async function renderRecordElement({
   name,
-  imports,
-  methods,
-}: RenderInterfaceOptions) {
-  return render(
-    <InterfaceElement
-      properties={properties}
-      name={name}
-      methods={methods}
-      imports={imports}
-    />,
-  );
+  fields,
+}: RecordElementProps) {
+  return render(<RecordElement name={name} fields={fields} />);
 }

@@ -84,7 +84,7 @@ export function WidgetElement({
             <Var name="node" kind={VarKind.Const}>
               <Code>{`new Gtk.${name}()`}</Code>
             </Var>
-            <Code>super(node,props)</Code>
+            <Code>supe(node,props)</Code>
           </ClassMethod>
         </Class>
       </Export>
@@ -110,7 +110,6 @@ export const WidgetElementExports = ({
           from={`./${widget.$.name}`}
         />
       ))}
-
       <ExportNamedDeclaration>
         <VariableDeclaration kind={VariableDeclarationKind.Const}>
           <VariableDeclarator
@@ -131,7 +130,6 @@ export const WidgetElementExports = ({
           </VariableDeclarator>
         </VariableDeclaration>
       </ExportNamedDeclaration>
-
       {widgets.map((widgets) => (
         <ExportAllDeclaration
           key={widgets.$.name}

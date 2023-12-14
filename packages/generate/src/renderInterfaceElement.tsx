@@ -40,7 +40,6 @@ export async function renderInterfaceElement({
   imports,
   methods,
 }: RenderInterfaceOptions) {
-  // console.log('imports', imports);
   return render(
     <InterfaceElement
       properties={properties}

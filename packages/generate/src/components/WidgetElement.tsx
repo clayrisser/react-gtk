@@ -43,8 +43,7 @@ import {
   TypeParameterInstantiation,
   TypeReference,
   ObjectLiteral,
-  ObjectExpression,
-  ObjectProperty,
+  CallExpression,
 } from 'react-ast';
 
 export interface WidgetElementProps {
@@ -84,9 +83,11 @@ export function WidgetElement({
             ]}
           >
             <Var name="node" kind={VarKind.Const}>
-              <Code>{`new Gtk.${name}()`}</Code>
+              {/* <Code>{`new Gtk.${name}()`}</Code> */}
+              <CallExpression name={`new Gtk.${name}`} />
             </Var>
-            <Code>super(node,props)</Code>
+            {/* <Code>super(node,props)</Code> */}
+            <CallExpression name="super" arguments={['node', 'props']} />
           </ClassMethod>
         </Class>
       </Export>
@@ -128,14 +129,8 @@ export const WidgetElementExports = ({
               </TypeAnnotation>
             }
           >
-            {/* <ObjectLiteral>{`{${widgetNames.join(', ')}}`}</ObjectLiteral> */}
-            <ObjectExpression
-              properties={[
-                ...widgetNames.map((widgetName) => (
-                  <ObjectProperty key={widgetName} name={widgetName} />
-                )),
-              ]}
-            />
+            {/* <ObjectLiteral>{`{${widgetNames}}`}</ObjectLiteral> */}
+            <ObjectLiteral>{`{${widgetNames.join(', ')}}`}</ObjectLiteral>
           </VariableDeclarator>
         </VariableDeclaration>
       </ExportNamedDeclaration>

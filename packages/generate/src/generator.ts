@@ -25,6 +25,7 @@ import {
   GirInterfaceElement,
   GirFunctionElement,
   GirEnumElement,
+  GirRecordElement,
 } from '@ts-for-gir/lib';
 import { loadGtkModule } from './module';
 import {
@@ -39,6 +40,9 @@ import fs from 'fs/promises';
 import { Method, ParamType, Property } from './components/InterfaceElement';
 import { renderEnumElement } from './renderEnumElements';
 import { Member } from './components/EnumElement';
+import { renderRecordElement } from './renderRecordElements';
+import { Field } from './components/RecordElement';
+import { ClassPropertyAccessibility } from 'react-ast';
 
 export interface GeneratorOptions {
   outDir: string;
@@ -69,6 +73,7 @@ export class Generator {
 
   async load() {
     this.module = await loadGtkModule();
+    // console.log('keys', Object.keys(this.module.ns));
   }
 
   async generate() {
@@ -77,6 +82,60 @@ export class Generator {
     await this.generateFunctions();
     await this.generateEnums();
     await this.generateInterfaces();
+    await this.generateRecords();
+  }
+
+  async generateRecords() {
+    if (typeof this.module === 'undefined') await this.load();
+    const records = await this.getRecords();
+    await Promise.all(
+      records.map(async (record) => {
+        await this.generateRecord(record);
+      }),
+    );
+  }
+
+  async getRecords() {
+    if (typeof this.module === 'undefined') await this.load();
+    return this.module.ns.record || [];
+  }
+
+  async getRecordFields(record: GirRecordElement) {
+    return record.field?.map((field) => {
+      const type = this.getType(field.type?.[0].$.name);
+
+      // console.log(field.callback?.[0].parameters?.[0]);
+      return {
+        name: field.$.name,
+        type,
+        accessibility: ClassPropertyAccessibility.Public,
+        ...(field.$.private === '1' && {
+          accessibility: ClassPropertyAccessibility.Private,
+        }),
+      } as Field;
+    });
+  }
+
+  async generateRecord(record: GirRecordElement) {
+    const fields = await this.getRecordFields(record);
+    // if (record.$.name.endsWith('Class')) {
+    //   console.log('class', record);
+    // }
+    // if (record.$.name.endsWith('Interface')) {
+    //   console.log('interface', record);
+    // }
+    // console.log('records', record.$.name);
+    const code = await renderRecordElement({
+      name: record.$.name,
+      fields,
+    });
+    await fs.mkdir(path.resolve('src/generated/records'), {
+      recursive: true,
+    });
+    await fs.writeFile(
+      path.resolve('src/generated/records', `${record.$.name}.tsx`),
+      code,
+    );
   }
 
   async generateElements() {

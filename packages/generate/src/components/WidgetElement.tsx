@@ -44,6 +44,10 @@ import {
   TypeReference,
   ObjectLiteral,
   CallExpression,
+  ObjectExpression,
+  ObjectProperty,
+  ClassProperty,
+  AssignmentExpression,
 } from 'react-ast';
 
 export interface WidgetElementProps {
@@ -74,6 +78,7 @@ export function WidgetElement({
       </Export>
       <Export>
         <Class name={name} extends={extendedClass}>
+          <ClassProperty id="node" typeAnnotation={`Gtk.${name}`} />
           <ClassMethod
             id="constructor"
             params={[
@@ -88,6 +93,10 @@ export function WidgetElement({
             </Var>
             {/* <Code>super(node,props)</Code> */}
             <CallExpression name="super" arguments={['node', 'props']} />
+            <Code>super(node,props)</Code>
+            <AssignmentExpression left="this.node">
+              <Identifier>node</Identifier>
+            </AssignmentExpression>
           </ClassMethod>
         </Class>
       </Export>
@@ -113,7 +122,6 @@ export const WidgetElementExports = ({
           from={`./${widget.$.name}`}
         />
       ))}
-
       <ExportNamedDeclaration>
         <VariableDeclaration kind={VariableDeclarationKind.Const}>
           <VariableDeclarator
@@ -134,7 +142,6 @@ export const WidgetElementExports = ({
           </VariableDeclarator>
         </VariableDeclaration>
       </ExportNamedDeclaration>
-
       {widgets.map((widgets) => (
         <ExportAllDeclaration
           key={widgets.$.name}

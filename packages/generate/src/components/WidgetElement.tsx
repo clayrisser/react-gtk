@@ -44,8 +44,6 @@ import {
   TypeReference,
   ObjectLiteral,
   CallExpression,
-  ObjectExpression,
-  ObjectProperty,
   ClassProperty,
   AssignmentExpression,
 } from 'react-ast';
@@ -88,12 +86,9 @@ export function WidgetElement({
             ]}
           >
             <Var name="node" kind={VarKind.Const}>
-              {/* <Code>{`new Gtk.${name}()`}</Code> */}
               <CallExpression name={`new Gtk.${name}`} />
             </Var>
-            {/* <Code>super(node,props)</Code> */}
             <CallExpression name="super" arguments={['node', 'props']} />
-            <Code>super(node,props)</Code>
             <AssignmentExpression left="this.node">
               <Identifier>node</Identifier>
             </AssignmentExpression>

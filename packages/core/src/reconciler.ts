@@ -139,12 +139,12 @@ export default ReactReconciler<
 
   resetTextContent(textInstance: TextInstance): void {
     logger.debug('resetTextContent');
-    textInstance.resetText();
+    textInstance.resetText({ stage: Stage.Update });
   },
 
   commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
     logger.debug('commitTextUpdate');
-    textInstance.updateText(oldText, newText);
+    textInstance.updateText(oldText, newText, { stage: Stage.Update });
   },
 
   removeChild(parentInstance: Instance, child: Instance | TextInstance): void {
@@ -241,9 +241,7 @@ export default ReactReconciler<
 
   getInstanceFromScope(scopeInstance: any): null | Instance {
     logger.debug('getInstanceFromScope');
-    if (scopeInstance.node) {
-      return scopeInstance as Instance;
-    }
+    if (scopeInstance.node) return scopeInstance as Instance;
     return null;
   },
 

@@ -20,8 +20,7 @@
  */
 
 import React from 'react';
-import { render, Box, Button, Label, Image, Grid, Text } from './index';
-import Gtk from '@girs/node-gtk-4.0';
+import { render, Box, Button } from './index';
 
 export const Example = () => {
   return (
@@ -32,31 +31,6 @@ export const Example = () => {
           console.log('I was clicked!');
         }}
       />
-      <Label
-        label="Label with markup"
-        halign={4}
-        justify={Gtk.Justification.RIGHT}
-        tooltip_markup="<i>Tooltip</i> with <b>markup</b>"
-        margin_start={10}
-        margin_top={20}
-        focus_on_click={true}
-      />
-      <Image resource="packages/core/src/assets/test.png" />
-      <Grid
-        halign={4}
-        marginStart={20}
-        marginTop={30}
-        marginEnd={20}
-        marginBottom={30}
-        rowSpacing={15}
-        columnSpacing={20}
-        baselineRow={10}
-      >
-        <Label label="Label 1" />
-      </Grid>
-      <Text marginStart={20} marginTop={30} marginEnd={20} marginBottom={30}>
-        text
-      </Text>
     </Box>
   );
 };

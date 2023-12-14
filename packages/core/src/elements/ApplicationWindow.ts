@@ -26,6 +26,7 @@ export interface ApplicationWindowProps {}
 
 export class ApplicationWindow extends Element {
   node: Gtk.ApplicationWindow;
+
   constructor(app: Gtk.Application, props: ApplicationWindowProps = {}) {
     const node = new Gtk.ApplicationWindow(app);
     super(node, props);

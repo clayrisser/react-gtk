@@ -69,7 +69,7 @@
     "@ts-for-gir/generator-typescript": "^3.2.6",
     "@ts-for-gir/lib": "^3.2.6",
     "commander": "^11.1.0",
-    "react-ast": "^0.6.3"
+    "react-ast": "^0.6.4"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

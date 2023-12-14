@@ -10,6 +10,7 @@ enums
 dts
 esm
 flatpak
+finishings
 gdk
 gir
 gio
@@ -37,6 +38,7 @@ homedir
 hydratable
 jsx
 lang
+lpi
 linux
 microtask
 minify
@@ -60,6 +62,7 @@ tsx
 txt
 type
 usr
+uri
 utf
 utf8
 xml

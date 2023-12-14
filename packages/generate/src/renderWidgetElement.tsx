@@ -28,6 +28,7 @@ import {
   WidgetElementProps,
 } from './components/WidgetElement';
 import { render } from 'react-ast';
+import { ExportConstants } from './components/ConstantElement';
 
 export interface RenderWidgetElementOptions
   extends Omit<WidgetElementProps, 'name'> {}

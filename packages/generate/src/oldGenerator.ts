@@ -1,5 +1,5 @@
 /*
- *  File: /src/generator.ts
+ *  File: /src/oldGenerator.ts
  *  Project: @react-gtk/generate
  *  File Created: 06-12-2023 06:15:12
  *  Author: Clay Risser
@@ -34,7 +34,6 @@ export class Generator {
   constructor(private girFilePath: string) {}
 
   async generate() {
-    console.log('HELLO');
     // const parsedData = await this.getParsedData();
     // this.getNameSpaces(parsedData);
     // this.getClasses(parsedData);

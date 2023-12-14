@@ -43,6 +43,8 @@ import { Member } from './components/EnumElement';
 import { renderRecordElement } from './renderRecordElements';
 import { Field } from './components/RecordElement';
 import { ClassPropertyAccessibility } from 'react-ast';
+import { renderConstantElement } from './renderConstantElement';
+import { ConstantType } from './components/ConstantElement';
 
 export interface GeneratorOptions {
   outDir: string;
@@ -73,7 +75,6 @@ export class Generator {
 
   async load() {
     this.module = await loadGtkModule();
-    console.log('keys', Object.keys(this.module.ns));
   }
 
   async generate() {
@@ -83,6 +84,7 @@ export class Generator {
     await this.generateEnums();
     await this.generateInterfaces();
     await this.generateRecords();
+    await this.generateConstants();
   }
 
   async generateRecords() {
@@ -124,8 +126,8 @@ export class Generator {
     // if (record.$.name.endsWith('Interface')) {
     //   console.log('interface', record);
     // }
-    console.log('records', record.$.name);
-    console.log('');
+    // console.log('records', record.$.name);
+    // console.log('');
     const code = await renderRecordElement({
       name: record.$.name,
       fields,
@@ -164,6 +166,32 @@ export class Generator {
 
     console.log(this.options);
     console.log(this.outDir);
+  }
+
+  async generateConstants() {
+    if (typeof this.module === 'undefined') await this.load();
+    const constants = await this.getConstants();
+    const code = await renderConstantElement({ constants });
+    await fs.mkdir(path.resolve('src/generated/constants'), {
+      recursive: true,
+    });
+    await fs.writeFile(
+      path.resolve('src/generated/constants', `index.ts`),
+      code,
+    );
+  }
+
+  async getConstants() {
+    if (typeof this.module === 'undefined') await this.load();
+    return (
+      this.module.ns.constant?.map(
+        (constant) =>
+          ({
+            name: constant.$.name,
+            value: constant.$.value,
+          }) as ConstantType,
+      ) || []
+    );
   }
 
   async generateTypes() {

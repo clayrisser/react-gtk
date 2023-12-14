@@ -40,7 +40,7 @@ export function FunctionElement({ name }: FunctionElementProps) {
   return (
     <Export>
       <FunctionDeclaration
-        id={name}
+        name={name}
         async
         returnType="T<A, B>"
         params={[
@@ -54,7 +54,7 @@ export function FunctionElement({ name }: FunctionElementProps) {
       >
         <VariableDeclaration kind={VariableDeclarationKind.Const}>
           <VariableDeclarator
-            id="hello"
+            name="hello"
             typeAnnotation={<TypeAnnotation>T</TypeAnnotation>}
             key="await"
           >

@@ -40,7 +40,7 @@ export function EnumElement({ members, name }: EnumElementProps) {
   return (
     <>
       <Export>
-        <EnumDeclaration id={name}>
+        <EnumDeclaration name={name}>
           {members?.map((member) => (
             <EnumMember key={member.name} name={member.name}>
               {member.value && <StringLiteral>{member.value}</StringLiteral>}

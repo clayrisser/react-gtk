@@ -60,7 +60,7 @@ export function RecordClassElement({
         <Class name={name}>
           {fields?.map(({ name, type, accessibility }) => (
             <ClassProperty
-              id={name}
+              name={name}
               key={name}
               accessibility={accessibility}
               typeAnnotation={<TypeAnnotation>{type}</TypeAnnotation>}

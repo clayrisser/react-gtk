@@ -223,13 +223,26 @@ export class Generator {
   }
 
   async generateWidget(widget: GirClassElement) {
+    const extendedInterfaces = await this.getExtendedInterfaces(widget);
+    const imports: ImportType[] = extendedInterfaces.map(
+      (extendedInterface) => ({
+        import: extendedInterface,
+        from: `../interfaces/${extendedInterface}`,
+      }),
+    );
     const generateElementCode = await renderWidgetElement(widget, {
       importElementPath: '../../elements/Element',
+      extendedInterfaces,
+      imports,
     });
     await fs.writeFile(
       path.resolve(this.outDir, `${widget.$.name}.tsx`),
       generateElementCode,
     );
+  }
+
+  async getExtendedInterfaces(widget: GirClassElement) {
+    return widget.implements?.map((implement) => implement.$.name) || [];
   }
 
   async generateFunction(function_: GirFunctionElement) {

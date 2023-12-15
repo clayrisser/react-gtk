@@ -40,6 +40,8 @@ export async function renderWidgetElement(
     <WidgetElement
       name={widget.$.name}
       importElementPath={options.importElementPath}
+      extendedInterfaces={options.extendedInterfaces}
+      imports={options.imports}
     />,
   );
 }

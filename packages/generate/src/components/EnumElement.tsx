@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 import React from 'react';
-import { EnumDeclaration, EnumMember, Export, StringLiteral } from 'react-ast';
+import { EnumDeclaration, EnumMember, Export, Literal } from 'react-ast';
 
 export interface Property {
   name: string;
@@ -43,7 +43,7 @@ export function EnumElement({ members, name }: EnumElementProps) {
         <EnumDeclaration name={name}>
           {members?.map((member) => (
             <EnumMember key={member.name} name={member.name}>
-              {member.value && <StringLiteral>{member.value}</StringLiteral>}
+              {member.value && <Literal>{member.value}</Literal>}
             </EnumMember>
           ))}
         </EnumDeclaration>

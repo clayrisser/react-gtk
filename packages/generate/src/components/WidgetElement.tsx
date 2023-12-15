@@ -32,7 +32,6 @@ import {
   Export,
   ExportAllDeclaration,
   VariableDeclaration,
-  StringLiteral,
   VariableDeclarationKind,
   ExportNamedDeclaration,
   VariableDeclarator,
@@ -41,10 +40,12 @@ import {
   TypeAnnotation,
   TypeParameterInstantiation,
   TypeReference,
-  ObjectLiteral,
+  Literal,
   CallExpression,
   ClassProperty,
   AssignmentExpression,
+  ObjectExpression,
+  Property,
 } from 'react-ast';
 
 export interface WidgetElementProps {
@@ -131,8 +132,11 @@ export const WidgetElementExports = ({
               </TypeAnnotation>
             }
           >
-            {/* <ObjectLiteral>{`{${widgetNames}}`}</ObjectLiteral> */}
-            <ObjectLiteral>{`{${widgetNames.join(', ')}}`}</ObjectLiteral>
+            <ObjectExpression>
+              {widgetNames.map((widgetName: string, index: number) => (
+                <Property name={widgetName} key={index} />
+              ))}
+            </ObjectExpression>
           </VariableDeclarator>
         </VariableDeclaration>
       </ExportNamedDeclaration>
@@ -163,7 +167,7 @@ export const ExportAllWidgets = ({ widgets }: ExportAllWidgetsProps) => {
             key={widget.$.name}
           >
             <VariableDeclarator name={widget.$.name}>
-              <StringLiteral>{widget.$.name}</StringLiteral>
+              <Literal>{widget.$.name}</Literal>
             </VariableDeclarator>
           </VariableDeclaration>
         </Export>

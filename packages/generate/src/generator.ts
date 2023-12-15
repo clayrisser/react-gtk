@@ -49,6 +49,7 @@ import {
   renderRecordClassElement,
   renderRecordInterfaceElement,
 } from './renderRecordElement';
+import { renderTypesElement } from './renderTypes';
 
 export interface GeneratorOptions {
   outDir: string;
@@ -157,6 +158,7 @@ export class Generator {
     await fs.rm(this.outDir, { recursive: true, force: true });
     await fs.mkdir(this.outDir, { recursive: true });
     const widgets = await this.getWidgets();
+    // await this.generateTypes(widgets);
     await Promise.all(
       widgets.map(async (widget) => {
         this.generateWidget(widget);
@@ -202,14 +204,20 @@ export class Generator {
     );
   }
 
-  async generateTypes() {
+  async generateTypes(widget: GirClassElement[]) {
     if (typeof this.module === 'undefined') await this.load();
-    const interfaces = await this.getInterfaces();
-    await Promise.all(
-      interfaces.map(async (interface_) => {
-        this.generateInterface(interface_);
-      }),
-    );
+    // const interfaces = await this.getInterfaces();
+    // await Promise.all(
+    //   interfaces.map(async (interface_) => {
+    //     this.generateInterface(interface_);
+    //   }),
+    // );
+    const types = widget.map((widget) => widget.$.name);
+    const code = await renderTypesElement({ types });
+    await fs.mkdir(path.resolve('src/@types'), {
+      recursive: true,
+    });
+    await fs.writeFile(path.resolve('src/@types', `reactGtk.d.ts`), code);
   }
 
   async generateFunctions() {

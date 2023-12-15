@@ -46,6 +46,7 @@ import {
   AssignmentExpression,
   ObjectExpression,
   Property,
+  Code,
 } from 'react-ast';
 import { ImportType } from '../generator';
 
@@ -77,21 +78,25 @@ export function WidgetElement({
     <>
       <Import from={importElementPath} imports="Element" />
       <Import from="@girs/node-gtk-4.0" default="Gtk" />
-      {imports?.map((import_) => (
+      {/* {imports?.map((import_) => (
         <Import
           key={import_.import}
           from={import_.from}
           imports={import_.import}
         />
-      ))}
-      <Export>
+      ))} */}
+      <Code>{`export type ${name}Props =Gtk.${name} ${
+        (extendedInterfaces?.length || 0) > 0 ? '&Gtk.' : ''
+      }${extendedInterfaces?.join('&Gtk.')}`}</Code>
+
+      {/* <Export>
         <Interface
           name={interfaceName}
           extends={extendedInterfaces?.map((extendedInterface) => (
             <Identifier key={extendedInterface}>{extendedInterface}</Identifier>
           ))}
         />
-      </Export>
+      </Export> */}
       <Export>
         <Class name={name} extends={extendedClass}>
           <ClassProperty name="node" typeAnnotation={`Gtk.${name}`} />

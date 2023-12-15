@@ -1,8 +1,8 @@
 /**
- * File: /src/example.tsx
- * Project: @react-gtk/core
- * File Created: 29-11-2023 05:45:29
- * Author: Clay Risser
+ * File: /src/renderTypes.tsx
+ * Project: @react-gtk/generate
+ * File Created: 15-12-2023 15:03:45
+ * Author: Lalit rajak
  * -----
  * BitSpur (c) Copyright 2017 - 2023
  *
@@ -20,21 +20,9 @@
  */
 
 import React from 'react';
-import { render, Box, Button } from './generated';
+import { render } from 'react-ast';
+import { TypesElement, TypesElementProps } from './components/TypesElement';
 
-export const Example = () => {
-  return (
-    <Box>
-      <Button
-        label="Click me!"
-        onClicked={() => {
-          console.log('I was clicked!');
-        }}
-      />
-    </Box>
-  );
-};
-
-(async () => {
-  await render(<Example />);
-})();
+export async function renderTypesElement({ types }: TypesElementProps) {
+  return render(<TypesElement types={types} />);
+}

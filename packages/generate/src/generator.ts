@@ -158,7 +158,7 @@ export class Generator {
     await fs.rm(this.outDir, { recursive: true, force: true });
     await fs.mkdir(this.outDir, { recursive: true });
     const widgets = await this.getWidgets();
-    // await this.generateTypes(widgets);
+    await this.generateTypes(widgets);
     await Promise.all(
       widgets.map(async (widget) => {
         this.generateWidget(widget);
@@ -214,10 +214,13 @@ export class Generator {
     // );
     const types = widget.map((widget) => widget.$.name);
     const code = await renderTypesElement({ types });
-    await fs.mkdir(path.resolve('src/@types'), {
+    await fs.mkdir(path.resolve('src/generated/@types'), {
       recursive: true,
     });
-    await fs.writeFile(path.resolve('src/@types', `reactGtk.d.ts`), code);
+    await fs.writeFile(
+      path.resolve('src/generated/@types', `reactGtk.d.ts`),
+      code,
+    );
   }
 
   async generateFunctions() {
@@ -231,17 +234,8 @@ export class Generator {
   }
 
   async generateWidget(widget: GirClassElement) {
-    const extendedInterfaces = await this.getExtendedInterfaces(widget);
-    const imports: ImportType[] = extendedInterfaces.map(
-      (extendedInterface) => ({
-        import: extendedInterface,
-        from: `../interfaces/${extendedInterface}`,
-      }),
-    );
     const generateElementCode = await renderWidgetElement(widget, {
       importElementPath: '../../elements/Element',
-      extendedInterfaces,
-      imports,
     });
     await fs.writeFile(
       path.resolve(this.outDir, `${widget.$.name}.tsx`),

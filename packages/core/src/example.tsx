@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { render, Box, Button } from './generated';
+import { render, Box, Button,Label } from './generated';
 
 export const Example = () => {
   return (
@@ -31,6 +31,7 @@ export const Example = () => {
           console.log('I was clicked!');
         }}
       />
+      <Label label="hello"  />
     </Box>
   );
 };

@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 import React from 'react';
-import { Import, Interface, PropertySignature } from 'react-ast';
+import { Code, Interface, PropertySignature } from 'react-ast';
 
 export interface TypesElementProps {
   types: string[];
@@ -29,7 +29,7 @@ export function TypesElement({ types }: TypesElementProps) {
   return (
     <>
       {types.map((type) => (
-        <Import from="../generated" imports={[`${type}Props`]} key={type} />
+        <Code key={type}>{`type ${type}Props = import('..')`}</Code>
       ))}
       <Interface name="IntrinsicElements">
         {types?.map((type, i) => (

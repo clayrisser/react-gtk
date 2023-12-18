@@ -33,13 +33,9 @@ declare global {
 export type BoxProps = JSX.IntrinsicElements['Box'];
 export class Box extends Element {
   node: Gtk.Box;
-
   constructor(props: BoxProps) {
     const node = new Gtk.Box();
-    super(node, props, {
-      appendChild: (child: Gtk.Widget) => node.append(child),
-      removeChild: (child: Gtk.Widget) => node.remove(child),
-    });
+    super(node, props);
     this.node = node;
   }
 }

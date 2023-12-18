@@ -25,7 +25,10 @@ import { Element } from './Element';
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      Button: any;
+      Button: {
+        onClicked?: Gtk.Button.ClickedSignalCallback;
+        label?: string;
+      };
     }
   }
 }
@@ -34,7 +37,6 @@ export type ButtonProps = JSX.IntrinsicElements['Button'];
 
 export class Button extends Element {
   node: Gtk.Button;
-
   constructor(props: ButtonProps = {}) {
     const node = new Gtk.Button();
     super(node, props);

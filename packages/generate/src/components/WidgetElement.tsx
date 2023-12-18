@@ -74,6 +74,8 @@ export function WidgetElement({
       <Import from={importElementPath} imports="Element" />
       <Import from="@girs/node-gtk-4.0" default="Gtk" />
 
+      {/* TODO: add the global JSX.IntrinsicElements */}
+
       <Export>
         <Interface
           name={interfaceName}

@@ -19,6 +19,7 @@
  *  limitations under the License.
  */
 
+import kebabCase from 'lodash.kebabcase';
 import GObject from '@girs/node-gobject-2.0';
 import PropTypes from 'prop-types';
 import type Gtk from '@girs/node-gtk-4.0';
@@ -37,6 +38,7 @@ import {
   RemoveAllChildrenOptions,
 } from '../types';
 
+const logger = console;
 let _propertyList: string[] | undefined;
 let _signalList: Set<string> | undefined;
 
@@ -46,6 +48,8 @@ export abstract class Element implements Instance {
   static defaultProps: Props = {};
 
   static propTypes: object = {};
+
+  name = '';
 
   props: Props;
 
@@ -59,6 +63,7 @@ export abstract class Element implements Instance {
     private meta: ElementMeta = {},
   ) {
     this.props = this.getProps(props);
+    this.name = GObject.typeName(node.__gtype__ as unknown as GObject.GType) || 'Unknown';
     node._element = this as unknown as Instance;
   }
 
@@ -73,11 +78,17 @@ export abstract class Element implements Instance {
     if (this.meta.appendChild) {
       this.meta.appendChild(child.node);
     } else if ('setChild' in this.node && typeof this.node.setChild === 'function') {
-      (
-        this.node as {
-          setChild: (child: Gtk.Widget | null) => void;
-        }
-      ).setChild(child.node);
+      const node = this.node as any;
+      if ('append' in node && typeof node.append === 'function') {
+        node.append(child.node);
+      } else if ('addChild' in node && typeof node.addChild === 'function') {
+        node.addChild(child.node);
+      } else if ('appendPage' in node && typeof node.appendPage === 'function') {
+        node.appendPage(child.node);
+      } else if ('setChild' in node && typeof node.setChild === 'function') {
+        node.setChild(node);
+      }
+      logger.warn(`widget ${this.name} does not support children`);
     }
   }
 
@@ -138,7 +149,7 @@ export abstract class Element implements Instance {
       const prop = this.props[key];
       if (typeof prop !== 'undefined' && prop !== null) {
         if (/^on[A-Z]/.test(key)) {
-          const signal = key.replace(/^on([A-Z])/, (_, match) => match.toLowerCase());
+          const signal = kebabCase(key.slice(2));
           if (this.signalList.has(signal)) this.node.connect(signal, prop);
         } else if (key in this.node) {
           (this.node as any)[key] = prop;

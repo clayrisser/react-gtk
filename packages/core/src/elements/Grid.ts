@@ -33,13 +33,9 @@ declare global {
 export type GridProps = JSX.IntrinsicElements['Grid'];
 export class Grid extends Element {
   node: Gtk.Grid;
-
   constructor(props: GridProps) {
     const node = new Gtk.Grid();
-    super(node, props, {
-      appendChild: (child: Gtk.Widget) => node.attach(child, 0, 0, 1, 1),
-      removeChild: (child: Gtk.Widget) => node.remove(child),
-    });
+    super(node, props);
     this.node = node;
   }
 }

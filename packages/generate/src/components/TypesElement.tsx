@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 import React from 'react';
-import { Export, Import, Interface, PropertySignature } from 'react-ast';
+import { Import, Interface, PropertySignature } from 'react-ast';
 
 export interface TypesElementProps {
   types: string[];

@@ -50,7 +50,6 @@ import {
   renderRecordInterfaceElement,
 } from './renderRecordElement';
 import { renderTypesElement } from './renderTypes';
-import { Gtk } from '@girs/node-gtk-4.0';
 
 export interface GeneratorOptions {
   outDir: string;

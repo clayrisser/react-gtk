@@ -19,8 +19,9 @@
  *  limitations under the License.
  */
 
+import type { Element } from './elements/Element';
 import type { Gtk } from '@girs/node-gtk-4.0';
-import { Text } from './elements/Text';
+import type { Text } from './elements/Text';
 
 export type BundleType = 0 | 1;
 
@@ -86,13 +87,13 @@ export interface RemoveAllChildrenOptions extends SharedOptions {}
 export interface PreparePortalMountOptions extends Omit<SharedOptions, 'stage'> {}
 
 export interface Instance {
-  appendChild: (child: Instance | TextInstance, options?: Partial<AppendChildOptions>) => void;
+  appendChild: (child: Instance, options?: Partial<AppendChildOptions>) => void;
   children: Instance[];
   commitMount: (options?: Partial<CommitMountOptions>) => void;
   commitUpdate: (newProps: Props, options?: Partial<CommitUpdateOptions>) => void;
   node: GtkNode;
   props: Props;
-  removeChild: (child: Instance | TextInstance, options?: Partial<RemoveChildOptions>) => void;
+  removeChild: (child: Instance, options?: Partial<RemoveChildOptions>) => void;
   removeAllChildren: (options?: Partial<RemoveAllChildrenOptions>) => void;
   preparePortalMount: (options?: Partial<PreparePortalMountOptions>) => void;
 }

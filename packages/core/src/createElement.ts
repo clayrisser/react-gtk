@@ -19,6 +19,7 @@
  *  limitations under the License.
  */
 
+import { Instance } from './types';
 import { elements } from './elements';
 
 export default function createElement(elementType: string, props: any) {
@@ -26,5 +27,5 @@ export default function createElement(elementType: string, props: any) {
   if (!Element) {
     throw new Error(`unknown element of type '${elementType}'`);
   }
-  return new Element(props);
+  return new (Element as any)(props) as Instance;
 }

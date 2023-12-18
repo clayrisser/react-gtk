@@ -1,7 +1,7 @@
 /**
- * File: /src/example.tsx
- * Project: @react-gtk/core
- * File Created: 29-11-2023 05:45:29
+ * File: /src/index.tsx
+ * Project: @react-gtk/todo-example
+ * File Created: 18-12-2023 04:58:18
  * Author: Clay Risser
  * -----
  * BitSpur (c) Copyright 2017 - 2023
@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { render, Box, Button,Label } from './generated';
+import { render, Box, Button, Label } from '@react-gtk/core';
 
 export const Example = () => {
   return (
@@ -31,7 +31,7 @@ export const Example = () => {
           console.log('I was clicked!');
         }}
       />
-      <Label label="hello"  />
+      <Label label="hello" />
     </Box>
   );
 };

@@ -22,6 +22,14 @@
 import Gtk from '@girs/node-gtk-4.0';
 import { Element } from './Element';
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      Grid: any;
+    }
+  }
+}
+
 export type GridProps = JSX.IntrinsicElements['Grid'];
 export class Grid extends Element {
   node: Gtk.Grid;

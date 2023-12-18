@@ -20,15 +20,23 @@
  */
 
 import Gtk from '@girs/node-gtk-4.0';
-import { SharedOptions } from '../types';
+import { Instance, SharedOptions } from '../types';
 import { Element } from './Element';
 // import { Text as GeneratedText } from '../generated/elements/Text';
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      Text: any;
+    }
+  }
+}
 
 export interface ResetTextOptions extends SharedOptions {}
 
 export interface UpdateTextOptions extends SharedOptions {}
 
-export interface TextProps {}
+export type TextProps = JSX.IntrinsicElements['Text'];
 
 // export class Text extends GeneratedText {
 export class Text extends Element {

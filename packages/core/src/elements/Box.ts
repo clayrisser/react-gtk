@@ -22,6 +22,14 @@
 import Gtk from '@girs/node-gtk-4.0';
 import { Element } from './Element';
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      Box: any;
+    }
+  }
+}
+
 export type BoxProps = JSX.IntrinsicElements['Box'];
 export class Box extends Element {
   node: Gtk.Box;

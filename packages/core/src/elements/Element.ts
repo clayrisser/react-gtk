@@ -59,7 +59,7 @@ export abstract class Element implements Instance {
     private meta: ElementMeta = {},
   ) {
     this.props = this.getProps(props);
-    node._element = this;
+    node._element = this as unknown as Instance;
   }
 
   appendChild(child: Instance, options: Partial<AppendChildOptions> = {}) {

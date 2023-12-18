@@ -21,7 +21,16 @@
     "strict": true,
     "target": "ES2022",
     "tsBuildInfoFile": ".tsbuildinfo",
-    "lib": ["DOM", "DOM.Iterable", "ES2022", "ScriptHost", "WebWorker", "WebWorker.ImportScripts", "Webworker.Iterable"]
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022",
+      "ScriptHost",
+      "WebWorker",
+      "WebWorker.ImportScripts",
+      "Webworker.Iterable"
+    ],
+    "typeRoots": ["@react-gtk/core/types"]
   },
   "ts-node": {
     "swc": true,

@@ -19,22 +19,22 @@
  *  limitations under the License.
  */
 
-import type { Element } from './Element';
 import { Box } from './Box';
-import { Label } from './Label';
 import { Button } from './Button';
-import { Image } from './Image';
 import { Grid } from './Grid';
+import { Image } from './Image';
+import { Instance } from '../types';
+import { Label } from './Label';
 import { Text } from './Text';
 
-export const elements: Record<string, typeof Element> = {
+export const elements: Record<string, Instance> = {
   Box,
   Button,
   Label,
   Image,
   Grid,
   Text,
-};
+} as Record<string, any>;
 
 export * from './ApplicationWindow';
 export * from './Box';

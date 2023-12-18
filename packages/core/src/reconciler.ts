@@ -137,14 +137,14 @@ export default ReactReconciler<
     logger.debug('resetAfterCommit');
   },
 
-  resetTextContent(textInstance: TextInstance): void {
+  resetTextContent(_textInstance: TextInstance): void {
     logger.debug('resetTextContent');
-    textInstance.resetText({ stage: Stage.Update });
+    // textInstance.resetText({ stage: Stage.Update });
   },
 
-  commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
+  commitTextUpdate(_textInstance: TextInstance, _oldText: string, _newText: string): void {
     logger.debug('commitTextUpdate');
-    textInstance.updateText(oldText, newText, { stage: Stage.Update });
+    // textInstance.updateText(oldText, newText, { stage: Stage.Update });
   },
 
   removeChild(parentInstance: Instance, child: Instance | TextInstance): void {

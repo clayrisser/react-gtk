@@ -22,6 +22,14 @@
 import Gtk from '@girs/node-gtk-4.0';
 import { Element } from './Element';
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      Label: any;
+    }
+  }
+}
+
 export type LabelProps = JSX.IntrinsicElements['Label'];
 
 export class Label extends Element {

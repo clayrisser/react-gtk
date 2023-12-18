@@ -20,20 +20,24 @@
  */
 
 import Gtk from '@girs/node-gtk-4.0';
+import type { Ref } from 'react';
 import { Element } from './Element';
+import { Instance } from '../types';
+import { StyleProps } from '../style';
+
+export interface ButtonProps extends StyleProps {
+  label?: string;
+  onClicked?: Gtk.Button.ClickedSignalCallback;
+  ref?: Ref<Instance>;
+}
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      Button: {
-        onClicked?: Gtk.Button.ClickedSignalCallback;
-        label?: string;
-      };
+      Button: ButtonProps;
     }
   }
 }
-
-export type ButtonProps = JSX.IntrinsicElements['Button'];
 
 export class Button extends Element {
   node: Gtk.Button;

@@ -25,14 +25,16 @@ import { ButtonProps } from './elements/Button';
 import { LabelProps } from './elements/Label';
 import { ImageProps } from './elements/Image';
 import { GridProps } from './elements/Grid';
+import { YogaProps } from './elements/Yoga';
 
 export const Box = 'Box';
 export const Button = 'Button';
 export const Label = 'Label';
 export const Window = 'Window';
+export const Yoga = 'Yoga';
 export const Image = 'Image';
 export const Grid = 'Grid';
 
-export type { LabelProps, ApplicationWindowProps, ButtonProps, BoxProps, ImageProps, GridProps };
+export type { LabelProps, ApplicationWindowProps, ButtonProps, BoxProps, ImageProps, GridProps, YogaProps };
 
 export * from './render';

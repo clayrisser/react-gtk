@@ -113,7 +113,10 @@ export default ReactReconciler<
 
   getPublicInstance(instance: Instance | TextInstance): PublicInstance {
     logger.debug('getPublicInstance');
-    return instance.node;
+    return {
+      css: instance.css,
+      node: instance.node,
+    };
   },
 
   prepareForCommit(_rootContainerInstance: Container): Record<string, any> | null {

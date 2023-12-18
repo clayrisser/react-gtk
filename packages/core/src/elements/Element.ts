@@ -1,7 +1,7 @@
 /*
  *  File: /src/elements/Element.ts
  *  Project: @react-gtk/core
- *  File Created: 28-11-2023 22:32:06
+ *  File Created: 01-12-2023 05:55:50
  *  Author: Clay Risser
  *  -----
  *  BitSpur (c) Copyright 2017 - 2023
@@ -19,23 +19,25 @@
  *  limitations under the License.
  */
 
-import kebabCase from 'lodash.kebabcase';
 import GObject from '@girs/node-gobject-2.0';
+import Gtk from '@girs/node-gtk-4.0';
 import PropTypes from 'prop-types';
-import type Gtk from '@girs/node-gtk-4.0';
+import Yoga from 'yoga-layout/wasm-sync';
+import kebabCase from 'lodash.kebabcase';
+import { buildCssDeclaration, psuedoClasses } from '../style';
 import {
-  Instance,
-  GtkNode,
-  Props,
-  ElementMeta,
   AppendChildOptions,
-  Stage,
-  SharedOptions,
-  CommitUpdateOptions,
   CommitMountOptions,
-  RemoveChildOptions,
+  CommitUpdateOptions,
+  ElementMeta,
+  GtkNode,
+  Instance,
   PreparePortalMountOptions,
+  Props,
   RemoveAllChildrenOptions,
+  RemoveChildOptions,
+  SharedOptions,
+  Stage,
 } from '../types';
 
 const logger = console;
@@ -49,46 +51,71 @@ export abstract class Element implements Instance {
 
   static propTypes: object = {};
 
-  name = '';
+  id: string;
+
+  type: string;
 
   props: Props;
 
   children: Instance[] = [];
 
+  yogaNode = Yoga.Node.create();
+
+  private cssBlocks: Record<number, string[]> = {};
+
+  private connectedSignals: Record<string, number> = {};
+
   abstract node: GtkNode;
 
   constructor(
-    node: GtkNode,
+    node?: GtkNode,
     props: Props = {},
     private meta: ElementMeta = {},
   ) {
     this.props = this.getProps(props);
-    this.name = GObject.typeName(node.__gtype__ as unknown as GObject.GType) || 'Unknown';
-    node._element = this as unknown as Instance;
+    this.type =
+      (node ? GObject.typeName(node.__gtype__ as unknown as GObject.GType) : meta.virtual && 'Virtual') || 'Unknown';
+    this.id = props.name || `${this.type}-${Math.random().toString(36).substring(2, 9)}`;
+    if (node) {
+      node._element = this as unknown as Instance;
+      node.setName(this.id);
+    }
   }
 
   appendChild(child: Instance, options: Partial<AppendChildOptions> = {}) {
-    const { stage } = {
+    const { stage, parentIsContainer } = {
       parentIsContainer: false,
       stage: Stage.Update,
       ...options,
     } as AppendChildOptions;
     this.updateNode({ stage });
     this.children.push(child);
+    if (!child.node) return;
     if (this.meta.appendChild) {
-      this.meta.appendChild(child.node);
-    } else if ('setChild' in this.node && typeof this.node.setChild === 'function') {
+      this.meta.appendChild(child, { stage, parentIsContainer });
+    } else {
       const node = this.node as any;
-      if ('append' in node && typeof node.append === 'function') {
+      if (
+        'append' in node &&
+        typeof node.append === 'function' &&
+        'remove' in node &&
+        typeof node.remove === 'function'
+      ) {
         node.append(child.node);
       } else if ('addChild' in node && typeof node.addChild === 'function') {
         node.addChild(child.node);
-      } else if ('appendPage' in node && typeof node.appendPage === 'function') {
+      } else if (
+        'appendPage' in node &&
+        typeof node.appendPage === 'function' &&
+        'removePage' in node &&
+        typeof node.removePage === 'function'
+      ) {
         node.appendPage(child.node);
       } else if ('setChild' in node && typeof node.setChild === 'function') {
-        node.setChild(node);
+        node.setChild(child.node);
+      } else {
+        logger.warn(`widget ${this.type} does not support children`);
       }
-      logger.warn(`widget ${this.name} does not support children`);
     }
   }
 
@@ -99,14 +126,32 @@ export abstract class Element implements Instance {
     } as RemoveChildOptions;
     this.updateNode({ stage });
     this.children.splice(this.children.indexOf(child), 1);
+    if (!child.node) return;
     if (this.meta.removeChild) {
-      this.meta.removeChild(child.node);
-    } else if ('setChild' in this.node && typeof this.node.setChild === 'function') {
-      (
-        this.node as {
-          setChild: (child: Gtk.Widget | null) => void;
-        }
-      ).setChild(null);
+      this.meta.removeChild(child);
+    } else {
+      const node = this.node as any;
+      if (
+        'append' in node &&
+        typeof node.append === 'function' &&
+        'remove' in node &&
+        typeof node.remove === 'function'
+      ) {
+        node.remove(child.node);
+      } else if ('addChild' in node && typeof node.addChild === 'function') {
+        node.addChild(child.node);
+      } else if (
+        'appendPage' in node &&
+        typeof node.appendPage === 'function' &&
+        'removePage' in node &&
+        typeof node.removePage === 'function'
+      ) {
+        node.removePage(child.node, -1); // TODO: get the page id of the child
+      } else if ('setChild' in node && typeof node.setChild === 'function') {
+        node.setChild(null);
+      } else {
+        logger.warn(`widget ${this.type} does not support children`);
+      }
     }
   }
 
@@ -145,17 +190,49 @@ export abstract class Element implements Instance {
   }
 
   updateNode(_options: UpdateNodeOptions) {
+    if (!this.node) return;
     Object.keys(this.props).forEach((key: string) => {
-      const prop = this.props[key];
-      if (typeof prop !== 'undefined' && prop !== null) {
-        if (/^on[A-Z]/.test(key)) {
+      const value = this.props[key];
+      if (typeof value !== 'undefined' && value !== null) {
+        if (key === 'style') {
+          this.setStyle(value);
+        } else if (key === 'userStyle') {
+          this.setStyle(value, Gtk.STYLE_PROVIDER_PRIORITY_USER);
+        } else if (key === 'fallbackStyle') {
+          this.setStyle(value, Gtk.STYLE_PROVIDER_PRIORITY_FALLBACK);
+        } else if (/^on[A-Z]/.test(key)) {
           const signal = kebabCase(key.slice(2));
-          if (this.signalList.has(signal)) this.node.connect(signal, prop);
-        } else if (key in this.node) {
-          (this.node as any)[key] = prop;
+          if (this.signalList.has(signal)) {
+            if (signal in this.connectedSignals) this.node!.disconnect(this.connectedSignals[signal]);
+            this.connectedSignals[signal] = this.node!.connect(signal, value);
+          }
+        } else if (key in this.node!) {
+          switch (key) {
+            case 'className': {
+              if (typeof value === 'string') this.node?.setCssClasses(value.split(' '));
+              break;
+            }
+            case 'class': {
+              break;
+            }
+            default: {
+              (this.node as any)[key] = value;
+            }
+          }
         }
       }
     });
+    this.updateYogaNode();
+  }
+
+  updateYogaNode() {
+    if (!this.node) return;
+    this.yogaNode.setWidth(this.node.getWidth());
+    this.yogaNode.setHeight(this.node.getHeight());
+  }
+
+  prepareUnmount() {
+    if (this.meta.prepareUnmount) this.meta.prepareUnmount();
   }
 
   get propertyList(): string[] {
@@ -179,11 +256,60 @@ export abstract class Element implements Instance {
   get signalList(): Set<string> {
     if (_signalList) return _signalList;
     _signalList = new Set(
-      GObject.signalListIds(this.node.__gtype__ as unknown as GObject.GType)
-        .map((id: number) => GObject.signalName(id))
-        .filter((name: string | null) => name?.length) as string[],
+      ((this.node &&
+        GObject.signalListIds(this.node.__gtype__ as unknown as GObject.GType)
+          .map((id: number) => GObject.signalName(id))
+          .filter((name: string | null) => name?.length)) ||
+        []) as string[],
     );
     return _signalList;
+  }
+
+  get css() {
+    return Object.keys(this.cssBlocks)
+      .map((key) => Number(key))
+      .reduce((css: string[], key: number) => {
+        const cssBlocks = this.cssBlocks[key];
+        css.push(cssBlocks.join('\n'));
+        return css;
+      }, []);
+  }
+
+  private setStyle(style: Record<string, string | number | null>, priority = Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION) {
+    if (!this.node || typeof style !== 'object') return;
+    const cssProvider = new Gtk.CssProvider();
+    const styleContext = this.node.getStyleContext();
+    if (!styleContext) return;
+    const cssDeclarations: string[] = [];
+    const cssBlocks: string[] = [];
+    Object.entries(style).forEach(
+      ([key, value]: [string, string | number | null | Record<string, string | number | null>]) => {
+        if (key?.[0] === '&') {
+          if (psuedoClasses.has(key) && typeof value === 'object') {
+            const cssDeclarations: string[] = [];
+            Object.entries(value as Record<string, string | number | null>).forEach(
+              ([psuedoKey, psuedoValue]: [string, string | number | null]) => {
+                cssDeclarations.push(
+                  buildCssDeclaration(value as Record<string, string | number | null>, psuedoKey, psuedoValue),
+                );
+              },
+            );
+            cssBlocks.push(`#${this.id}${key.split('&')[1]} {\n${cssDeclarations.join('\n')}\n}`);
+          }
+          return;
+        }
+        if (typeof value !== 'object') cssDeclarations.push(buildCssDeclaration(style, key, value));
+      },
+    );
+    cssBlocks.push(`#${this.id} {\n${cssDeclarations.join('\n')}\n}`);
+    this.cssBlocks[priority] = cssBlocks;
+    const css = cssBlocks.join('\n');
+    try {
+      cssProvider.loadFromData(css, css.length);
+      styleContext.addProvider(cssProvider, priority);
+    } catch (err) {
+      logger.warn(err);
+    }
   }
 
   private getProps(props: Props): Props {

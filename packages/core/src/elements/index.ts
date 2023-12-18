@@ -26,6 +26,7 @@ import { Image } from './Image';
 import { Instance } from '../types';
 import { Label } from './Label';
 import { Text } from './Text';
+import { Yoga } from './Yoga';
 import { elements as generatedElements } from '../generated/elements';
 
 export const elements: Record<string, Instance> = {
@@ -33,6 +34,7 @@ export const elements: Record<string, Instance> = {
   Box,
   Button,
   Label,
+  Yoga,
   Image,
   Grid,
   Text,
@@ -46,4 +48,5 @@ export * from './Label';
 export * from './Image';
 export * from './Grid';
 export * from './Text';
+export * from './Yoga';
 // export * from '../generated/elements';

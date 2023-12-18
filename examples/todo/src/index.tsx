@@ -19,19 +19,41 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { render, Box, Button, Label } from '@react-gtk/core';
 
 export const Example = () => {
+  const [count, setCount] = useState(0);
+
   return (
     <Box>
       <Button
         label="Click me!"
         onClicked={() => {
-          console.log('I was clicked!');
+          setCount((count) => {
+            count = count + 1;
+            console.log(`I was clicked ${count} times!`);
+            return count;
+          });
+        }}
+        style={{
+          color: 'red',
+          borderWidth: 8,
+          borderColor: 'green',
+          transition: 'all 0.5s ease',
+          '&:hover': {
+            color: 'green',
+            backgroundColor: 'yellow',
+          },
+          '&:active': {
+            color: 'white',
+            backgroundColor: 'purple',
+          },
         }}
       />
-      <Label label="hello" />
+      <Label label={count.toString()} />
+      <Label label="   " />
+      <Label label={count % 2 === 0 ? 'even' : 'odd'} />
     </Box>
   );
 };

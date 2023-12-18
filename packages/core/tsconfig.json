@@ -10,7 +10,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "module": "ES2022",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,

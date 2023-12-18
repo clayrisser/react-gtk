@@ -1,4 +1,5 @@
 argv
+asian
 ast
 camelcase
 cjs
@@ -42,6 +43,7 @@ homedir
 hydratable
 jsx
 kebabcase
+kerning
 lalit
 lang
 linux
@@ -55,6 +57,7 @@ of
 outdir
 pango
 promisify
+psuedo
 rajak
 reconciler
 renderer

@@ -19,9 +19,9 @@
  *  limitations under the License.
  */
 
-import type { Element } from './elements/Element';
 import type { Gtk } from '@girs/node-gtk-4.0';
 import type { Text } from './elements/Text';
+import type { Node as YogaNode } from 'yoga-layout/wasm-sync';
 
 export type BundleType = 0 | 1;
 
@@ -33,7 +33,10 @@ export type Prop = any;
 
 export type HydratableInstance = any;
 
-export type PublicInstance = GtkNode;
+export interface PublicInstance {
+  css: string[];
+  node: GtkNode;
+}
 
 export type HostContext = Context;
 
@@ -59,13 +62,15 @@ export interface Context {
   [key: string]: ContextItem;
 }
 
-export type AppendChild = (child: Gtk.Widget, ...args: any[]) => void;
+export type AppendChild = (child: Instance, options: AppendChildOptions) => void;
 
-export type RemoveChild = (child: Gtk.Widget, ...args: any[]) => void;
+export type RemoveChild = (child: Instance, ...args: any[]) => void;
 
 export interface ElementMeta {
   appendChild?: AppendChild;
+  prepareUnmount?: () => void;
   removeChild?: RemoveChild;
+  virtual?: boolean;
 }
 
 export interface SharedOptions {
@@ -91,16 +96,23 @@ export interface Instance {
   children: Instance[];
   commitMount: (options?: Partial<CommitMountOptions>) => void;
   commitUpdate: (newProps: Props, options?: Partial<CommitUpdateOptions>) => void;
+  css: string[];
+  id: string;
   node: GtkNode;
-  props: Props;
-  removeChild: (child: Instance, options?: Partial<RemoveChildOptions>) => void;
-  removeAllChildren: (options?: Partial<RemoveAllChildrenOptions>) => void;
   preparePortalMount: (options?: Partial<PreparePortalMountOptions>) => void;
+  prepareUnmount: () => void;
+  props: Props;
+  removeAllChildren: (options?: Partial<RemoveAllChildrenOptions>) => void;
+  removeChild: (child: Instance, options?: Partial<RemoveChildOptions>) => void;
+  type: string;
+  yogaNode: YogaNode;
 }
 
-export interface GtkNode extends Gtk.Widget {
-  _element?: Instance;
-}
+export type GtkNode =
+  | null
+  | (Gtk.Widget & {
+      _element?: Instance;
+    });
 
 export enum ContainerType {
   None = 0,

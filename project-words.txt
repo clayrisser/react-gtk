@@ -12,7 +12,7 @@ dts
 esm
 flatpak
 finishings
-lalit
+focusable
 fs
 gdk
 gir
@@ -42,6 +42,7 @@ homedir
 hydratable
 jsx
 lang
+lalit
 lpi
 linux
 microtask
@@ -62,6 +63,7 @@ snapd
 struct
 subtree
 scrollable
+tooltip
 transpile
 tsbuildinfo
 typeof

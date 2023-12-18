@@ -287,7 +287,7 @@ declare namespace JSX {
       marginEnd?: number;
       marginStart?: number;
       marginTop?: number;
-      maxLenght?: number;
+      maxLength?: number;
       maxWidthChars?: number;
       name: string;
       opacity?: number;

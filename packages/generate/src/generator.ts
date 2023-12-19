@@ -266,7 +266,15 @@ export class Generator {
   async getWidgets() {
     if (typeof this.module === 'undefined') await this.load();
     const classes = await this.getClasses();
-    return classes.filter((class_) => class_.$.parent === 'Widget');
+    const widgets = classes.filter((class_) => class_.$.parent === 'Widget');
+    classes.forEach((class_) => {
+      if (class_.$.parent !== 'Widget') {
+        if (widgets.find((widget) => widget.$.name === class_.$.parent)) {
+          widgets.push(class_);
+        }
+      }
+    });
+    return widgets;
   }
 
   async getClasses() {

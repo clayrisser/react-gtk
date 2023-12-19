@@ -28,12 +28,7 @@ import { Image } from './Image';
 import { Instance } from '../types';
 import { Label } from './Label';
 import { Text } from './Text';
-<<<<<<< HEAD
-import { elements as generatedElements } from '../generated/elements';
-=======
-import { Yoga } from './Yoga';
 // import { elements as generatedElements } from '../generated/elements';
->>>>>>> f87983c3f717a72f71d5b857abd0fac931bbebca
 
 export const elements: Record<string, Instance> = {
   // ...generatedElements,

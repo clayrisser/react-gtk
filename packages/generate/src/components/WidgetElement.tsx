@@ -47,6 +47,10 @@ import {
   ObjectExpression,
   Property,
   Expression,
+  DeclarationType,
+  ModuleDeclaration,
+  PropertySignature,
+  InterfaceDeclaration,
 } from 'react-ast';
 
 export interface WidgetElementProps {
@@ -74,7 +78,13 @@ export function WidgetElement({
       <Import from={importElementPath} imports="Element" />
       <Import from="@girs/node-gtk-4.0" default="Gtk" />
 
-      {/* TODO: add the global JSX.IntrinsicElements */}
+      <ModuleDeclaration declaration={DeclarationType.Declare} name="global">
+        <ModuleDeclaration declaration={DeclarationType.Namespace} name="jsx">
+          <InterfaceDeclaration name="IntrinsicElements">
+            <PropertySignature name={name} typeAnnotation="any" />
+          </InterfaceDeclaration>
+        </ModuleDeclaration>
+      </ModuleDeclaration>
 
       <Export>
         <Interface

@@ -19,14 +19,17 @@
  *  limitations under the License.
  */
 
-export interface StyleProp {
-  '&:active'?: StyleProp;
-  '&:backdrop'?: StyleProp;
-  '&:checked'?: StyleProp;
-  '&:disabled'?: StyleProp;
-  '&:focus'?: StyleProp;
-  '&:hover'?: StyleProp;
-  '&:indeterminate'?: StyleProp;
+export interface StyleProp extends Style {
+  '&:active'?: Style;
+  '&:backdrop'?: Style;
+  '&:checked'?: Style;
+  '&:disabled'?: Style;
+  '&:focus'?: Style;
+  '&:hover'?: Style;
+  '&:indeterminate'?: Style;
+}
+
+export interface Style {
   animation?: string;
   animationDelay?: number;
   animationDirection?: string;
@@ -292,8 +295,8 @@ export function buildCssDeclaration(
     if (key === 'backgroundColor' && !('backgroundImage' in style)) {
       cssDeclaration += '  background-image: none;\n';
     }
-    value = typeof value === 'number' && property.defaultUnit ? `${value}${property.defaultUnit}` : value;
-    cssDeclaration += `  ${styleProperties[key].name}: ${value};`;
+    value = typeof value === 'number' && property.defaultUnit ? `${value}${property.defaultUnit}` : value.toString();
+    cssDeclaration += `  ${property.name}: ${value};`;
   }
   return cssDeclaration;
 }

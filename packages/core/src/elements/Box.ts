@@ -21,16 +21,22 @@
 
 import Gtk from '@girs/node-gtk-4.0';
 import { Element } from './Element';
+import { ReactNode } from 'react';
+import { StyleProps } from '../style';
+
+export interface BoxProps extends StyleProps {
+  children?: ReactNode;
+  sizeRequest?: [number, number];
+}
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      Box: any;
+      Box: BoxProps;
     }
   }
 }
 
-export type BoxProps = JSX.IntrinsicElements['Box'];
 export class Box extends Element {
   node: Gtk.Box;
   constructor(props: BoxProps) {

@@ -20,8 +20,8 @@
  */
 
 import type { Gtk } from '@girs/node-gtk-4.0';
-import type { Text } from './elements/Text';
 import type { Node as YogaNode } from 'yoga-layout/wasm-sync';
+import type { Text } from './elements/Text';
 
 export type BundleType = 0 | 1;
 
@@ -105,6 +105,10 @@ export interface Instance {
   removeAllChildren: (options?: Partial<RemoveAllChildrenOptions>) => void;
   removeChild: (child: Instance, options?: Partial<RemoveChildOptions>) => void;
   type: string;
+}
+
+export interface YogaInstance extends Instance {
+  yogaChildren?: YogaNode[];
   yogaNode: YogaNode;
 }
 

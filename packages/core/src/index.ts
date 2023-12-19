@@ -22,19 +22,31 @@
 import { ApplicationWindowProps } from './elements/ApplicationWindow';
 import { BoxProps } from './elements/Box';
 import { ButtonProps } from './elements/Button';
-import { LabelProps } from './elements/Label';
-import { ImageProps } from './elements/Image';
+import { FlexBoxProps } from './elements/FlexBox';
+import { FlexEdgeProps } from './elements/FlexEdge';
 import { GridProps } from './elements/Grid';
-import { YogaProps } from './elements/Yoga';
+import { ImageProps } from './elements/Image';
+import { LabelProps } from './elements/Label';
 
 export const Box = 'Box';
 export const Button = 'Button';
+export const FlexBox = 'FlexBox';
+export const FlexEdge = 'FlexEdge';
+export const Grid = 'Grid';
+export const Image = 'Image';
 export const Label = 'Label';
 export const Window = 'Window';
 export const Yoga = 'Yoga';
-export const Image = 'Image';
-export const Grid = 'Grid';
 
-export type { LabelProps, ApplicationWindowProps, ButtonProps, BoxProps, ImageProps, GridProps, YogaProps };
+export type {
+  LabelProps,
+  ApplicationWindowProps,
+  ButtonProps,
+  BoxProps,
+  ImageProps,
+  GridProps,
+  FlexBoxProps,
+  FlexEdgeProps,
+};
 
 export * from './render';

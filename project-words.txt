@@ -39,6 +39,7 @@ guint
 gulong
 gushort
 hari
+hexpand
 homedir
 hydratable
 jsx
@@ -79,5 +80,6 @@ uri
 usr
 utf
 utf8
+vexpand
 xml
 yarnpkg

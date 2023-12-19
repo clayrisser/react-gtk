@@ -21,22 +21,24 @@
 
 import { Box } from './Box';
 import { Button } from './Button';
+import { FlexBox } from './FlexBox';
+import { FlexEdge } from './FlexEdge';
 import { Grid } from './Grid';
 import { Image } from './Image';
 import { Instance } from '../types';
 import { Label } from './Label';
 import { Text } from './Text';
-import { Yoga } from './Yoga';
 import { elements as generatedElements } from '../generated/elements';
 
 export const elements: Record<string, Instance> = {
   // ...generatedElements,
   Box,
   Button,
-  Label,
-  Yoga,
-  Image,
+  FlexBox,
+  FlexEdge,
   Grid,
+  Image,
+  Label,
   Text,
 } as Record<string, any>;
 
@@ -44,9 +46,10 @@ export * from './ApplicationWindow';
 export * from './Box';
 export * from './Button';
 export * from './Element';
-export * from './Label';
-export * from './Image';
+export * from './FlexBox';
+export * from './FlexEdge';
 export * from './Grid';
+export * from './Image';
+export * from './Label';
 export * from './Text';
-export * from './Yoga';
 // export * from '../generated/elements';

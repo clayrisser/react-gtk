@@ -22,7 +22,6 @@
 import GObject from '@girs/node-gobject-2.0';
 import Gtk from '@girs/node-gtk-4.0';
 import PropTypes from 'prop-types';
-import Yoga from 'yoga-layout/wasm-sync';
 import kebabCase from 'lodash.kebabcase';
 import { buildCssDeclaration, psuedoClasses } from '../style';
 import {
@@ -59,11 +58,13 @@ export abstract class Element implements Instance {
 
   children: Instance[] = [];
 
-  yogaNode = Yoga.Node.create();
-
   private cssBlocks: Record<number, string[]> = {};
 
   private connectedSignals: Record<string, number> = {};
+
+  private styleContext?: Gtk.StyleContext;
+
+  private classNames: Set<string> = new Set();
 
   abstract node: GtkNode;
 
@@ -78,7 +79,8 @@ export abstract class Element implements Instance {
     this.id = props.name || `${this.type}-${Math.random().toString(36).substring(2, 9)}`;
     if (node) {
       node._element = this as unknown as Instance;
-      node.setName(this.id);
+      this.styleContext = node.getStyleContext();
+      this.styleContext.addClass(this.id);
     }
   }
 
@@ -125,6 +127,7 @@ export abstract class Element implements Instance {
       ...options,
     } as RemoveChildOptions;
     this.updateNode({ stage });
+    child.prepareUnmount();
     this.children.splice(this.children.indexOf(child), 1);
     if (!child.node) return;
     if (this.meta.removeChild) {
@@ -209,26 +212,36 @@ export abstract class Element implements Instance {
         } else if (key in this.node!) {
           switch (key) {
             case 'className': {
-              if (typeof value === 'string') this.node?.setCssClasses(value.split(' '));
+              if (this.styleContext) {
+                [...this.classNames].forEach((className: string) => {
+                  this.styleContext?.removeClass(className);
+                });
+                this.classNames = new Set();
+                (Array.isArray(value) ? value : value.toString().split(' ')).forEach((className: string) => {
+                  if (typeof className !== 'string') return;
+                  this.styleContext?.addClass(className);
+                  this.classNames.add(className);
+                });
+              }
               break;
             }
             case 'class': {
               break;
             }
             default: {
-              (this.node as any)[key] = value;
+              const node = this.node as any;
+              node[key] = value;
             }
+          }
+        } else if (Array.isArray(value)) {
+          const node = this.node as any;
+          key = `set${key[0].toUpperCase() + key.slice(1)}`;
+          if (key in node && typeof node[key] === 'function') {
+            node[key](...value);
           }
         }
       }
     });
-    this.updateYogaNode();
-  }
-
-  updateYogaNode() {
-    if (!this.node) return;
-    this.yogaNode.setWidth(this.node.getWidth());
-    this.yogaNode.setHeight(this.node.getHeight());
   }
 
   prepareUnmount() {
@@ -276,10 +289,8 @@ export abstract class Element implements Instance {
   }
 
   private setStyle(style: Record<string, string | number | null>, priority = Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION) {
-    if (!this.node || typeof style !== 'object') return;
+    if (!this.node || !this.styleContext || typeof style !== 'object') return;
     const cssProvider = new Gtk.CssProvider();
-    const styleContext = this.node.getStyleContext();
-    if (!styleContext) return;
     const cssDeclarations: string[] = [];
     const cssBlocks: string[] = [];
     Object.entries(style).forEach(
@@ -294,19 +305,19 @@ export abstract class Element implements Instance {
                 );
               },
             );
-            cssBlocks.push(`#${this.id}${key.split('&')[1]} {\n${cssDeclarations.join('\n')}\n}`);
+            cssBlocks.push(`.${this.id}${key.split('&')[1]} {\n${cssDeclarations.join('\n')}\n}`);
           }
           return;
         }
         if (typeof value !== 'object') cssDeclarations.push(buildCssDeclaration(style, key, value));
       },
     );
-    cssBlocks.push(`#${this.id} {\n${cssDeclarations.join('\n')}\n}`);
+    cssBlocks.push(`.${this.id} {\n${cssDeclarations.join('\n')}\n}`);
     this.cssBlocks[priority] = cssBlocks;
     const css = cssBlocks.join('\n');
     try {
       cssProvider.loadFromData(css, css.length);
-      styleContext.addProvider(cssProvider, priority);
+      this.styleContext.addProvider(cssProvider, priority);
     } catch (err) {
       logger.warn(err);
     }

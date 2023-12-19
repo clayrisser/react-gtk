@@ -41,14 +41,15 @@ export async function renderWidgetElement(
     camelCase(`on-${s.$.name}`),
   );
   if (signalProps?.length) {
-    console.log(`${widget.$.name} signalProps`, signalProps);
+    // console.log(`${widget.$.name} signalProps`, signalProps);
     // TODO: this is how to title case from the camel case (this should happen in the WidgetElement)
-    console.log(signalProps.map((s) => s.slice(2)));
+    // console.log(signalProps.map((s) => s.slice(2)));
   }
   return render(
     <WidgetElement
       name={widget.$.name}
       importElementPath={options.importElementPath}
+      signals={options.signals}
     />,
   );
 }

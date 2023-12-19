@@ -51,12 +51,15 @@ import {
   ModuleDeclaration,
   PropertySignature,
   InterfaceDeclaration,
+  MethodSignature,
 } from 'react-ast';
+import { Signal } from '../generator';
 
 export interface WidgetElementProps {
   name: string;
   extendedClass?: string;
   importElementPath?: string;
+  signals?: Signal[];
 }
 
 export interface WidgetElementExportsProps {
@@ -71,6 +74,7 @@ export function WidgetElement({
   name,
   extendedClass = 'Element',
   importElementPath = '@react-gtk/core',
+  signals,
 }: WidgetElementProps) {
   const interfaceName = `${name}Props`;
   return (
@@ -90,7 +94,20 @@ export function WidgetElement({
         <Interface
           name={interfaceName}
           extends={<Expression identifiers={`Gtk.${name}`} />}
-        />
+        >
+          {signals?.map((signal) => (
+            <MethodSignature
+              name={signal.name}
+              params={signal.params?.map((param) => (
+                <Identifier key={param.name} typeAnnotation={param.type}>
+                  {param.name}
+                </Identifier>
+              ))}
+              key={signal.name}
+              returnType={signal.returnType}
+            />
+          ))}
+        </Interface>
       </Export>
       <Export>
         <Class name={name} extends={extendedClass}>

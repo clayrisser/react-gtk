@@ -81,7 +81,7 @@ export function WidgetElement({
       <ModuleDeclaration declaration={DeclarationType.Declare} name="global">
         <ModuleDeclaration declaration={DeclarationType.Namespace} name="jsx">
           <InterfaceDeclaration name="IntrinsicElements">
-            <PropertySignature name={name} typeAnnotation="any" />
+            <PropertySignature name={name} typeAnnotation={interfaceName} />
           </InterfaceDeclaration>
         </ModuleDeclaration>
       </ModuleDeclaration>

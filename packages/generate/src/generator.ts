@@ -56,6 +56,15 @@ export interface GeneratorOptions {
   kind: Kind;
 }
 
+export interface Signal {
+  name: string;
+  returnType: string;
+  params?: {
+    name: string;
+    type: string;
+  }[];
+}
+
 export interface ImportType {
   import: string;
   from: string;
@@ -234,13 +243,35 @@ export class Generator {
   }
 
   async generateWidget(widget: GirClassElement) {
+    const signals = this.getSignals(widget);
     const generateElementCode = await renderWidgetElement(widget, {
       importElementPath: '../../elements/Element',
+      signals,
     });
     await fs.writeFile(
       path.resolve(this.outDir, `${widget.$.name}.tsx`),
       generateElementCode,
     );
+  }
+
+  getSignals(widget: GirClassElement) {
+    return widget['glib:signal']?.map((signal) => {
+      const params = signal.parameters?.[0].parameter.map((parameter) => {
+        let type = this.getType(parameter.type?.[0].$.name);
+        if (type === parameter.type?.[0].$.name) {
+          type = `Gtk.${type}`;
+        }
+        return {
+          name: parameter.$.name,
+          type: this.getType(parameter.type?.[0].$.name),
+        };
+      });
+      return {
+        name: camelCase(`on-${signal.$.name}`),
+        returnType: this.getType(signal['return-value']?.[0].type?.[0].$.name),
+        params,
+      } as Signal;
+    });
   }
 
   async getExtendedInterfaces(widget: GirClassElement) {
@@ -266,7 +297,15 @@ export class Generator {
   async getWidgets() {
     if (typeof this.module === 'undefined') await this.load();
     const classes = await this.getClasses();
-    return classes.filter((class_) => class_.$.parent === 'Widget');
+    const widgets = classes.filter((class_) => class_.$.parent === 'Widget');
+    classes.forEach((class_) => {
+      if (class_.$.parent !== 'Widget') {
+        if (widgets.find((widget) => widget.$.name === class_.$.parent)) {
+          widgets.push(class_);
+        }
+      }
+    });
+    return widgets;
   }
 
   async getClasses() {

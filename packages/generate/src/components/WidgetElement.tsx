@@ -47,12 +47,19 @@ import {
   ObjectExpression,
   Property,
   Expression,
+  DeclarationType,
+  ModuleDeclaration,
+  PropertySignature,
+  InterfaceDeclaration,
+  MethodSignature,
 } from 'react-ast';
+import { Signal } from '../generator';
 
 export interface WidgetElementProps {
   name: string;
   extendedClass?: string;
   importElementPath?: string;
+  signals?: Signal[];
 }
 
 export interface WidgetElementExportsProps {
@@ -67,6 +74,7 @@ export function WidgetElement({
   name,
   extendedClass = 'Element',
   importElementPath = '@react-gtk/core',
+  signals,
 }: WidgetElementProps) {
   const interfaceName = `${name}Props`;
   return (
@@ -74,13 +82,32 @@ export function WidgetElement({
       <Import from={importElementPath} imports="Element" />
       <Import from="@girs/node-gtk-4.0" default="Gtk" />
 
-      {/* TODO: add the global JSX.IntrinsicElements */}
+      <ModuleDeclaration declaration={DeclarationType.Declare} name="global">
+        <ModuleDeclaration declaration={DeclarationType.Namespace} name="jsx">
+          <InterfaceDeclaration name="IntrinsicElements">
+            <PropertySignature name={name} typeAnnotation={interfaceName} />
+          </InterfaceDeclaration>
+        </ModuleDeclaration>
+      </ModuleDeclaration>
 
       <Export>
         <Interface
           name={interfaceName}
           extends={<Expression identifiers={`Gtk.${name}`} />}
-        />
+        >
+          {signals?.map((signal) => (
+            <MethodSignature
+              name={signal.name}
+              params={signal.params?.map((param) => (
+                <Identifier key={param.name} typeAnnotation={param.type}>
+                  {param.name}
+                </Identifier>
+              ))}
+              key={signal.name}
+              returnType={signal.returnType}
+            />
+          ))}
+        </Interface>
       </Export>
       <Export>
         <Class name={name} extends={extendedClass}>

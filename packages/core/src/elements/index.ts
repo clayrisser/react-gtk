@@ -27,7 +27,7 @@ import { Instance } from '../types';
 import { Label } from './Label';
 import { Text } from './Text';
 import { Yoga } from './Yoga';
-import { elements as generatedElements } from '../generated/elements';
+// import { elements as generatedElements } from '../generated/elements';
 
 export const elements: Record<string, Instance> = {
   // ...generatedElements,

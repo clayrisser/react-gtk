@@ -98,7 +98,7 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
 
   commitMount(_newProps: Props) {
     this.mounted = true;
-    this.updateNode();
+    this.renderNode();
     this.didMount();
   }
 
@@ -108,7 +108,7 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
       ...newProps,
     };
     this.willUpdate(changes);
-    this.updateNode(changes);
+    this.renderNode(changes);
     this.didUpdate(changes);
   }
 
@@ -136,7 +136,7 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
     this.autoUnpackChild(child);
   }
 
-  updateNode(_changes?: Changes) {
+  renderNode(_changes?: Changes) {
     if (!this.node) return;
     Object.keys(this.props).forEach((key: string) => {
       const value = this.props[key];

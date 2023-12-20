@@ -21,13 +21,13 @@
 
 import Gtk from '@girs/node-gtk-4.0';
 import Yoga from 'yoga-layout/wasm-sync';
+import debounce from 'lodash.debounce';
 import type { ReactNode, Ref } from 'react';
 import { Element } from './Element';
 import { FlexStyle } from 'react-native';
 import { Instance, YogaInstance } from '../types';
 import { StyleProp, StyleProps } from '../style';
 import { YogaStyle, lookupAlign, lookupPosition, parseDimension } from '../yoga';
-// import { parseSize } from '../util';
 
 export interface FlexEdgeProps extends Omit<StyleProps, 'style'> {
   children?: ReactNode;
@@ -59,6 +59,11 @@ declare global {
 
 export class FlexEdge extends Element<Gtk.Box, FlexEdgeProps> implements YogaInstance {
   yogaNode = Yoga.Node.create();
+  yogaParent?: YogaInstance;
+
+  _debouncedCalculateLayout: () => void;
+
+  private _yogaRoot?: YogaInstance;
 
   private yogaStyle: YogaStyle = {};
 
@@ -69,6 +74,7 @@ export class FlexEdge extends Element<Gtk.Box, FlexEdgeProps> implements YogaIns
       ...props,
     });
     this.updateYogaNode();
+    this._debouncedCalculateLayout = debounce(this.calculateLayout.bind(this), 100);
   }
 
   prepareUnmount() {
@@ -76,9 +82,21 @@ export class FlexEdge extends Element<Gtk.Box, FlexEdgeProps> implements YogaIns
     return super.prepareUnmount();
   }
 
-  updateNode() {
+  renderNode() {
     this.updateYogaNode();
-    super.updateNode();
+    super.renderNode();
+  }
+
+  rootCalculateLayout() {
+    this.yogaRoot._debouncedCalculateLayout();
+  }
+
+  private calculateLayout() {
+    this.yogaRoot.yogaNode.calculateLayout(
+      this.yogaRoot.estimatedWidth,
+      this.yogaRoot.estimatedHeight,
+      Yoga.DIRECTION_LTR,
+    );
   }
 
   private updateYogaNode() {
@@ -113,5 +131,13 @@ export class FlexEdge extends Element<Gtk.Box, FlexEdgeProps> implements YogaIns
     const { height } = this.yogaStyle;
     if (typeof height === 'number') return height;
     return this.parent?.estimatedHeight;
+  }
+
+  get yogaRoot() {
+    if (this._yogaRoot) return this._yogaRoot;
+    const parent = this.parent as YogaInstance;
+    const yogaRoot = parent.yogaParent ? parent.yogaRoot : (this as YogaInstance);
+    this._yogaRoot = yogaRoot;
+    return yogaRoot;
   }
 }

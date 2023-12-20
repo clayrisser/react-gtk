@@ -19,6 +19,7 @@
  *  limitations under the License.
  */
 
+import './gtkPolyfill';
 import { ApplicationWindowProps } from './elements/ApplicationWindow';
 import { BoxProps } from './elements/Box';
 import { ButtonProps } from './elements/Button';

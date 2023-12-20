@@ -226,6 +226,7 @@ export default ReactReconciler<
   },
 
   scheduleTimeout(handler: (...args: any[]) => void, timeout: number): TimeoutHandle | NoTimeout {
+    console.log('SET TIMEOUT');
     logger.trace('setTimeout');
     return setTimeout(handler, timeout);
   },

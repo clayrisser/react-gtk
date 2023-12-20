@@ -20,7 +20,8 @@
  */
 
 import Gtk from '@girs/node-gtk-4.0';
-import Yoga, { Node as YogaNode } from 'yoga-layout/wasm-sync';
+import Yoga from 'yoga-layout/wasm-sync';
+import debounce from 'lodash.debounce';
 import type { FlexStyle } from 'react-native';
 import type { ReactNode, Ref } from 'react';
 import { Element } from './Element';
@@ -53,17 +54,22 @@ declare global {
 }
 
 export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaInstance {
-  yogaChildren: YogaNode[] = [];
+  yogaChildren: YogaInstance[] = [];
   yogaNode = Yoga.Node.create();
-  yogaParent?: YogaNode;
+  yogaParent?: YogaInstance;
+
+  _debouncedCalculateLayout: () => void;
+
+  private _yogaRoot?: YogaInstance;
 
   private yogaStyle: YogaStyle = {};
 
   constructor(props: FlexBoxProps) {
     super(new Gtk.Fixed(), props);
-    (this.yogaNode as any)._element = this;
-    this.updateYogaNode();
-    this.yogaNode.getParent();
+    // this.updateYogaNode();
+    this._debouncedCalculateLayout = debounce(() => {
+      this.calculateLayout();
+    }, 100);
   }
 
   appendChild(child: Instance): void {
@@ -78,8 +84,8 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
       flexEdge.appendChild(child);
       yogaChild = flexEdge;
     }
-    yogaChild.yogaParent = this.yogaNode;
-    this.yogaChildren.push(yogaChild.yogaNode);
+    yogaChild.yogaParent = this;
+    this.yogaChildren.push(yogaChild);
     this.yogaNode.insertChild(yogaChild.yogaNode, this.yogaChildren.length - 1);
     return super.appendChild(yogaChild);
   }
@@ -96,12 +102,12 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
       flexEdge.appendChild(child);
       yogaChild = flexEdge;
     }
-    yogaChild.yogaParent = this.yogaNode;
+    yogaChild.yogaParent = this;
     const index = this.children.indexOf(beforeChild as Instance);
     if (index > -1 && index < this.yogaChildren.length) {
-      this.yogaChildren.splice(index, 0, yogaChild.yogaNode);
+      this.yogaChildren.splice(index, 0, yogaChild);
     } else {
-      this.yogaChildren.push(yogaChild.yogaNode);
+      this.yogaChildren.push(yogaChild);
     }
     this.yogaNode.insertChild(yogaChild.yogaNode, index);
     return super.insertBefore(child, beforeChild);
@@ -137,21 +143,43 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
     return super.prepareUnmount();
   }
 
-  updateNode() {
+  willMount() {
     this.updateYogaNode();
-    return super.updateNode();
+  }
+
+  renderNode() {
+    this.rootCalculateLayout();
+    return super.renderNode();
   }
 
   get yogaRoot() {
-    let root = this as YogaInstance;
-    for (;;) {
-      const yogaParent = root.yogaParent;
-      if (!yogaParent) return root.yogaNode;
-      root = root.parent as YogaInstance;
-    }
+    if (this._yogaRoot) return this._yogaRoot;
+    const parent = this.parent as YogaInstance;
+    const yogaRoot = parent.yogaNode ? parent.yogaRoot : (this as YogaInstance);
+    this._yogaRoot = yogaRoot;
+    return yogaRoot;
+  }
+
+  private get layout() {
+    return this.yogaNode.getComputedLayout();
+  }
+
+  rootCalculateLayout() {
+    console.log('R');
+    this.yogaRoot._debouncedCalculateLayout();
+  }
+
+  private calculateLayout() {
+    console.log('CALC LAYOUT');
+    this.yogaRoot.yogaNode.calculateLayout(
+      this.yogaRoot.estimatedWidth,
+      this.yogaRoot.estimatedHeight,
+      Yoga.DIRECTION_LTR,
+    );
   }
 
   private updateYogaNode() {
+    console.log('UPDATE YOGA NODE');
     const { style } = this.props;
     this.yogaStyle = {
       width: parseDimension(style?.width),

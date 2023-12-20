@@ -4,6 +4,8 @@ ast
 camelcase
 cjs
 cspell
+debounce
+debounced
 declarator
 dharmendra
 dom

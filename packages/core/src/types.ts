@@ -88,17 +88,19 @@ export interface Instance<Node extends GtkNode = GtkNode, Props = Record<string,
   props: Props;
   removeAllChildren: () => void;
   removeChild: (child: Instance | TextInstance) => void;
-  updateNode: (changes?: Changes) => void;
+  renderNode: (changes?: Changes) => void;
   willMount: () => void;
   willUnmount: () => void;
   willUpdate: (changes: Changes) => void;
 }
 
 export interface YogaInstance extends Instance {
-  yogaChildren?: YogaNode[];
+  _debouncedCalculateLayout: () => void;
+  rootCalculateLayout: () => void;
+  yogaChildren?: YogaInstance[];
   yogaNode: YogaNode;
-  yogaParent?: YogaNode;
-  yogaRoot?: YogaNode;
+  yogaParent?: YogaInstance;
+  yogaRoot: YogaInstance;
 }
 
 export type GtkNode =

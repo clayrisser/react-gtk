@@ -22,8 +22,8 @@
 import GLib from '@girs/node-glib-2.0';
 import Gtk from '@girs/node-gtk-4.0';
 import Renderer from './reconciler';
-import { BundleType } from 'react-reconciler';
 import { ApplicationWindow } from './elements';
+import { BundleType } from 'react-reconciler';
 import { dev } from './util';
 
 let hasRun = false;

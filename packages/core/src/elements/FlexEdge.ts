@@ -27,6 +27,7 @@ import { FlexStyle } from 'react-native';
 import { Instance, YogaInstance } from '../types';
 import { StyleProp, StyleProps } from '../style';
 import { YogaStyle, lookupAlign, lookupPosition, parseDimension } from '../yoga';
+// import { parseSize } from '../util';
 
 export interface FlexEdgeProps extends Omit<StyleProps, 'style'> {
   children?: ReactNode;

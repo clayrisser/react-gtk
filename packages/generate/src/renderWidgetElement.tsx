@@ -50,6 +50,7 @@ export async function renderWidgetElement(
       name={widget.$.name}
       importElementPath={options.importElementPath}
       signals={options.signals}
+      imports={options.imports}
     />,
   );
 }

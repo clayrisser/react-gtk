@@ -243,10 +243,11 @@ export class Generator {
   }
 
   async generateWidget(widget: GirClassElement) {
-    const signals = this.getSignals(widget);
+    const { signals, imports } = this.getSignalsWithImports(widget);
     const generateElementCode = await renderWidgetElement(widget, {
       importElementPath: '../../elements/Element',
       signals,
+      imports,
     });
     await fs.writeFile(
       path.resolve(this.outDir, `${widget.$.name}.tsx`),
@@ -254,24 +255,69 @@ export class Generator {
     );
   }
 
-  getSignals(widget: GirClassElement) {
-    return widget['glib:signal']?.map((signal) => {
-      const params = signal.parameters?.[0].parameter.map((parameter) => {
-        let type = this.getType(parameter.type?.[0].$.name);
-        if (type === parameter.type?.[0].$.name) {
-          type = `Gtk.${type}`;
-        }
+  getSignalsWithImports(widget: GirClassElement) {
+    const imports: ImportType[] = [];
+    return {
+      signals: widget['glib:signal']?.map((signal) => {
+        const params = signal.parameters?.[0].parameter.map((parameter) => {
+          // let type = this.getType(parameter.type?.[0].$.name);
+          // if (type === parameter.type?.[0].$.name) {
+          //   if (type.includes('.')) {
+          //     this.getImports(imports, type);
+          //   } else type = `Gtk.${type}`;
+          // }
+          const type = this.getTypeWithImports(
+            parameter.type?.[0].$.name || '',
+            imports,
+          );
+          return {
+            name: parameter.$.name,
+            type,
+          };
+        });
+        const returnType = this.getTypeWithImports(
+          signal['return-value']?.[0].type?.[0].$.name || '',
+          imports,
+        );
         return {
-          name: parameter.$.name,
-          type: this.getType(parameter.type?.[0].$.name),
-        };
+          name: camelCase(`on-${signal.$.name}`),
+          returnType,
+          params,
+        } as Signal;
+      }),
+      imports,
+    };
+  }
+
+  getImports(imports: ImportType[], type: string) {
+    if (imports.find((import_) => import_.import === type)) return;
+    const lib = this.getLibImport(type.split('.')[0]);
+    if (lib) {
+      imports.push({
+        import: type.split('.')[0],
+        from: lib,
       });
-      return {
-        name: camelCase(`on-${signal.$.name}`),
-        returnType: this.getType(signal['return-value']?.[0].type?.[0].$.name),
-        params,
-      } as Signal;
-    });
+    }
+  }
+
+  getTypeWithImports(type: string, imports?: ImportType[]) {
+    if (type.includes('.') && imports) {
+      const lib = this.getLibImport(type.split('.')[0]);
+      if (lib) {
+        this.addImport(imports, {
+          import: type.split('.')[0],
+          from: lib,
+        });
+      }
+    } else {
+      const type_ = this.getType(type);
+      if (type_ === type) {
+        type = `Gtk.${type}`;
+      } else {
+        type = type_;
+      }
+    }
+    return type;
   }
 
   async getExtendedInterfaces(widget: GirClassElement) {

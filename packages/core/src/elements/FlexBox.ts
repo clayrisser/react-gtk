@@ -23,9 +23,9 @@ import Gtk from '@girs/node-gtk-4.0';
 import Yoga from 'yoga-layout/wasm-sync';
 import type { FlexStyle } from 'react-native';
 import type { ReactNode, Ref } from 'react';
+import { Changes, Instance, TextInstance, YogaInstance } from '../types';
 import { Element } from './Element';
 import { FlexEdge } from './FlexEdge';
-import { Changes, Instance, TextInstance, YogaInstance } from '../types';
 import { StyleProp, StyleProps } from '../style';
 import {
   YogaStyle,
@@ -126,6 +126,8 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
     ) {
       return;
     }
+    // const initialWidth = Math.max(minWidth, Math.min(maxWidth, widget.getPreferredWidth()));
+    // const initialHeight = Math.max(minHeight, Math.min(maxHeight, widget.getPreferredHeight()));
     child.node.setSizeRequest(width, height);
     this.node.put(child.node, left, top);
   }
@@ -154,6 +156,17 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
   get layout() {
     return this.yogaNode.getComputedLayout();
   }
+
+  // private setSize(
+  //   width: number,
+  //   height: number,
+  //   minWidth: number,
+  //   minHeight: number,
+  //   maxWidth: number,
+  //   maxHeight: number,
+  // ) {
+  //   this.node.setSizeRequest(width, height);
+  // }
 
   private calculateLayout() {
     this.yogaRoot?.yogaNode.calculateLayout(

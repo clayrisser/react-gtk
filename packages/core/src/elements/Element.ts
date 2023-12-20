@@ -238,13 +238,16 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
 
   get signalList(): Set<string> {
     if (_signalList) return _signalList;
-    _signalList = new Set(
-      ((this.node &&
-        GObject.signalListIds(this.node.__gtype__ as unknown as GObject.GType)
-          .map((id: number) => GObject.signalName(id))
-          .filter((name: string | null) => name?.length)) ||
-        []) as string[],
-    );
+    _signalList = new Set();
+    let gtype = this.node?.__gtype__ as unknown as GObject.GType;
+    while (gtype) {
+      const signalIds = GObject.signalListIds(gtype);
+      for (const id of signalIds) {
+        const signalName = GObject.signalName(id);
+        if (signalName) _signalList.add(signalName);
+      }
+      gtype = GObject.typeParent(gtype);
+    }
     return _signalList;
   }
 

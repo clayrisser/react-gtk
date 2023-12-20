@@ -73,9 +73,9 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
   }
 
   appendChild(child: Instance) {
-    if (!this.mounted) child.willMount();
     child.parent = this as Instance;
     this.children.push(child);
+    if (!this.mounted) child.willMount();
     this.packChild(child);
     this.updateNode();
   }
@@ -84,9 +84,9 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
     child.willUnmount();
     child.mounted = false;
     this.unpackChild(child);
+    child.didUnmount();
     this.children.splice(this.children.indexOf(child), 1);
     delete child.parent;
-    child.didUnmount();
   }
 
   removeAllChildren() {
@@ -103,26 +103,34 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
   }
 
   commitUpdate(changes: Changes, newProps: Props, _oldProps: Props) {
-    this.willUpdate(changes);
     this.props = {
       ...this.props,
       ...newProps,
     };
+    this.willUpdate(changes);
     this.updateNode(changes);
     this.didUpdate(changes);
   }
 
-  insertBefore(child: Instance | TextInstance, _beforeChild: Instance | TextInstance) {
+  insertBefore(child: Instance | TextInstance, beforeChild: Instance | TextInstance) {
+    child.parent = this as Instance;
+    const index = this.children.indexOf(beforeChild as Instance);
+    if (index > -1) {
+      this.children.splice(index, 0, child);
+    } else {
+      this.children.push(child);
+    }
     if (!child.mounted) child.willMount();
-    return;
+    this.packChild(child);
+    this.updateNode();
   }
 
   prepareUnmount() {
     return;
   }
 
-  packChild(child: Instance) {
-    this.autoPackChild(child);
+  packChild(child: Instance, beforeChild?: Instance | TextInstance) {
+    this.autoPackChild(child, beforeChild);
   }
 
   unpackChild(child: Instance) {
@@ -308,7 +316,7 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
     return props;
   }
 
-  protected autoPackChild(child: Instance) {
+  protected autoPackChild(child: Instance, _beforeChild?: Instance | TextInstance) {
     const node = this.node as any;
     if (
       'append' in node &&

@@ -176,7 +176,6 @@ export default ReactReconciler<
     rootContainerInstance.removeChild(child);
   },
 
-  // TODO
   insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
     logger.trace('insertBefore');
     parentInstance.insertBefore(child, beforeChild);

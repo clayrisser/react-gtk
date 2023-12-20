@@ -25,7 +25,7 @@ import type { FlexStyle } from 'react-native';
 import type { ReactNode, Ref } from 'react';
 import { Element } from './Element';
 import { FlexEdge } from './FlexEdge';
-import { Instance, YogaInstance } from '../types';
+import { Instance, TextInstance, YogaInstance } from '../types';
 import { StyleProp, StyleProps } from '../style';
 import {
   YogaStyle,
@@ -76,13 +76,33 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
       flexEdge.appendChild(child);
       yogaChild = flexEdge;
     }
-    yogaChild.yogaRoot = this.yogaRoot;
     this.yogaChildren.push(yogaChild.yogaNode);
     this.yogaNode.insertChild(yogaChild.yogaNode, this.yogaChildren.length - 1);
     return super.appendChild(yogaChild);
   }
 
-  packChild(child: Instance): void {
+  insertBefore(child: Instance | TextInstance, beforeChild: Instance | TextInstance) {
+    let yogaChild = child as YogaInstance;
+    if (!yogaChild.yogaNode) {
+      const flexEdge = new FlexEdge({
+        style: {
+          width: '100%',
+          height: '100%',
+        },
+      });
+      flexEdge.appendChild(child);
+      yogaChild = flexEdge;
+    }
+    const index = this.children.indexOf(beforeChild as Instance);
+    if (index > -1 && index < this.yogaChildren.length) {
+      this.yogaChildren.splice(index, 0, yogaChild.yogaNode);
+    } else {
+      this.yogaChildren.push(yogaChild.yogaNode);
+    }
+    return super.insertBefore(child, beforeChild);
+  }
+
+  packChild(child: Instance, _beforeChild?: Instance | TextInstance): void {
     const yogaChild = child as YogaInstance;
     if (!yogaChild.node || !yogaChild.yogaNode) return;
     const width = parseDimension(this.props.style?.width);

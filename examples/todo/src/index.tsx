@@ -46,7 +46,7 @@
 // // console.log(node2.getComputedLayout());
 // // {left: 250, top: 0, width: 100, height: 100}
 
-// import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { render, Box, FlexBox } from '@react-gtk/core';
 
 export const Example = () => {

@@ -33,6 +33,7 @@ export const dev = isDev();
 export const logger = {
   ...console,
   debug: dev ? console.debug : (..._args: any[]) => undefined,
+  trace: (..._args: any[]) => undefined,
 };
 
 export function debugRef(debug = true) {

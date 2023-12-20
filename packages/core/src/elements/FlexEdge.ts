@@ -21,13 +21,12 @@
 
 import Gtk from '@girs/node-gtk-4.0';
 import Yoga from 'yoga-layout/wasm-sync';
-import debounce from 'lodash.debounce';
 import type { ReactNode, Ref } from 'react';
 import { Element } from './Element';
 import { FlexStyle } from 'react-native';
-import { Instance, YogaInstance } from '../types';
+import { Changes, Instance, YogaInstance } from '../types';
 import { StyleProp, StyleProps } from '../style';
-import { YogaStyle, lookupAlign, lookupPosition, parseDimension } from '../yoga';
+import { YogaStyle, lookupAlign, lookupPosition, parseDimension, setYogaRoot } from '../yoga';
 
 export interface FlexEdgeProps extends Omit<StyleProps, 'style'> {
   children?: ReactNode;
@@ -60,10 +59,8 @@ declare global {
 export class FlexEdge extends Element<Gtk.Box, FlexEdgeProps> implements YogaInstance {
   yogaNode = Yoga.Node.create();
   yogaParent?: YogaInstance;
-
-  _debouncedCalculateLayout: () => void;
-
-  private _yogaRoot?: YogaInstance;
+  yogaRoot?: YogaInstance;
+  type = 'FlexEdge';
 
   private yogaStyle: YogaStyle = {};
 
@@ -74,7 +71,6 @@ export class FlexEdge extends Element<Gtk.Box, FlexEdgeProps> implements YogaIns
       ...props,
     });
     this.updateYogaNode();
-    this._debouncedCalculateLayout = debounce(this.calculateLayout.bind(this), 100);
   }
 
   prepareUnmount() {
@@ -87,12 +83,28 @@ export class FlexEdge extends Element<Gtk.Box, FlexEdgeProps> implements YogaIns
     super.renderNode();
   }
 
-  rootCalculateLayout() {
-    this.yogaRoot._debouncedCalculateLayout();
+  willMount() {
+    const parent = this.parent as YogaInstance;
+    if (!parent.yogaNode) {
+      setYogaRoot(this);
+      this.calculateLayout();
+    }
+    this.updateYogaNode();
+    return super.willMount();
+  }
+
+  willUpdate(changes: Changes) {
+    this.updateYogaNode();
+    this.calculateLayout();
+    return super.willUpdate(changes);
+  }
+
+  get layout() {
+    return this.yogaNode.getComputedLayout();
   }
 
   private calculateLayout() {
-    this.yogaRoot.yogaNode.calculateLayout(
+    this.yogaRoot?.yogaNode.calculateLayout(
       this.yogaRoot.estimatedWidth,
       this.yogaRoot.estimatedHeight,
       Yoga.DIRECTION_LTR,
@@ -119,25 +131,5 @@ export class FlexEdge extends Element<Gtk.Box, FlexEdgeProps> implements YogaIns
     if (typeof this.yogaStyle.maxHeight !== 'undefined') this.yogaNode.setMaxHeight(this.yogaStyle.maxHeight);
     if (typeof this.yogaStyle.alignSelf !== 'undefined') this.yogaNode.setAlignSelf(this.yogaStyle.alignSelf);
     if (typeof this.yogaStyle.position !== 'undefined') this.yogaNode.setPositionType(this.yogaStyle.position);
-  }
-
-  get estimatedWidth() {
-    const { width } = this.yogaStyle;
-    if (typeof width === 'number') return width;
-    return this.parent?.estimatedWidth;
-  }
-
-  get estimatedHeight() {
-    const { height } = this.yogaStyle;
-    if (typeof height === 'number') return height;
-    return this.parent?.estimatedHeight;
-  }
-
-  get yogaRoot() {
-    if (this._yogaRoot) return this._yogaRoot;
-    const parent = this.parent as YogaInstance;
-    const yogaRoot = parent.yogaParent ? parent.yogaRoot : (this as YogaInstance);
-    this._yogaRoot = yogaRoot;
-    return yogaRoot;
   }
 }

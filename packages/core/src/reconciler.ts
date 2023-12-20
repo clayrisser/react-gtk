@@ -128,7 +128,7 @@ export default ReactReconciler<
   },
 
   prepareUpdate(
-    _instance: Instance,
+    instance: Instance,
     _type: Type,
     oldProps: Record<string, any>,
     newProps: Record<string, any>,
@@ -150,7 +150,9 @@ export default ReactReconciler<
         changes.style.push(key);
       }
     }
-    return changes.props.length || changes.style.length ? { changes } : null;
+    const updatePayload = changes.props.length || changes.style.length ? { changes } : null;
+    if (updatePayload) instance.prepareUpdate(updatePayload.changes, newProps, oldProps);
+    return updatePayload;
   },
 
   resetAfterCommit(_rootContainerInstance: Container): void {
@@ -211,7 +213,7 @@ export default ReactReconciler<
 
   commitUpdate(
     instance: Instance,
-    updatePayload: any,
+    updatePayload: UpdatePayload,
     _type: string,
     oldProps: Record<string, any>,
     newProps: Record<string, any>,

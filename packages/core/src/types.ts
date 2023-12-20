@@ -75,6 +75,7 @@ export interface Instance<Node extends GtkNode = GtkNode, Props = Record<string,
   commitMount: (newProps: Props) => void;
   commitUpdate: (changes: Changes, newProps: Props, oldProps: Props) => void;
   css: string[];
+  defer: (operation: DeferredOperation) => void;
   didMount: () => void;
   didUnmount: () => void;
   didUpdate: (changes: Changes) => void;
@@ -85,7 +86,9 @@ export interface Instance<Node extends GtkNode = GtkNode, Props = Record<string,
   mounted: boolean;
   node: Node;
   parent?: Instance<GtkNode, Record<string, any>>;
+  prepareUpdate: (changes: Changes, newProps: Props, oldProps: Props) => void;
   props: Props;
+  reconcilePhase: ReconcilePhase;
   removeAllChildren: () => void;
   removeChild: (child: Instance | TextInstance) => void;
   renderNode: (changes?: Changes) => void;
@@ -94,13 +97,21 @@ export interface Instance<Node extends GtkNode = GtkNode, Props = Record<string,
   willUpdate: (changes: Changes) => void;
 }
 
+export interface YogaLayout {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+  width: number;
+  height: number;
+}
+
 export interface YogaInstance extends Instance {
-  _debouncedCalculateLayout: () => void;
-  rootCalculateLayout: () => void;
+  layout: YogaLayout;
   yogaChildren?: YogaInstance[];
   yogaNode: YogaNode;
   yogaParent?: YogaInstance;
-  yogaRoot: YogaInstance;
+  yogaRoot?: YogaInstance;
 }
 
 export type GtkNode =
@@ -113,4 +124,11 @@ export enum ContainerType {
   None = 0,
   Child = 1,
   Children = 2,
+}
+
+export type DeferredOperation = () => void;
+
+export enum ReconcilePhase {
+  Commit,
+  Render,
 }

@@ -20,16 +20,23 @@
  */
 
 export interface StyleProp extends Style {
-  '&:active'?: Style;
-  '&:backdrop'?: Style;
-  '&:checked'?: Style;
-  '&:disabled'?: Style;
-  '&:focus'?: Style;
-  '&:hover'?: Style;
-  '&:indeterminate'?: Style;
+  '&:active'?: GtkStyle;
+  '&:backdrop'?: GtkStyle;
+  '&:checked'?: GtkStyle;
+  '&:disabled'?: GtkStyle;
+  '&:focus'?: GtkStyle;
+  '&:hover'?: GtkStyle;
+  '&:indeterminate'?: GtkStyle;
 }
 
-export interface Style {
+export interface Style extends GtkStyle {
+  height?: number | '100%' | 'auto';
+  minHeight?: number | '100%' | 'auto';
+  minWidth?: number | '100%' | 'auto';
+  width?: number | '100%' | 'auto';
+}
+
+export interface GtkStyle {
   animation?: string;
   animationDelay?: number;
   animationDirection?: string;

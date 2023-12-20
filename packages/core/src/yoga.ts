@@ -21,6 +21,7 @@
 
 import Yoga, { Align, FlexDirection, Justify, Overflow, PositionType, Wrap } from 'yoga-layout/wasm-sync';
 import type { FlexStyle, DimensionValue, FlexAlignType } from 'react-native';
+import { YogaInstance } from './types';
 
 export function lookupFlexDirection(flexDirection?: FlexStyle['flexDirection']) {
   switch (flexDirection) {
@@ -158,4 +159,10 @@ export interface YogaStyle {
   overflow?: Overflow;
   position?: PositionType;
   width?: number | 'auto' | `${number}%`;
+}
+
+export function setYogaRoot(instance: YogaInstance, yogaRoot?: YogaInstance) {
+  if (!yogaRoot) yogaRoot = instance;
+  instance.yogaRoot = yogaRoot;
+  (instance.yogaChildren || []).forEach((instance: YogaInstance) => setYogaRoot(instance, yogaRoot));
 }

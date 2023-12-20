@@ -21,12 +21,11 @@
 
 import Gtk from '@girs/node-gtk-4.0';
 import Yoga from 'yoga-layout/wasm-sync';
-import debounce from 'lodash.debounce';
 import type { FlexStyle } from 'react-native';
 import type { ReactNode, Ref } from 'react';
 import { Element } from './Element';
 import { FlexEdge } from './FlexEdge';
-import { Instance, TextInstance, YogaInstance } from '../types';
+import { Changes, Instance, TextInstance, YogaInstance } from '../types';
 import { StyleProp, StyleProps } from '../style';
 import {
   YogaStyle,
@@ -37,6 +36,7 @@ import {
   lookupOverflow,
   lookupPosition,
   parseDimension,
+  setYogaRoot,
 } from '../yoga';
 
 export interface FlexBoxProps extends Omit<StyleProps, 'style'> {
@@ -57,19 +57,13 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
   yogaChildren: YogaInstance[] = [];
   yogaNode = Yoga.Node.create();
   yogaParent?: YogaInstance;
-
-  _debouncedCalculateLayout: () => void;
-
-  private _yogaRoot?: YogaInstance;
+  yogaRoot?: YogaInstance;
+  type = 'FlexBox';
 
   private yogaStyle: YogaStyle = {};
 
   constructor(props: FlexBoxProps) {
     super(new Gtk.Fixed(), props);
-    // this.updateYogaNode();
-    this._debouncedCalculateLayout = debounce(() => {
-      this.calculateLayout();
-    }, 100);
   }
 
   appendChild(child: Instance): void {
@@ -121,21 +115,19 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
   }
 
   packChild(child: Instance, _beforeChild?: Instance | TextInstance): void {
+    if (!child.node) return;
     const yogaChild = child as YogaInstance;
-    if (!yogaChild.node || !yogaChild.yogaNode) return;
-    const width = parseDimension(this.props.style?.width);
-    const height = parseDimension(this.props.style?.height);
-    this.yogaNode.calculateLayout(width as number, height as number, Yoga.DIRECTION_LTR);
-    const { width: calculatedWidth, height: calculatedHeight } = this.yogaNode.getComputedLayout();
-    this.node.setSizeRequest(calculatedWidth, calculatedHeight);
-    const {
-      left: childLeft,
-      top: childTop,
-      width: childWidth,
-      height: childHeight,
-    } = yogaChild.yogaNode.getComputedLayout();
-    yogaChild.node.setSizeRequest(childWidth, childHeight);
-    this.node.put(yogaChild.node, childLeft, childTop);
+    const { left, top, width, height } = yogaChild?.layout || {};
+    if (
+      typeof width === 'undefined' ||
+      typeof height === 'undefined' ||
+      typeof left === 'undefined' ||
+      typeof top === 'undefined'
+    ) {
+      return;
+    }
+    child.node.setSizeRequest(width, height);
+    this.node.put(child.node, left, top);
   }
 
   willUnmount() {
@@ -145,33 +137,26 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
 
   willMount() {
     this.updateYogaNode();
-  }
-
-  renderNode() {
-    this.rootCalculateLayout();
-    return super.renderNode();
-  }
-
-  get yogaRoot() {
-    if (this._yogaRoot) return this._yogaRoot;
     const parent = this.parent as YogaInstance;
-    const yogaRoot = parent.yogaNode ? parent.yogaRoot : (this as YogaInstance);
-    this._yogaRoot = yogaRoot;
-    return yogaRoot;
+    if (!parent.yogaNode) {
+      setYogaRoot(this);
+      this.calculateLayout();
+    }
+    return super.willMount();
   }
 
-  private get layout() {
+  willUpdate(changes: Changes) {
+    this.updateYogaNode();
+    this.calculateLayout();
+    return super.willUpdate(changes);
+  }
+
+  get layout() {
     return this.yogaNode.getComputedLayout();
   }
 
-  rootCalculateLayout() {
-    console.log('R');
-    this.yogaRoot._debouncedCalculateLayout();
-  }
-
   private calculateLayout() {
-    console.log('CALC LAYOUT');
-    this.yogaRoot.yogaNode.calculateLayout(
+    this.yogaRoot?.yogaNode.calculateLayout(
       this.yogaRoot.estimatedWidth,
       this.yogaRoot.estimatedHeight,
       Yoga.DIRECTION_LTR,
@@ -179,15 +164,14 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
   }
 
   private updateYogaNode() {
-    console.log('UPDATE YOGA NODE');
     const { style } = this.props;
     this.yogaStyle = {
-      width: parseDimension(style?.width),
-      height: parseDimension(style?.height),
-      maxWidth: parseDimension(style?.maxWidth, false),
-      minWidth: parseDimension(style?.minWidth, false),
-      maxHeight: parseDimension(style?.maxHeight, false),
-      minHeight: parseDimension(style?.minHeight, false),
+      width: this.minWidth,
+      height: this.minHeight,
+      // maxWidth: parseDimension(style?.maxWidth, false),
+      minWidth: this.minWidth,
+      // maxHeight: parseDimension(style?.maxHeight, false),
+      minHeight: this.minHeight,
       flexDirection: lookupFlexDirection(style?.flexDirection),
       justifyContent: lookupJustify(style?.justifyContent),
       flexWrap: lookupFlexWrap(style?.flexWrap),
@@ -225,15 +209,15 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
     }
   }
 
-  get estimatedWidth() {
-    const { width } = this.yogaStyle;
-    if (typeof width === 'number') return width;
-    return this.parent?.estimatedWidth;
-  }
+  // get estimatedWidth() {
+  //   const { width } = this.yogaStyle;
+  //   if (typeof width === 'number') return width;
+  //   return this.parent?.estimatedWidth;
+  // }
 
-  get estimatedHeight() {
-    const { height } = this.yogaStyle;
-    if (typeof height === 'number') return height;
-    return this.parent?.estimatedHeight;
-  }
+  // get estimatedHeight() {
+  //   const { height } = this.yogaStyle;
+  //   if (typeof height === 'number') return height;
+  //   return this.parent?.estimatedHeight;
+  // }
 }

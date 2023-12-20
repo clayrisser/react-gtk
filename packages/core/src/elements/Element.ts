@@ -23,9 +23,10 @@ import GObject from '@girs/node-gobject-2.0';
 import Gtk from '@girs/node-gtk-4.0';
 import PropTypes from 'prop-types';
 import kebabCase from 'lodash.kebabcase';
-import { Changes, GtkNode, Instance, TextInstance } from '../types';
+import { Changes, DeferredOperation, GtkNode, Instance, ReconcilePhase, TextInstance } from '../types';
 import { buildCssDeclaration, psuedoClasses } from '../style';
 import { parseDimension } from '../yoga';
+import { DimensionValue } from 'react-native';
 
 const logger = console;
 let _propertyList: string[] | undefined;
@@ -40,7 +41,7 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
 
   id: string;
 
-  type: string;
+  type = 'Unknown';
 
   props: Props;
 
@@ -52,7 +53,11 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
 
   mounted = false;
 
+  reconcilePhase = ReconcilePhase.Render;
+
   protected styleContext?: Gtk.StyleContext;
+
+  private deferredOperations: (() => void)[] = [];
 
   private cssBlocks: Record<number, string[]> = {};
 
@@ -62,7 +67,9 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
 
   constructor(node: Node, props: Props = {} as Props) {
     this.props = this.getProps(props);
-    this.type = (node ? GObject.typeName(node.__gtype__ as unknown as GObject.GType) : 'Virtual') || 'Unknown';
+    if (this.type === 'Unknown') {
+      this.type = (node ? GObject.typeName(node.__gtype__ as unknown as GObject.GType) : 'Virtual') || 'Unknown';
+    }
     this.id = `${this.type}-${Math.random().toString(36).substring(2, 9)}`;
     this.node = node;
     if (this.node) {
@@ -72,11 +79,21 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
     }
   }
 
+  defer(operation: DeferredOperation) {
+    if (this.reconcilePhase === ReconcilePhase.Commit) {
+      logger.warn('cannot defer during commit reconcile phase');
+    } else if (this.reconcilePhase === ReconcilePhase.Render) {
+      this.deferredOperations.push(operation);
+    }
+  }
+
   appendChild(child: Instance) {
     child.parent = this as Instance;
     this.children.push(child);
     if (!this.mounted) child.willMount();
-    this.packChild(child);
+    child.defer(() => {
+      this.packChild(child);
+    });
   }
 
   removeChild(child: Instance) {
@@ -98,17 +115,25 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
 
   commitMount(_newProps: Props) {
     this.mounted = true;
+    this.reconcilePhase = ReconcilePhase.Commit;
     this.renderNode();
+    this.executeDeferredOperations();
     this.didMount();
   }
 
-  commitUpdate(changes: Changes, newProps: Props, _oldProps: Props) {
+  prepareUpdate(changes: Changes, newProps: Props, _oldProps: Props) {
+    this.reconcilePhase = ReconcilePhase.Render;
     this.props = {
       ...this.props,
       ...newProps,
     };
     this.willUpdate(changes);
+  }
+
+  commitUpdate(changes: Changes, _newProps: Props, _oldProps: Props) {
+    this.reconcilePhase = ReconcilePhase.Commit;
     this.renderNode(changes);
+    this.executeDeferredOperations();
     this.didUpdate(changes);
   }
 
@@ -167,10 +192,10 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
                   this.classNames.add(className);
                 });
               }
-              break;
+              return;
             }
             case 'class': {
-              break;
+              return;
             }
             default: {
               const node = this.node as any;
@@ -178,6 +203,7 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
             }
           }
         } else if (Array.isArray(value)) {
+          if (key === 'sizeRequest') return;
           const node = this.node as any;
           key = `set${key[0].toUpperCase() + key.slice(1)}`;
           if (key in node && typeof node[key] === 'function') {
@@ -186,18 +212,10 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
         }
       }
     });
-  }
-
-  get estimatedWidth() {
-    const width = parseDimension(this.props.style?.width);
-    if (typeof width === 'number') return width;
-    return this.parent?.estimatedWidth;
-  }
-
-  get estimatedHeight() {
-    const width = parseDimension(this.props.style?.width);
-    if (typeof width === 'number') return width;
-    return this.parent?.estimatedHeight;
+    const { minWidth, minHeight } = this;
+    if (minWidth > -1 || minHeight > -1) {
+      this.node.setSizeRequest(minWidth, minHeight);
+    }
   }
 
   get propertyList(): string[] {
@@ -264,7 +282,52 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
     return;
   }
 
+  protected get minWidth() {
+    const style = this.props.style || {};
+    if (typeof this.props.sizeRequest?.[0] !== 'undefined') return this.props.sizeRequest[0];
+    return Math.max(
+      typeof style.width === 'undefined' || style.width === '100%' || style.width === 'auto'
+        ? -1
+        : parseDimension(style.width as DimensionValue, false, false) || -1,
+      typeof style.minWidth === 'undefined' || style.minWidth === '100%' || style.minWidth === 'auto'
+        ? -1
+        : parseDimension(style.minWidth as DimensionValue, false, false) || -1,
+    );
+  }
+
+  protected get minHeight() {
+    const style = this.props.style || {};
+    if (typeof this.props.sizeRequest?.[1] !== 'undefined') return this.props.sizeRequest[1];
+    return Math.max(
+      typeof style.height === 'undefined' || style.height === '100%' || style.height === 'auto'
+        ? -1
+        : parseDimension(style.height as DimensionValue, false, false) || -1,
+      typeof style.minHeight === 'undefined' || style.minHeight === '100%' || style.minHeight === 'auto'
+        ? -1
+        : parseDimension(style.minHeight as DimensionValue, false, false) || -1,
+    );
+  }
+
+  get estimatedWidth() {
+    const { minWidth } = this;
+    if (minWidth > -1) return minWidth;
+    return this.parent?.estimatedWidth;
+  }
+
+  get estimatedHeight() {
+    const { minHeight } = this;
+    if (minHeight > -1) return minHeight;
+    return this.parent?.estimatedHeight;
+  }
+
   protected setStyle(
+    style: Record<string, string | number | null>,
+    priority = Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
+  ) {
+    return this.setGtkStyle(style, priority);
+  }
+
+  protected setGtkStyle(
     style: Record<string, string | number | null>,
     priority = Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
   ) {
@@ -363,5 +426,12 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
     } else {
       logger.warn(`widget ${this.type} does not support children`);
     }
+  }
+
+  private executeDeferredOperations() {
+    this.deferredOperations.forEach((operation: DeferredOperation) => {
+      operation();
+    });
+    this.deferredOperations = [];
   }
 }

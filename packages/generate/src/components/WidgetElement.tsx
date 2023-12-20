@@ -53,13 +53,14 @@ import {
   InterfaceDeclaration,
   MethodSignature,
 } from 'react-ast';
-import { Signal } from '../generator';
+import { ImportType, Signal } from '../generator';
 
 export interface WidgetElementProps {
   name: string;
   extendedClass?: string;
   importElementPath?: string;
   signals?: Signal[];
+  imports?: ImportType[];
 }
 
 export interface WidgetElementExportsProps {
@@ -75,12 +76,20 @@ export function WidgetElement({
   extendedClass = 'Element',
   importElementPath = '@react-gtk/core',
   signals,
+  imports,
 }: WidgetElementProps) {
   const interfaceName = `${name}Props`;
   return (
     <>
       <Import from={importElementPath} imports="Element" />
       <Import from="@girs/node-gtk-4.0" default="Gtk" />
+      {imports?.map((import_) => (
+        <Import
+          key={import_.import}
+          from={import_.from}
+          imports={import_.import}
+        />
+      ))}
 
       <ModuleDeclaration declaration={DeclarationType.Declare} name="global">
         <ModuleDeclaration declaration={DeclarationType.Namespace} name="jsx">
@@ -95,18 +104,21 @@ export function WidgetElement({
           name={interfaceName}
           extends={<Expression identifiers={`Gtk.${name}`} />}
         >
-          {signals?.map((signal) => (
-            <MethodSignature
-              name={signal.name}
-              params={signal.params?.map((param) => (
-                <Identifier key={param.name} typeAnnotation={param.type}>
-                  {param.name}
-                </Identifier>
-              ))}
-              key={signal.name}
-              returnType={signal.returnType}
-            />
-          ))}
+          {signals?.map((signal) => {
+            // console.log('signal', signal);
+            return (
+              <MethodSignature
+                name={signal.name}
+                params={signal.params?.map((param) => (
+                  <Identifier key={param.name} typeAnnotation={param.type}>
+                    {param.name}
+                  </Identifier>
+                ))}
+                key={signal.name}
+                returnType={signal.returnType}
+              />
+            );
+          })}
         </Interface>
       </Export>
       <Export>

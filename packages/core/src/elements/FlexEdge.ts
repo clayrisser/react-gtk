@@ -26,7 +26,7 @@ import { Element } from './Element';
 import { Instance, YogaInstance } from '../types';
 import { StyleProp, StyleProps } from '../style';
 import { FlexStyle } from 'react-native';
-import { parseSize } from '../util';
+// import { parseSize } from '../util';
 
 export interface FlexEdgeProps extends Omit<StyleProps, 'style'> {
   children?: ReactNode;

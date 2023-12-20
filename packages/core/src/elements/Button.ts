@@ -39,11 +39,8 @@ declare global {
   }
 }
 
-export class Button extends Element {
-  node: Gtk.Button;
-  constructor(props: ButtonProps = {}) {
-    const node = new Gtk.Button();
-    super(node, props);
-    this.node = node;
+export class Button extends Element<Gtk.Button, ButtonProps> {
+  constructor(props?: ButtonProps) {
+    super(new Gtk.Button(), props);
   }
 }

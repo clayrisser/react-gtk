@@ -40,6 +40,7 @@ gulong
 gushort
 hari
 hexpand
+homebrew
 homedir
 hydratable
 jsx
@@ -54,6 +55,7 @@ minify
 mkdirp
 mkpm
 namespace
+nowrap
 of
 outdir
 pango
@@ -76,6 +78,7 @@ tsx
 txt
 type
 typeof
+unmount
 uri
 usr
 utf

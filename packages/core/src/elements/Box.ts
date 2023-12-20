@@ -37,11 +37,8 @@ declare global {
   }
 }
 
-export class Box extends Element {
-  node: Gtk.Box;
-  constructor(props: BoxProps) {
-    const node = new Gtk.Box();
-    super(node, props);
-    this.node = node;
+export class Box extends Element<Gtk.Box, BoxProps> {
+  constructor(props?: BoxProps) {
+    super(new Gtk.Box(), props);
   }
 }

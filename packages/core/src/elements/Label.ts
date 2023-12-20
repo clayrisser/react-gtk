@@ -22,22 +22,20 @@
 import Gtk from '@girs/node-gtk-4.0';
 import { Element } from './Element';
 
+export interface LabelProps {
+  label?: string;
+}
+
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      Label: any;
+      Label: LabelProps;
     }
   }
 }
 
-export type LabelProps = JSX.IntrinsicElements['Label'];
-
 export class Label extends Element {
-  node: Gtk.Label;
-
-  constructor(props: LabelProps = {}) {
-    const node = new Gtk.Label();
-    super(node, props);
-    this.node = node;
+  constructor(props?: LabelProps) {
+    super(new Gtk.Label(), props);
   }
 }

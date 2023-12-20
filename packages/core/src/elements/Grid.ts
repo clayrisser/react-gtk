@@ -21,21 +21,22 @@
 
 import Gtk from '@girs/node-gtk-4.0';
 import { Element } from './Element';
+import { ReactNode } from 'react';
+
+export interface GridProps {
+  children?: ReactNode;
+}
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      Grid: any;
+      Grid: GridProps;
     }
   }
 }
 
-export type GridProps = JSX.IntrinsicElements['Grid'];
-export class Grid extends Element {
-  node: Gtk.Grid;
-  constructor(props: GridProps) {
-    const node = new Gtk.Grid();
-    super(node, props);
-    this.node = node;
+export class Grid extends Element<Gtk.Grid, GridProps> {
+  constructor(props?: GridProps) {
+    super(new Gtk.Grid(), props);
   }
 }

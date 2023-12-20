@@ -21,7 +21,6 @@
 
 import type { Gtk } from '@girs/node-gtk-4.0';
 import type { Node as YogaNode } from 'yoga-layout/wasm-sync';
-import type { Text } from './elements/Text';
 
 export type BundleType = 0 | 1;
 
@@ -40,7 +39,14 @@ export interface PublicInstance {
 
 export type HostContext = Context;
 
-export type UpdatePayload = any;
+export interface Changes {
+  props: string[];
+  style: string[];
+}
+
+export interface UpdatePayload {
+  changes: Changes;
+}
 
 export type ChildSet = any;
 
@@ -50,66 +56,46 @@ export type NoTimeout = any;
 
 export type SuspenseInstance = any;
 
-export interface TextInstance extends Text {}
+export interface TextInstance<Props = Record<string, any>> extends Instance<Gtk.Text, Props> {}
 
 export interface Container extends Instance {}
-
-export interface Props {
-  [key: string]: Prop;
-}
 
 export interface Context {
   [key: string]: ContextItem;
 }
 
-export type AppendChild = (child: Instance, options: AppendChildOptions) => void;
+export type AppendChild = (child: Instance) => void;
 
 export type RemoveChild = (child: Instance, ...args: any[]) => void;
 
-export interface ElementMeta {
-  appendChild?: AppendChild;
-  prepareUnmount?: () => void;
-  removeChild?: RemoveChild;
-  virtual?: boolean;
-}
-
-export interface SharedOptions {
-  stage: Stage;
-}
-
-export interface AppendChildOptions extends SharedOptions {
-  parentIsContainer: boolean;
-}
-
-export interface CommitMountOptions extends Omit<SharedOptions, 'stage'> {}
-
-export interface CommitUpdateOptions extends Omit<SharedOptions, 'stage'> {}
-
-export interface RemoveChildOptions extends SharedOptions {}
-
-export interface RemoveAllChildrenOptions extends SharedOptions {}
-
-export interface PreparePortalMountOptions extends Omit<SharedOptions, 'stage'> {}
-
-export interface Instance {
-  appendChild: (child: Instance, options?: Partial<AppendChildOptions>) => void;
+export interface Instance<Node extends GtkNode = GtkNode, Props = Record<string, any>> {
+  appendChild: (child: Instance | TextInstance) => void;
   children: Instance[];
-  commitMount: (options?: Partial<CommitMountOptions>) => void;
-  commitUpdate: (newProps: Props, options?: Partial<CommitUpdateOptions>) => void;
+  commitMount: (newProps: Props) => void;
+  commitUpdate: (changes: Changes, newProps: Props, oldProps: Props) => void;
   css: string[];
+  didMount: () => void;
+  didUnmount: () => void;
+  didUpdate: (changes: Changes) => void;
+  estimatedHeight?: number;
+  estimatedWidth?: number;
   id: string;
-  node: GtkNode;
-  preparePortalMount: (options?: Partial<PreparePortalMountOptions>) => void;
-  prepareUnmount: () => void;
+  insertBefore: (child: Instance | TextInstance, beforeChild: Instance | TextInstance) => void;
+  mounted: boolean;
+  node: Node;
+  parent?: Instance;
   props: Props;
-  removeAllChildren: (options?: Partial<RemoveAllChildrenOptions>) => void;
-  removeChild: (child: Instance, options?: Partial<RemoveChildOptions>) => void;
-  type: string;
+  removeAllChildren: () => void;
+  removeChild: (child: Instance | TextInstance) => void;
+  willMount: () => void;
+  willUnmount: () => void;
+  willUpdate: (changes: Changes) => void;
 }
 
 export interface YogaInstance extends Instance {
   yogaChildren?: YogaNode[];
   yogaNode: YogaNode;
+  yogaRoot?: YogaNode;
 }
 
 export type GtkNode =
@@ -122,9 +108,4 @@ export enum ContainerType {
   None = 0,
   Child = 1,
   Children = 2,
-}
-
-export enum Stage {
-  Mount = 'mount',
-  Update = 'update',
 }

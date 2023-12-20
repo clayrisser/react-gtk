@@ -20,28 +20,22 @@
  */
 
 import Gtk from '@girs/node-gtk-4.0';
-import { SharedOptions } from '../types';
 import { Element } from './Element';
+import { TextInstance } from '../types';
 // import { Text as GeneratedText } from '../generated/elements/Text';
+
+export interface TextProps {}
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      Text: any;
+      Text: TextProps;
     }
   }
 }
 
-export interface ResetTextOptions extends SharedOptions {}
-
-export interface UpdateTextOptions extends SharedOptions {}
-
-export type TextProps = JSX.IntrinsicElements['Text'];
-
 // export class Text extends GeneratedText {
-export class Text extends Element {
-  node: Gtk.Text;
-
+export class Text extends Element<Gtk.Text, TextProps> implements TextInstance<TextProps> {
   // resetText(options: Partial<ResetTextOptions>) {
   //   const { stage } = {
   //     parentIsContainer: false,
@@ -62,9 +56,7 @@ export class Text extends Element {
   //   // TODO: implement
   // }
 
-  constructor(props: TextProps = {}) {
-    const node = new Gtk.Text();
-    super(node, props);
-    this.node = node;
+  constructor(props?: TextProps) {
+    super(new Gtk.Text(), props);
   }
 }

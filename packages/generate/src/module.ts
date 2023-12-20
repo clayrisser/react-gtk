@@ -27,6 +27,7 @@ async function loadModule(girModule = 'Gtk-4.0') {
   const moduleLoader = new ModuleLoader({
     environment: 'gjs',
     girDirectories: [
+      '/opt/homebrew/Cellar/gtk4/4.12.4/share/gir-1.0',
       '/usr/lib/x86_64-linux-gnu/mutter-10',
       '/usr/lib/x86_64-linux-gnu/mutter-11',
       '/usr/lib/x86_64-linux-gnu/mutter-12',
@@ -60,5 +61,5 @@ async function loadModule(girModule = 'Gtk-4.0') {
 }
 
 export async function loadGtkModule() {
-  return (await loadModule()).grouped.gtk.modules?.[0].module;
+  return (await loadModule())?.grouped?.gtk?.modules?.[0].module;
 }

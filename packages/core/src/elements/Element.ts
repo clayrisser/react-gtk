@@ -23,30 +23,18 @@ import GObject from '@girs/node-gobject-2.0';
 import Gtk from '@girs/node-gtk-4.0';
 import PropTypes from 'prop-types';
 import kebabCase from 'lodash.kebabcase';
+import { Changes, GtkNode, Instance, TextInstance } from '../types';
 import { buildCssDeclaration, psuedoClasses } from '../style';
-import {
-  AppendChildOptions,
-  CommitMountOptions,
-  CommitUpdateOptions,
-  ElementMeta,
-  GtkNode,
-  Instance,
-  PreparePortalMountOptions,
-  Props,
-  RemoveAllChildrenOptions,
-  RemoveChildOptions,
-  SharedOptions,
-  Stage,
-} from '../types';
+import { parseDimension } from '../yoga';
 
 const logger = console;
 let _propertyList: string[] | undefined;
 let _signalList: Set<string> | undefined;
 
-export interface UpdateNodeOptions extends SharedOptions {}
-
-export abstract class Element implements Instance {
-  static defaultProps: Props = {};
+export abstract class Element<Node extends GtkNode = GtkNode, Props extends Record<string, any> = Record<string, any>>
+  implements Instance<Node, Props>
+{
+  static defaultProps: Record<string, any> = {};
 
   static propTypes: object = {};
 
@@ -58,141 +46,90 @@ export abstract class Element implements Instance {
 
   children: Instance[] = [];
 
+  parent?: Instance;
+
+  node: Node;
+
+  mounted = false;
+
+  protected styleContext?: Gtk.StyleContext;
+
   private cssBlocks: Record<number, string[]> = {};
 
   private connectedSignals: Record<string, number> = {};
 
-  private styleContext?: Gtk.StyleContext;
-
   private classNames: Set<string> = new Set();
 
-  abstract node: GtkNode;
-
-  constructor(
-    node?: GtkNode,
-    props: Props = {},
-    private meta: ElementMeta = {},
-  ) {
+  constructor(node: Node, props: Props = {} as Props) {
     this.props = this.getProps(props);
-    this.type =
-      (node ? GObject.typeName(node.__gtype__ as unknown as GObject.GType) : meta.virtual && 'Virtual') || 'Unknown';
-    this.id = props.name || `${this.type}-${Math.random().toString(36).substring(2, 9)}`;
-    if (node) {
-      node._element = this as unknown as Instance;
-      this.styleContext = node.getStyleContext();
+    this.type = (node ? GObject.typeName(node.__gtype__ as unknown as GObject.GType) : 'Virtual') || 'Unknown';
+    this.id = `${this.type}-${Math.random().toString(36).substring(2, 9)}`;
+    this.node = node;
+    if (this.node) {
+      this.node._element = this as unknown as Instance;
+      this.styleContext = this.node.getStyleContext();
       this.styleContext.addClass(this.id);
     }
   }
 
-  appendChild(child: Instance, options: Partial<AppendChildOptions> = {}) {
-    const { stage, parentIsContainer } = {
-      parentIsContainer: false,
-      stage: Stage.Update,
-      ...options,
-    } as AppendChildOptions;
-    this.updateNode({ stage });
+  appendChild(child: Instance) {
+    if (!this.mounted) child.willMount();
+    child.parent = this as Instance;
     this.children.push(child);
-    if (!child.node) return;
-    if (this.meta.appendChild) {
-      this.meta.appendChild(child, { stage, parentIsContainer });
-    } else {
-      const node = this.node as any;
-      if (
-        'append' in node &&
-        typeof node.append === 'function' &&
-        'remove' in node &&
-        typeof node.remove === 'function'
-      ) {
-        node.append(child.node);
-      } else if ('addChild' in node && typeof node.addChild === 'function') {
-        node.addChild(child.node);
-      } else if (
-        'appendPage' in node &&
-        typeof node.appendPage === 'function' &&
-        'removePage' in node &&
-        typeof node.removePage === 'function'
-      ) {
-        node.appendPage(child.node);
-      } else if ('setChild' in node && typeof node.setChild === 'function') {
-        node.setChild(child.node);
-      } else {
-        logger.warn(`widget ${this.type} does not support children`);
-      }
-    }
+    this.packChild(child);
+    this.updateNode();
   }
 
-  removeChild(child: Instance, options: Partial<RemoveChildOptions> = {}) {
-    const { stage } = {
-      stage: Stage.Update,
-      ...options,
-    } as RemoveChildOptions;
-    this.updateNode({ stage });
-    child.prepareUnmount();
+  removeChild(child: Instance) {
+    child.willUnmount();
+    child.mounted = false;
+    this.unpackChild(child);
     this.children.splice(this.children.indexOf(child), 1);
-    if (!child.node) return;
-    if (this.meta.removeChild) {
-      this.meta.removeChild(child);
-    } else {
-      const node = this.node as any;
-      if (
-        'append' in node &&
-        typeof node.append === 'function' &&
-        'remove' in node &&
-        typeof node.remove === 'function'
-      ) {
-        node.remove(child.node);
-      } else if ('addChild' in node && typeof node.addChild === 'function') {
-        node.addChild(child.node);
-      } else if (
-        'appendPage' in node &&
-        typeof node.appendPage === 'function' &&
-        'removePage' in node &&
-        typeof node.removePage === 'function'
-      ) {
-        node.removePage(child.node, -1); // TODO: get the page id of the child
-      } else if ('setChild' in node && typeof node.setChild === 'function') {
-        node.setChild(null);
-      } else {
-        logger.warn(`widget ${this.type} does not support children`);
-      }
-    }
+    delete child.parent;
+    child.didUnmount();
   }
 
-  removeAllChildren(options: Partial<RemoveAllChildrenOptions> = {}) {
-    const { stage } = {
-      stage: Stage.Update,
-      ...options,
-    } as RemoveChildOptions;
+  removeAllChildren() {
     const children = [...this.children];
     this.children = [];
-    this.updateNode({ stage });
     children.forEach((child) => {
-      this.removeChild(child, { stage });
+      this.removeChild(child);
     });
   }
 
-  commitMount(_options: Partial<CommitMountOptions> = {}) {
-    this.updateNode({ stage: Stage.Mount });
+  commitMount(_newProps: Props) {
+    this.mounted = true;
+    this.didMount();
   }
 
-  commitUpdate(newProps: Props, _options: Partial<CommitUpdateOptions> = {}) {
+  commitUpdate(changes: Changes, newProps: Props, _oldProps: Props) {
+    this.willUpdate(changes);
     this.props = {
       ...this.props,
       ...newProps,
     };
-    this.updateNode({ stage: Stage.Update });
+    this.updateNode(changes);
+    this.didUpdate(changes);
   }
 
-  preparePortalMount(options: Partial<PreparePortalMountOptions> = {}) {
-    const { stage } = {
-      stage: Stage.Update,
-      ...options,
-    } as RemoveChildOptions;
-    this.updateNode({ stage });
-    // TODO: implement this (not for v1)
+  insertBefore(child: Instance | TextInstance, _beforeChild: Instance | TextInstance) {
+    if (!child.mounted) child.willMount();
+    return;
   }
 
-  updateNode(_options: UpdateNodeOptions) {
+  prepareUnmount() {
+    return;
+  }
+
+  packChild(child: Instance) {
+    this.autoPackChild(child);
+  }
+
+  unpackChild(child: Instance) {
+    this.autoUnpackChild(child);
+  }
+
+  updateNode(_changes?: Changes) {
     if (!this.node) return;
     Object.keys(this.props).forEach((key: string) => {
       const value = this.props[key];
@@ -244,8 +181,16 @@ export abstract class Element implements Instance {
     });
   }
 
-  prepareUnmount() {
-    if (this.meta.prepareUnmount) this.meta.prepareUnmount();
+  get estimatedWidth() {
+    const width = parseDimension(this.props.style?.width);
+    if (typeof width === 'number') return width;
+    return this.parent?.estimatedWidth;
+  }
+
+  get estimatedHeight() {
+    const width = parseDimension(this.props.style?.width);
+    if (typeof width === 'number') return width;
+    return this.parent?.estimatedHeight;
   }
 
   get propertyList(): string[] {
@@ -288,7 +233,34 @@ export abstract class Element implements Instance {
       }, []);
   }
 
-  private setStyle(style: Record<string, string | number | null>, priority = Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION) {
+  willMount() {
+    return;
+  }
+
+  willUpdate(_changes: Changes) {
+    return;
+  }
+
+  willUnmount() {
+    return;
+  }
+
+  didMount() {
+    return;
+  }
+
+  didUpdate(_changes: Changes) {
+    return;
+  }
+
+  didUnmount() {
+    return;
+  }
+
+  protected setStyle(
+    style: Record<string, string | number | null>,
+    priority = Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
+  ) {
     if (!this.node || !this.styleContext || typeof style !== 'object') return;
     const cssProvider = new Gtk.CssProvider();
     const cssDeclarations: string[] = [];
@@ -323,16 +295,66 @@ export abstract class Element implements Instance {
     }
   }
 
-  private getProps(props: Props): Props {
+  protected getProps(props: Props): Props {
     props = { ...this.props, ...props };
     const { defaultProps, propTypes } = this.constructor as typeof Element;
     Object.keys(defaultProps).forEach((key) => {
       const defaultProp = defaultProps[key];
       if (typeof props[key] === 'undefined' || props[key] === null) {
-        props[key] = defaultProp;
+        (props as Record<string, any>)[key] = defaultProp;
       }
     });
     PropTypes.checkPropTypes(propTypes, props, 'prop', this.constructor.name);
     return props;
+  }
+
+  protected autoPackChild(child: Instance) {
+    const node = this.node as any;
+    if (
+      'append' in node &&
+      typeof node.append === 'function' &&
+      'remove' in node &&
+      typeof node.remove === 'function'
+    ) {
+      node.append(child.node);
+    } else if ('addChild' in node && typeof node.addChild === 'function') {
+      node.addChild(child.node);
+    } else if (
+      'appendPage' in node &&
+      typeof node.appendPage === 'function' &&
+      'removePage' in node &&
+      typeof node.removePage === 'function'
+    ) {
+      node.appendPage(child.node);
+    } else if ('setChild' in node && typeof node.setChild === 'function') {
+      node.setChild(child.node);
+    } else {
+      logger.warn(`widget ${this.type} does not support children`);
+    }
+  }
+
+  protected autoUnpackChild(child: Instance) {
+    const node = this.node as any;
+    if (
+      'append' in node &&
+      typeof node.append === 'function' &&
+      'remove' in node &&
+      typeof node.remove === 'function'
+    ) {
+      node.remove(child.node);
+    } else if ('addChild' in node && typeof node.addChild === 'function') {
+      node.addChild(child.node);
+    } else if (
+      'appendPage' in node &&
+      typeof node.appendPage === 'function' &&
+      'removePage' in node &&
+      typeof node.removePage === 'function'
+    ) {
+      node.removePage(child.node, -1); // TODO: get the page id of the child
+    } else if ('setChild' in node && typeof node.setChild === 'function') {
+      node.setChild(null);
+    } else {
+      logger.warn(`widget ${this.type} does not support children`);
+    }
   }
 }

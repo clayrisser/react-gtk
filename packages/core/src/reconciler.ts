@@ -21,10 +21,8 @@
 
 import ReactReconciler from 'react-reconciler';
 import createElement from './createElement';
-import dev from './dev';
 import type { Lane } from 'react-reconciler';
 import { DefaultEventPriority } from 'react-reconciler/constants';
-import { Stage } from './types';
 import { Text } from './elements/Text';
 import { logger } from './util';
 import type {
@@ -35,7 +33,6 @@ import type {
   HydratableInstance,
   Instance,
   NoTimeout,
-  Props,
   PublicInstance,
   SuspenseInstance,
   TextInstance,
@@ -54,7 +51,7 @@ import type {
 
 export default ReactReconciler<
   Type,
-  Props,
+  Record<string, any>,
   Container,
   Instance,
   TextInstance,
@@ -77,42 +74,47 @@ export default ReactReconciler<
 
   supportsHydration: false,
 
-  createInstance(type: Type, props: Props, _rootContainerInstance: Container, _hostContext: HostContext): Instance {
-    logger.debug('createInstance');
+  createInstance(
+    type: Type,
+    props: Record<string, any>,
+    _rootContainerInstance: Container,
+    _hostContext: HostContext,
+  ): Instance {
+    logger.trace('createInstance');
     const elementProps = { ...props };
     delete elementProps.children;
     const element = createElement(type, elementProps);
     // TODO: double check type is Text
     if (type !== 'Text' && typeof props.children === 'string') {
       const textNode = new Text({ text: props.children });
-      element.appendChild(textNode, { stage: Stage.Mount });
+      element.appendChild(textNode);
     }
     return element;
   },
 
   appendInitialChild(parentInstance: Instance, child: Instance | TextInstance): void {
-    logger.debug('appendInitialChild');
-    parentInstance.appendChild(child, { stage: Stage.Mount });
+    logger.trace('appendInitialChild');
+    parentInstance.appendChild(child);
   },
 
   finalizeInitialChildren(
     _parentInstance: Instance,
     _type: Type,
-    _props: Props,
+    _props: Record<string, any>,
     _rootContainerInstance: Container,
     _hostContext: HostContext,
   ): boolean {
-    logger.debug('finalizeInitialChildren');
+    logger.trace('finalizeInitialChildren');
     return true;
   },
 
   createTextInstance(text: string, _rootContainerInstance: Container, _hostContext: HostContext): TextInstance {
-    logger.debug('createTextInstance');
+    logger.trace('createTextInstance');
     return new Text({ text });
   },
 
   getPublicInstance(instance: Instance | TextInstance): PublicInstance {
-    logger.debug('getPublicInstance');
+    logger.trace('getPublicInstance');
     return {
       css: instance.css,
       node: instance.node,
@@ -120,147 +122,164 @@ export default ReactReconciler<
   },
 
   prepareForCommit(_rootContainerInstance: Container): Record<string, any> | null {
-    logger.debug('prepareForCommit');
+    logger.trace('prepareForCommit');
     return null;
   },
 
   prepareUpdate(
     _instance: Instance,
     _type: Type,
-    _oldProps: Props,
-    _newProps: Props,
+    oldProps: Record<string, any>,
+    newProps: Record<string, any>,
     _rootContainerInstance: Container,
     _hostContext: HostContext,
-  ): null | UpdatePayload {
-    logger.debug('prepareUpdate');
-    return true;
+  ): UpdatePayload | null {
+    logger.trace('prepareUpdate');
+    const changes: { props: string[]; style: string[] } = {
+      props: [],
+      style: [],
+    };
+    for (let key in { ...oldProps, ...newProps }) {
+      if (oldProps[key] !== newProps[key]) {
+        changes.props.push(key);
+      }
+    }
+    for (let key in { ...oldProps.style, ...newProps.style }) {
+      if (oldProps.style[key] !== newProps.style[key]) {
+        changes.style.push(key);
+      }
+    }
+    return changes.props.length || changes.style.length ? { changes } : null;
   },
 
   resetAfterCommit(_rootContainerInstance: Container): void {
-    logger.debug('resetAfterCommit');
+    logger.trace('resetAfterCommit');
   },
 
+  // TODO: implement
   resetTextContent(_textInstance: TextInstance): void {
-    logger.debug('resetTextContent');
-    // textInstance.resetText({ stage: Stage.Update });
+    logger.trace('resetTextContent');
+    return;
   },
 
   commitTextUpdate(_textInstance: TextInstance, _oldText: string, _newText: string): void {
-    logger.debug('commitTextUpdate');
-    // textInstance.updateText(oldText, newText, { stage: Stage.Update });
+    logger.trace('commitTextUpdate');
   },
 
   removeChild(parentInstance: Instance, child: Instance | TextInstance): void {
-    logger.debug('removeChild');
-    parentInstance.removeChild(child, { stage: Stage.Update });
+    logger.trace('removeChild');
+    parentInstance.removeChild(child);
   },
 
   removeChildFromContainer(rootContainerInstance: Container, child: Instance | TextInstance): void {
-    logger.debug('removeChildFromContainer');
-    rootContainerInstance.removeChild(child, { stage: Stage.Update });
+    logger.trace('removeChildFromContainer');
+    rootContainerInstance.removeChild(child);
   },
 
   // TODO
-  insertBefore(
-    _parentInstance: Instance,
-    _child: Instance | TextInstance,
-    _beforeChild: Instance | TextInstance,
-  ): void {
-    logger.debug('insertBefore');
-    if (dev) logger.warn("'insertBefore' not supported");
+  insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
+    logger.trace('insertBefore');
+    parentInstance.insertBefore(child, beforeChild);
   },
 
   appendChildToContainer(rootContainerInstance: Container, child: Instance | TextInstance): void {
-    logger.debug('appendChildToContainer');
-    rootContainerInstance.appendChild(child, { parentIsContainer: true, stage: Stage.Mount });
+    logger.trace('appendChildToContainer');
+    rootContainerInstance.appendChild(child);
   },
 
   appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
-    logger.debug('appendChild');
-    return parentInstance.appendChild(child, { stage: Stage.Update });
+    logger.trace('appendChild');
+    return parentInstance.appendChild(child);
   },
 
-  shouldSetTextContent(_type: Type, props: Props): boolean {
-    logger.debug('shouldSetTextContent');
+  // TODO: make this work
+  shouldSetTextContent(_type: Type, props: Record<string, any>): boolean {
+    logger.trace('shouldSetTextContent');
     if (typeof props.children === 'string') return true;
     return false;
   },
 
   getRootHostContext(_rootContainerInstance: Container): HostContext {
-    logger.debug('getRootHostContext');
+    logger.trace('getRootHostContext');
     return {};
   },
 
   getChildHostContext(_parentHostContext: HostContext, _type: Type, _rootContainerInstance: Container): HostContext {
-    logger.debug('getChildHostContext');
+    logger.trace('getChildHostContext');
     return {};
   },
 
-  commitUpdate(instance: Instance, _updatePayload: any, _type: string, _oldProps: Props, newProps: Props): void {
-    logger.debug('commitUpdate');
-    instance.commitUpdate(newProps);
+  commitUpdate(
+    instance: Instance,
+    updatePayload: any,
+    _type: string,
+    oldProps: Record<string, any>,
+    newProps: Record<string, any>,
+  ): void {
+    logger.trace('commitUpdate');
+    instance.commitUpdate(updatePayload.changes, oldProps, newProps);
   },
 
-  commitMount(instance: Instance, _type: Type, _newProps: Props): void {
-    logger.debug('commitMount');
-    instance.commitMount();
+  commitMount(instance: Instance, _type: Type, newProps: Record<string, any>): void {
+    logger.trace('commitMount');
+    instance.commitMount(newProps);
   },
 
   scheduleTimeout(handler: (...args: any[]) => void, timeout: number): TimeoutHandle | NoTimeout {
-    logger.debug('setTimeout');
+    logger.trace('setTimeout');
     return setTimeout(handler, timeout);
   },
 
   cancelTimeout(handle: TimeoutHandle | NoTimeout): void {
-    logger.debug('clearTimeout');
+    logger.trace('clearTimeout');
     clearTimeout(handle);
   },
 
-  preparePortalMount(rootContainerInstance: Container) {
-    logger.debug('preparePortalMount');
-    rootContainerInstance.preparePortalMount({ stage: Stage.Mount });
+  preparePortalMount(_rootContainerInstance: Container) {
+    logger.trace('preparePortalMount');
+    return;
   },
 
   scheduleMicrotask(callback: () => unknown) {
-    logger.debug('scheduleMicrotask');
+    logger.trace('scheduleMicrotask');
     queueMicrotask(callback);
   },
 
   clearContainer(rootContainerInstance: Container) {
-    logger.debug('clearContainer');
-    rootContainerInstance.removeAllChildren({ stage: Stage.Update });
+    logger.trace('clearContainer');
+    rootContainerInstance.removeAllChildren();
   },
 
   getCurrentEventPriority(): Lane {
-    logger.debug('getCurrentEventPriority');
+    logger.trace('getCurrentEventPriority');
     return DefaultEventPriority;
   },
 
   getInstanceFromNode(node: GtkNode) {
-    logger.debug('getInstanceFromNode');
+    logger.trace('getInstanceFromNode');
     // TODO: make sure this doesn't create problems
     return (node?._element as any) || null;
   },
 
   getInstanceFromScope(scopeInstance: any): null | Instance {
-    logger.debug('getInstanceFromScope');
+    logger.trace('getInstanceFromScope');
     if (scopeInstance.node) return scopeInstance as Instance;
     return null;
   },
 
   beforeActiveInstanceBlur() {
-    logger.debug('beforeActiveInstanceBlur');
+    logger.trace('beforeActiveInstanceBlur');
   },
 
   afterActiveInstanceBlur() {
-    logger.debug('afterActiveInstanceBlur');
+    logger.trace('afterActiveInstanceBlur');
   },
 
   prepareScopeUpdate(_scopeInstance: any, _instance: any) {
-    logger.debug('prepareScopeUpdate');
+    logger.trace('prepareScopeUpdate');
   },
 
   detachDeletedInstance(_node: Instance) {
-    logger.debug('detachDeletedInstance');
+    logger.trace('detachDeletedInstance');
   },
 });

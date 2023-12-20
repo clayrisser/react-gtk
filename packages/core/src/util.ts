@@ -19,7 +19,6 @@
  *  limitations under the License.
  */
 
-import type { DimensionValue } from 'react-native';
 import type { Element } from './elements/Element';
 
 function isDev(): boolean {
@@ -39,14 +38,4 @@ export const logger = {
 export function debugRef(debug = true) {
   if (!debug) return () => undefined;
   return (ref: Element) => logger.debug(JSON.stringify(ref.node, null, 2));
-}
-
-export function parseSize(dimension?: DimensionValue): number | 'auto' | `${number}%` | undefined {
-  if (!dimension) return;
-  if (typeof dimension === 'number') return dimension;
-  if (dimension === 'auto') return dimension;
-  if (typeof dimension === 'string' && /%$/.test(dimension)) return dimension;
-  dimension = parseInt(dimension.toString(), 10);
-  if (Number.isFinite(dimension)) return dimension;
-  return;
 }

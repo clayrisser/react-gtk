@@ -22,22 +22,18 @@
 import Gtk from '@girs/node-gtk-4.0';
 import { Element } from './Element';
 
+export interface ImageProps {}
+
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      Image: any;
+      Image: ImageProps;
     }
   }
 }
 
-export type ImageProps = JSX.IntrinsicElements['Image'];
-
-export class Image extends Element {
-  node: Gtk.Image;
-
-  constructor(props: ImageProps = {}) {
-    const node = new Gtk.Image();
-    super(node, props);
-    this.node = node;
+export class Image extends Element<Gtk.Image, ImageProps> {
+  constructor(props?: ImageProps) {
+    super(new Gtk.Image(), props);
   }
 }

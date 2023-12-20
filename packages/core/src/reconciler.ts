@@ -117,6 +117,7 @@ export default ReactReconciler<
     logger.trace('getPublicInstance');
     return {
       css: instance.css,
+      id: instance.id,
       node: instance.node,
     };
   },

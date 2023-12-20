@@ -33,6 +33,7 @@ export type Prop = any;
 export type HydratableInstance = any;
 
 export interface PublicInstance {
+  id: string;
   css: string[];
   node: GtkNode;
 }
@@ -83,10 +84,11 @@ export interface Instance<Node extends GtkNode = GtkNode, Props = Record<string,
   insertBefore: (child: Instance | TextInstance, beforeChild: Instance | TextInstance) => void;
   mounted: boolean;
   node: Node;
-  parent?: Instance;
+  parent?: Instance<GtkNode, Record<string, any>>;
   props: Props;
   removeAllChildren: () => void;
   removeChild: (child: Instance | TextInstance) => void;
+  updateNode: (changes?: Changes) => void;
   willMount: () => void;
   willUnmount: () => void;
   willUpdate: (changes: Changes) => void;
@@ -95,6 +97,7 @@ export interface Instance<Node extends GtkNode = GtkNode, Props = Record<string,
 export interface YogaInstance extends Instance {
   yogaChildren?: YogaNode[];
   yogaNode: YogaNode;
+  yogaParent?: YogaNode;
   yogaRoot?: YogaNode;
 }
 

@@ -55,13 +55,15 @@ declare global {
 export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaInstance {
   yogaChildren: YogaNode[] = [];
   yogaNode = Yoga.Node.create();
-  yogaRoot?: YogaNode;
+  yogaParent?: YogaNode;
 
   private yogaStyle: YogaStyle = {};
 
   constructor(props: FlexBoxProps) {
     super(new Gtk.Fixed(), props);
+    (this.yogaNode as any)._element = this;
     this.updateYogaNode();
+    this.yogaNode.getParent();
   }
 
   appendChild(child: Instance): void {
@@ -76,6 +78,7 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
       flexEdge.appendChild(child);
       yogaChild = flexEdge;
     }
+    yogaChild.yogaParent = this.yogaNode;
     this.yogaChildren.push(yogaChild.yogaNode);
     this.yogaNode.insertChild(yogaChild.yogaNode, this.yogaChildren.length - 1);
     return super.appendChild(yogaChild);
@@ -93,13 +96,22 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
       flexEdge.appendChild(child);
       yogaChild = flexEdge;
     }
+    yogaChild.yogaParent = this.yogaNode;
     const index = this.children.indexOf(beforeChild as Instance);
     if (index > -1 && index < this.yogaChildren.length) {
       this.yogaChildren.splice(index, 0, yogaChild.yogaNode);
     } else {
       this.yogaChildren.push(yogaChild.yogaNode);
     }
+    this.yogaNode.insertChild(yogaChild.yogaNode, index);
     return super.insertBefore(child, beforeChild);
+  }
+
+  removeChild(child: Instance) {
+    const index = this.children.indexOf(child);
+    if (index > -1 && index < this.yogaChildren.length) this.yogaChildren.splice(index, 1);
+    delete this.yogaParent;
+    return super.removeChild(child);
   }
 
   packChild(child: Instance, _beforeChild?: Instance | TextInstance): void {
@@ -127,7 +139,16 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
 
   updateNode() {
     this.updateYogaNode();
-    super.updateNode();
+    return super.updateNode();
+  }
+
+  get yogaRoot() {
+    let root = this as YogaInstance;
+    for (;;) {
+      const yogaParent = root.yogaParent;
+      if (!yogaParent) return root.yogaNode;
+      root = root.parent as YogaInstance;
+    }
   }
 
   private updateYogaNode() {

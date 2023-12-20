@@ -56,7 +56,6 @@ export const Example = () => {
     <Box
       style={{
         backgroundColor: 'green',
-        // @ts-ignore
         padding: '10px',
       }}
     >
@@ -83,7 +82,7 @@ export const Example = () => {
             backgroundColor: 'yellow',
           }}
         >
-          <Box style={{ backgroundColor: 'purple' }} />
+          <FlexBox style={{ backgroundColor: 'purple' }} />
         </FlexBox>
       </FlexBox>
     </Box>

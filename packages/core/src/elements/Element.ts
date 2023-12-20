@@ -46,7 +46,7 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
 
   children: Instance[] = [];
 
-  parent?: Instance;
+  parent?: Instance<GtkNode, Record<string, any>>;
 
   node: Node;
 
@@ -77,7 +77,6 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
     this.children.push(child);
     if (!this.mounted) child.willMount();
     this.packChild(child);
-    this.updateNode();
   }
 
   removeChild(child: Instance) {
@@ -99,6 +98,7 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
 
   commitMount(_newProps: Props) {
     this.mounted = true;
+    this.updateNode();
     this.didMount();
   }
 
@@ -120,9 +120,8 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
     } else {
       this.children.push(child);
     }
-    if (!child.mounted) child.willMount();
+    if (!this.mounted) child.willMount();
     this.packChild(child);
-    this.updateNode();
   }
 
   prepareUnmount() {

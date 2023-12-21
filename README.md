@@ -15,7 +15,9 @@ be refactoring the entire project from scratch to reach general availablilty.
 The new refactor will support [GTK 4.0](https://blog.gtk.org/2020/12/16/gtk-4-0/)
 and CSS using [Yoga](https://yogalayout.com).
 
-You can follow the development in the [refactor](https://github.com/silicon-hills/react-gtk/tree/refactor) branch.
+You can follow the development in the [React GTK Discord](#discord)
+
+## [JOIN DISCORD](https://discord.gg/UBrXPfFnF3)
 
 ## [FILE ISSUE](https://github.com/codejamninja/react-gtk/issues/new)
 

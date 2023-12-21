@@ -26,12 +26,14 @@ import { Element } from './Element';
 import { FlexStyle } from 'react-native';
 import { Changes, Instance, YogaInstance } from '../types';
 import { StyleProp, StyleProps } from '../style';
-import { YogaStyle, lookupAlign, lookupPosition, parseDimension, setYogaRoot } from '../yoga';
+import { YogaStyle, lookupAlign, lookupPosition, parseDimension } from '../yoga';
+import GObject from '@girs/node-gobject-2.0';
+import { FlexRoot } from './FlexRoot';
 
 export interface FlexEdgeProps extends Omit<StyleProps, 'style'> {
   children?: ReactNode;
   ref?: Ref<Instance>;
-  style?: StyleProp &
+  style?: Omit<StyleProp, 'minWidth' | 'minHeight' | 'width' | 'height'> &
     Omit<
       FlexStyle,
       | 'flexDirection'
@@ -59,23 +61,26 @@ declare global {
 export class FlexEdge extends Element<Gtk.Box, FlexEdgeProps> implements YogaInstance {
   yogaNode = Yoga.Node.create();
   yogaParent?: YogaInstance;
-  yogaRoot?: YogaInstance;
+  yogaRoot?: FlexRoot;
   type = 'FlexEdge';
 
   private yogaStyle: YogaStyle = {};
 
   constructor(props: FlexEdgeProps) {
-    super(new Gtk.Box(), {
-      hexpand: true,
-      vexpand: true,
-      ...props,
-    });
+    super(new Gtk.Box(), props);
     this.updateYogaNode();
   }
 
-  prepareUnmount() {
+  setParent(parent: Instance): void {
+    if (parent.type !== 'FlexBox' && parent.type !== 'FlexRoot') {
+      throw new Error('FlexEdge can only be a child of FlexBox or FlexRoot');
+    }
+    return super.setParent(parent);
+  }
+
+  willUnmount() {
     this.yogaNode.freeRecursive();
-    return super.prepareUnmount();
+    return super.willUnmount();
   }
 
   renderNode() {
@@ -84,31 +89,41 @@ export class FlexEdge extends Element<Gtk.Box, FlexEdgeProps> implements YogaIns
   }
 
   willMount() {
-    const parent = this.parent as YogaInstance;
-    if (!parent.yogaNode) {
-      setYogaRoot(this);
-      this.calculateLayout();
-    }
     this.updateYogaNode();
     return super.willMount();
   }
 
   willUpdate(changes: Changes) {
     this.updateYogaNode();
-    this.calculateLayout();
+    this.yogaRoot?.calculateLayout();
     return super.willUpdate(changes);
+  }
+
+  renderYoga() {
+    if (!this.node) return;
+    const layout = this.layout;
+    if (!layout) return;
+    const { left, top, width, height } = layout;
+    if (
+      typeof width === 'undefined' ||
+      typeof height === 'undefined' ||
+      typeof left === 'undefined' ||
+      typeof top === 'undefined'
+    ) {
+      return;
+    }
+    this.node.setSizeRequest(width, height);
+    if (this.node?.parent) {
+      const parentNode = this.node.parent as Gtk.Fixed;
+      if (!parentNode || GObject.typeName(parentNode.__gtype__ as unknown as GObject.GType) !== 'GtkFixed') {
+        parentNode.move(this.node, left, top);
+      }
+    }
+    return layout;
   }
 
   get layout() {
     return this.yogaNode.getComputedLayout();
-  }
-
-  private calculateLayout() {
-    this.yogaRoot?.yogaNode.calculateLayout(
-      this.yogaRoot.estimatedWidth,
-      this.yogaRoot.estimatedHeight,
-      Yoga.DIRECTION_LTR,
-    );
   }
 
   private updateYogaNode() {
@@ -131,5 +146,13 @@ export class FlexEdge extends Element<Gtk.Box, FlexEdgeProps> implements YogaIns
     if (typeof this.yogaStyle.maxHeight !== 'undefined') this.yogaNode.setMaxHeight(this.yogaStyle.maxHeight);
     if (typeof this.yogaStyle.alignSelf !== 'undefined') this.yogaNode.setAlignSelf(this.yogaStyle.alignSelf);
     if (typeof this.yogaStyle.position !== 'undefined') this.yogaNode.setPositionType(this.yogaStyle.position);
+  }
+
+  protected get width() {
+    return this.layout.width;
+  }
+
+  protected get height() {
+    return this.layout.height;
   }
 }

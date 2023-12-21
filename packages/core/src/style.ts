@@ -30,10 +30,10 @@ export interface StyleProp extends Style {
 }
 
 export interface Style extends GtkStyle {
-  height?: number | '100%' | 'auto';
-  minHeight?: number | '100%' | 'auto';
-  minWidth?: number | '100%' | 'auto';
-  width?: number | '100%' | 'auto';
+  height?: number | 'auto';
+  minHeight?: number | 'auto';
+  minWidth?: number | 'auto';
+  width?: number | 'auto';
 }
 
 export interface GtkStyle {

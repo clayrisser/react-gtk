@@ -30,7 +30,7 @@ import { DimensionValue } from 'react-native';
 
 const logger = console;
 let _propertyList: string[] | undefined;
-let _signalList: Set<string> | undefined;
+let _availableSignals: Set<string> | undefined;
 
 export abstract class Element<Node extends GtkNode = GtkNode, Props extends Record<string, any> = Record<string, any>>
   implements Instance<Node, Props>
@@ -88,12 +88,16 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
   }
 
   appendChild(child: Instance) {
-    child.parent = this as Instance;
+    child.setParent(this as Instance);
     this.children.push(child);
     if (!this.mounted) child.willMount();
     child.defer(() => {
       this.packChild(child);
     });
+  }
+
+  setParent(parent: Instance) {
+    this.parent = parent;
   }
 
   removeChild(child: Instance) {
@@ -138,7 +142,7 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
   }
 
   insertBefore(child: Instance | TextInstance, beforeChild: Instance | TextInstance) {
-    child.parent = this as Instance;
+    child.setParent(this as Instance);
     const index = this.children.indexOf(beforeChild as Instance);
     if (index > -1) {
       this.children.splice(index, 0, child);
@@ -147,10 +151,6 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
     }
     if (!this.mounted) child.willMount();
     this.packChild(child);
-  }
-
-  prepareUnmount() {
-    return;
   }
 
   packChild(child: Instance, beforeChild?: Instance | TextInstance) {
@@ -174,9 +174,11 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
           this.setStyle(value, Gtk.STYLE_PROVIDER_PRIORITY_FALLBACK);
         } else if (/^on[A-Z]/.test(key)) {
           const signal = kebabCase(key.slice(2));
-          if (this.signalList.has(signal)) {
+          if (this.availableSignals.has(signal)) {
             if (signal in this.connectedSignals) this.node!.disconnect(this.connectedSignals[signal]);
             this.connectedSignals[signal] = this.node!.connect(signal, value);
+          } else {
+            logger.warn(`signal ${signal} is not available on ${this.type}`);
           }
         } else if (key in this.node!) {
           switch (key) {
@@ -212,9 +214,9 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
         }
       }
     });
-    const { minWidth, minHeight } = this;
-    if (minWidth > -1 || minHeight > -1) {
-      this.node.setSizeRequest(minWidth, minHeight);
+    const { width, height } = this;
+    if (width > -1 || height > -1) {
+      this.node.setSizeRequest(width, height);
     }
   }
 
@@ -236,19 +238,19 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
     return _propertyList;
   }
 
-  get signalList(): Set<string> {
-    if (_signalList) return _signalList;
-    _signalList = new Set();
+  get availableSignals(): Set<string> {
+    if (_availableSignals) return _availableSignals;
+    _availableSignals = new Set();
     let gtype = this.node?.__gtype__ as unknown as GObject.GType;
     while (gtype) {
       const signalIds = GObject.signalListIds(gtype);
       for (const id of signalIds) {
         const signalName = GObject.signalName(id);
-        if (signalName) _signalList.add(signalName);
+        if (signalName) _availableSignals.add(signalName);
       }
       gtype = GObject.typeParent(gtype);
     }
-    return _signalList;
+    return _availableSignals;
   }
 
   get css() {
@@ -285,41 +287,41 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
     return;
   }
 
-  protected get minWidth() {
+  protected get width() {
     const style = this.props.style || {};
     if (typeof this.props.sizeRequest?.[0] !== 'undefined') return this.props.sizeRequest[0];
     return Math.max(
-      typeof style.width === 'undefined' || style.width === '100%' || style.width === 'auto'
+      typeof style.width === 'undefined' || style.width === 'auto'
         ? -1
         : parseDimension(style.width as DimensionValue, false, false) || -1,
-      typeof style.minWidth === 'undefined' || style.minWidth === '100%' || style.minWidth === 'auto'
+      typeof style.minWidth === 'undefined' || style.minWidth === 'auto'
         ? -1
         : parseDimension(style.minWidth as DimensionValue, false, false) || -1,
     );
   }
 
-  protected get minHeight() {
+  protected get height() {
     const style = this.props.style || {};
     if (typeof this.props.sizeRequest?.[1] !== 'undefined') return this.props.sizeRequest[1];
     return Math.max(
-      typeof style.height === 'undefined' || style.height === '100%' || style.height === 'auto'
+      typeof style.height === 'undefined' || style.height === 'auto'
         ? -1
         : parseDimension(style.height as DimensionValue, false, false) || -1,
-      typeof style.minHeight === 'undefined' || style.minHeight === '100%' || style.minHeight === 'auto'
+      typeof style.minHeight === 'undefined' || style.minHeight === 'auto'
         ? -1
         : parseDimension(style.minHeight as DimensionValue, false, false) || -1,
     );
   }
 
   get estimatedWidth() {
-    const { minWidth } = this;
-    if (minWidth > -1) return minWidth;
+    const { width } = this;
+    if (width > -1) return width;
     return this.parent?.estimatedWidth;
   }
 
   get estimatedHeight() {
-    const { minHeight } = this;
-    if (minHeight > -1) return minHeight;
+    const { height } = this;
+    if (height > -1) return height;
     return this.parent?.estimatedHeight;
   }
 

@@ -119,6 +119,7 @@ export default ReactReconciler<
       css: instance.css,
       id: instance.id,
       node: instance.node,
+      availableSignals: instance.availableSignals,
     };
   },
 

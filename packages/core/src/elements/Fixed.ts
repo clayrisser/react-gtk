@@ -1,5 +1,5 @@
 /*
- *  File: /src/elements/Box.ts
+ *  File: /src/elements/Fixed.ts
  *  Project: @react-gtk/core
  *  File Created: 28-11-2023 23:41:23
  *  Author: Clay Risser
@@ -21,26 +21,24 @@
 
 import Gtk from '@girs/node-gtk-4.0';
 import { Element } from './Element';
-import { ReactNode, Ref } from 'react';
+import { ReactNode } from 'react';
 import { StyleProps } from '../style';
-import { PublicInstance } from '../types';
 
-export interface BoxProps extends StyleProps {
+export interface FixedProps extends StyleProps {
   children?: ReactNode;
-  ref?: Ref<PublicInstance<Gtk.Box>>;
   sizeRequest?: [number, number];
 }
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      Box: BoxProps;
+      Fixed: FixedProps;
     }
   }
 }
 
-export class Box extends Element<Gtk.Box, BoxProps> {
-  constructor(props?: BoxProps) {
-    super(new Gtk.Box(), props);
+export class Fixed extends Element<Gtk.Fixed, FixedProps> {
+  constructor(props?: FixedProps) {
+    super(new Gtk.Fixed(), props);
   }
 }

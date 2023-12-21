@@ -20,6 +20,7 @@
  */
 
 import type { Gtk } from '@girs/node-gtk-4.0';
+import type { FlexRoot } from './elements/FlexRoot';
 import type { Node as YogaNode } from 'yoga-layout/wasm-sync';
 
 export type BundleType = 0 | 1;
@@ -32,10 +33,11 @@ export type Prop = any;
 
 export type HydratableInstance = any;
 
-export interface PublicInstance {
-  id: string;
+export interface PublicInstance<Node extends GtkNode = GtkNode> {
+  availableSignals: Set<string>;
   css: string[];
-  node: GtkNode;
+  id: string;
+  node: Node;
 }
 
 export type HostContext = Context;
@@ -71,6 +73,7 @@ export type RemoveChild = (child: Instance, ...args: any[]) => void;
 
 export interface Instance<Node extends GtkNode = GtkNode, Props = Record<string, any>> {
   appendChild: (child: Instance | TextInstance) => void;
+  availableSignals: Set<string>;
   children: Instance[];
   commitMount: (newProps: Props) => void;
   commitUpdate: (changes: Changes, newProps: Props, oldProps: Props) => void;
@@ -92,6 +95,8 @@ export interface Instance<Node extends GtkNode = GtkNode, Props = Record<string,
   removeAllChildren: () => void;
   removeChild: (child: Instance | TextInstance) => void;
   renderNode: (changes?: Changes) => void;
+  setParent: (parent: Instance) => void;
+  type: string;
   willMount: () => void;
   willUnmount: () => void;
   willUpdate: (changes: Changes) => void;
@@ -108,10 +113,11 @@ export interface YogaLayout {
 
 export interface YogaInstance extends Instance {
   layout: YogaLayout;
+  renderYoga: () => YogaLayout | undefined;
   yogaChildren?: YogaInstance[];
   yogaNode: YogaNode;
   yogaParent?: YogaInstance;
-  yogaRoot?: YogaInstance;
+  yogaRoot?: FlexRoot;
 }
 
 export type GtkNode =

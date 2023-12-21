@@ -19,49 +19,38 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
-import { render, Box, FlexBox } from '@react-gtk/core';
+import React from 'react';
+import { render, Box, FlexBox, FlexRoot } from '@react-gtk/core';
 
 export const Example = () => {
-  // const [count, setCount] = useState(0);
-
   return (
     <Box
       style={{
         backgroundColor: 'green',
-        padding: '10px',
       }}
     >
-      <FlexBox
+      <FlexRoot
+        hexpand
         style={{
-          justifyContent: 'center',
-          flexDirection: 'row',
-          width: 600,
-          // @ts-ignore
-          padding: '10px',
-          height: 600,
-          backgroundColor: 'red',
+          // height: 600,
+          // width: 600,
+          backgroundColor: 'blue',
         }}
       >
         <FlexBox
           style={{
-            width: 100,
-            // @ts-ignore
-            padding: '10px',
-            height: 100,
-            backgroundColor: 'yellow',
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'red',
           }}
-        />
-        <FlexBox
-          style={{
-            width: 100,
-            // @ts-ignore
-            padding: '10px',
-            height: 100,
-            backgroundColor: 'blue',
-          }}
-        />
-      </FlexBox>
+        >
+          <FlexBox style={{ width: 60, height: 60, backgroundColor: 'yellow' }} />
+          <FlexBox style={{ width: 60, height: 60, backgroundColor: 'purple' }} />
+          <FlexBox style={{ width: 60, height: 60, backgroundColor: 'yellow' }} />
+        </FlexBox>
+      </FlexRoot>
     </Box>
   );
 };

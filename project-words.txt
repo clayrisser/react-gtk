@@ -66,6 +66,7 @@ psuedo
 rajak
 reconciler
 renderer
+rerender
 risser
 rmdir
 scrollable

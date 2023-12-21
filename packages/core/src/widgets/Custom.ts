@@ -25,8 +25,6 @@ import Gtk from '@girs/node-gtk-4.0';
 import Gdk from '@girs/node-gdk-4.0';
 import Graphene from '@girs/node-graphene-1.0';
 
-// Gtk.init();
-
 export class CustomWidget extends Gtk.Widget {
   customMethod() {}
 

@@ -23,10 +23,13 @@
 import gi from 'node-gtk';
 import Gtk from '@girs/node-gtk-4.0';
 
-Gtk.init();
-
 export class FlexRoot extends Gtk.Fixed {
   static GTypeName = 'NodeGTKFlexRoot';
+
+  computeExpand(hexpandP: boolean, vexpandP: boolean) {
+    console.log('compute expand');
+    return super.computeExpand(hexpandP, vexpandP);
+  }
 
   focus(direction: Gtk.DirectionType) {
     console.log('focus');

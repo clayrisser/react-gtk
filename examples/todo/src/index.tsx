@@ -32,14 +32,16 @@ export const Example = () => {
       }}
     >
       <Custom />
-      {/* <FlexRoot
+      <FlexRoot
+        // @ts-ignore
         hexpand
         style={{
           // height: 600,
           // width: 600,
           backgroundColor: 'blue',
         }}
-      >
+      />
+      {/*
         <FlexBox
           style={{
             justifyContent: 'space-between',

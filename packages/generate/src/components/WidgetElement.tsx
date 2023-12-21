@@ -52,6 +52,7 @@ import {
   PropertySignature,
   InterfaceDeclaration,
   MethodSignature,
+  NewExpression,
 } from 'react-ast';
 import { ImportType, Signal } from '../generator';
 
@@ -88,6 +89,7 @@ export function WidgetElement({
           key={import_.import}
           from={import_.from}
           imports={import_.import}
+          default={import_.default}
         />
       ))}
 
@@ -104,21 +106,18 @@ export function WidgetElement({
           name={interfaceName}
           extends={<Expression identifiers={`Gtk.${name}`} />}
         >
-          {signals?.map((signal) => {
-            // console.log('signal', signal);
-            return (
-              <MethodSignature
-                name={signal.name}
-                params={signal.params?.map((param) => (
-                  <Identifier key={param.name} typeAnnotation={param.type}>
-                    {param.name}
-                  </Identifier>
-                ))}
-                key={signal.name}
-                returnType={signal.returnType}
-              />
-            );
-          })}
+          {signals?.map((signal) => (
+            <MethodSignature
+              name={signal.name}
+              params={signal.params?.map((param) => (
+                <Identifier key={param.name} typeAnnotation={param.type}>
+                  {param.name}
+                </Identifier>
+              ))}
+              key={signal.name}
+              returnType={signal.returnType}
+            />
+          ))}
         </Interface>
       </Export>
       <Export>
@@ -133,7 +132,9 @@ export function WidgetElement({
             ]}
           >
             <Var name="node" kind={VarKind.Const}>
-              <CallExpression name={`new Gtk.${name}`} />
+              <NewExpression name={name}>
+                <Identifier>Gtk</Identifier>
+              </NewExpression>
             </Var>
             <CallExpression name="super" arguments={['node', 'props']} />
             <AssignmentExpression left="this.node">

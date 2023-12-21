@@ -66,9 +66,9 @@ export interface Signal {
 }
 
 export interface ImportType {
-  import: string;
+  import?: string;
   from: string;
-  type?: 'type' | 'default';
+  default?: string;
 }
 
 export class Generator {
@@ -291,23 +291,17 @@ export class Generator {
 
   getImports(imports: ImportType[], type: string) {
     if (imports.find((import_) => import_.import === type)) return;
-    const lib = this.getLibImport(type.split('.')[0]);
-    if (lib) {
-      imports.push({
-        import: type.split('.')[0],
-        from: lib,
-      });
+    const import_ = this.getLibImport(type.split('.')[0]);
+    if (import_) {
+      imports.push(import_);
     }
   }
 
   getTypeWithImports(type: string, imports?: ImportType[]) {
     if (type.includes('.') && imports) {
-      const lib = this.getLibImport(type.split('.')[0]);
-      if (lib) {
-        this.addImport(imports, {
-          import: type.split('.')[0],
-          from: lib,
-        });
+      const import_ = this.getLibImport(type.split('.')[0]);
+      if (import_) {
+        this.addImport(imports, import_);
       }
     } else {
       const type_ = this.getType(type);
@@ -506,13 +500,9 @@ export class Generator {
         from: `../enums/${type}`,
       });
     } else if (type.includes('.')) {
-      const import_ = type.split('.')[0];
-      const lib = this.getLibImport(import_);
-      if (lib) {
-        this.addImport(imports, {
-          import: import_,
-          from: lib,
-        });
+      const import_ = this.getLibImport(type.split('.')[0]);
+      if (import_) {
+        this.addImport(imports, import_);
       }
     }
   }
@@ -566,22 +556,43 @@ export class Generator {
     }
   }
 
-  private getLibImport(lib: string) {
+  private getLibImport(lib: string): ImportType | undefined {
     switch (lib) {
       case 'GLib':
-        return '@girs/node-glib-2.0';
+        return {
+          default: lib,
+          from: '@girs/node-glib-2.0',
+        };
       case 'GObject':
-        return '@girs/node-gobject-2.0';
+        return {
+          default: lib,
+          from: '@girs/node-gobject-2.0',
+        };
       case 'Gdk':
-        return '@girs/node-gdk-4.0';
+        return {
+          default: lib,
+          from: '@girs/node-gdk-4.0',
+        };
       case 'Gio':
-        return '@girs/node-gio-2.0';
+        return {
+          default: lib,
+          from: '@girs/node-gio-2.0',
+        };
       case 'Gtk':
-        return '@girs/node-gtk-4.0';
+        return {
+          default: lib,
+          from: '@girs/node-gtk-4.0',
+        };
       case 'Gsk':
-        return '@girs/node-gsk-4.0';
+        return {
+          default: lib,
+          from: '@girs/node-gsk-4.0',
+        };
       case 'Pango':
-        return '@girs/node-pango-1.0';
+        return {
+          default: lib,
+          from: '@girs/node-pango-1.0',
+        };
       default:
         return;
     }

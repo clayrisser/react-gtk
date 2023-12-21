@@ -38,10 +38,11 @@ import {
   parseDimension,
 } from '../yoga';
 import GObject from '@girs/node-gobject-2.0';
+import { FlexRoot as FlexBoxWidget } from '../widgets/FlexRoot';
 
 export interface FlexBoxProps extends Omit<StyleProps, 'style'> {
   children?: ReactNode;
-  ref?: Ref<PublicInstance<Gtk.Fixed>>;
+  ref?: Ref<PublicInstance<FlexBoxWidget>>;
   sizeRequest?: [number, number];
   style?: Omit<StyleProp, 'minWidth' | 'minHeight' | 'width' | 'height'> & FlexStyle;
 }
@@ -54,7 +55,7 @@ declare global {
   }
 }
 
-export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaInstance {
+export class FlexBox extends Element<FlexBoxWidget, FlexBoxProps> implements YogaInstance {
   yogaChildren: YogaInstance[] = [];
   yogaNode = Yoga.Node.create();
   yogaParent?: YogaInstance;
@@ -64,7 +65,7 @@ export class FlexBox extends Element<Gtk.Fixed, FlexBoxProps> implements YogaIns
   private yogaStyle: YogaStyle = {};
 
   constructor(props: FlexBoxProps) {
-    super(new Gtk.Fixed(), props);
+    super(new FlexBoxWidget(), props);
     this.node.hexpand = false;
     this.node.vexpand = false;
   }

@@ -59,8 +59,10 @@
     "indent": 4
   },
   "dependencies": {
+    "@girs/node-gdk-4.0": "^4.0.0-3.2.6",
     "@girs/node-glib-2.0": "^2.78.0-3.2.6",
     "@girs/node-gobject-2.0": "^2.78.0-3.2.6",
+    "@girs/node-graphene-1.0": "^1.0.0-3.2.6",
     "@girs/node-gtk-4.0": "^4.12.3-3.2.6",
     "lodash.debounce": "^4.0.8",
     "lodash.kebabcase": "^4.1.1",

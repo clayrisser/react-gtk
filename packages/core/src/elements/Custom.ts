@@ -1,7 +1,7 @@
 /*
- *  File: /src/gtk.ts
+ *  File: /src/elements/Custom.ts
  *  Project: @react-gtk/core
- *  File Created: 28-11-2023 22:32:06
+ *  File Created: 21-12-2023 11:05:43
  *  Author: Clay Risser
  *  -----
  *  BitSpur (c) Copyright 2017 - 2023
@@ -19,19 +19,26 @@
  *  limitations under the License.
  */
 
-// @ts-ignore
-import nodeGtk from 'node-gtk';
+import { Element } from './Element';
+import { Ref } from 'react';
+import { StyleProps } from '../style';
+import { PublicInstance } from '../types';
+import { CustomWidget } from '../widgets/Custom';
 
-let initialized = false;
-
-function getGtk(version = '4.0') {
-  const Gtk = nodeGtk.require('Gtk', version);
-  if (!initialized) {
-    initialized = true;
-    nodeGtk.startLoop();
-    Gtk.init();
-  }
-  return Gtk;
+export interface CustomProps extends StyleProps {
+  ref?: Ref<PublicInstance<CustomWidget>>;
 }
 
-export const Gtk = getGtk();
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      Custom: CustomProps;
+    }
+  }
+}
+
+export class Custom extends Element<CustomWidget, CustomProps> {
+  constructor(props?: CustomProps) {
+    super(new CustomWidget(), props);
+  }
+}

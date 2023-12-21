@@ -48,24 +48,24 @@ export class FlexRoot extends FlexBox {
 
   constructor(props: FlexRootProps) {
     super(props as FlexBoxProps);
-    this.connected.push(
-      this.node.connect('map', () => {
-        let timeout: NodeJS.Timeout;
-        const interval = setInterval(() => {
-          const width = this.node.getAllocatedWidth();
-          const height = this.node.getAllocatedHeight();
-          if (width > 0 || height > 0) {
-            clearInterval(interval);
-            clearTimeout(timeout);
-            this.allocatedSize = [width, height];
-            this.rerenderYogaTree();
-          }
-        }, 200);
-        timeout = setTimeout(() => {
-          clearInterval(interval);
-        }, 1000);
-      }),
-    );
+    // this.connected.push(
+    //   this.node.connect('map', () => {
+    //     let timeout: NodeJS.Timeout;
+    //     const interval = setInterval(() => {
+    //       const width = this.node.getAllocatedWidth();
+    //       const height = this.node.getAllocatedHeight();
+    //       if (width > 0 || height > 0) {
+    //         clearInterval(interval);
+    //         clearTimeout(timeout);
+    //         this.allocatedSize = [width, height];
+    //         this.rerenderYogaTree();
+    //       }
+    //     }, 200);
+    //     timeout = setTimeout(() => {
+    //       clearInterval(interval);
+    //     }, 1000);
+    //   }),
+    // );
   }
 
   setParent(parent: Instance): void {

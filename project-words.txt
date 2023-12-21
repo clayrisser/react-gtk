@@ -32,6 +32,7 @@ globals
 glong
 gobject
 gpointer
+graphene
 gshort
 gsize
 gsk

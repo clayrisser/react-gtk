@@ -20,16 +20,19 @@
  */
 
 import React from 'react';
-import { render, Box, FlexBox, FlexRoot } from '@react-gtk/core';
+import { render, Box, Custom, FlexBox, FlexRoot } from '@react-gtk/core';
 
 export const Example = () => {
   return (
     <Box
       style={{
+        width: 400,
+        height: 400,
         backgroundColor: 'green',
       }}
     >
-      <FlexRoot
+      <Custom />
+      {/* <FlexRoot
         hexpand
         style={{
           // height: 600,
@@ -50,7 +53,7 @@ export const Example = () => {
           <FlexBox style={{ width: 60, height: 60, backgroundColor: 'purple' }} />
           <FlexBox style={{ width: 60, height: 60, backgroundColor: 'yellow' }} />
         </FlexBox>
-      </FlexRoot>
+      </FlexRoot> */}
     </Box>
   );
 };

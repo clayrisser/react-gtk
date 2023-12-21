@@ -29,6 +29,7 @@ import { FlexRootProps } from './elements/FlexRoot';
 import { GridProps } from './elements/Grid';
 import { ImageProps } from './elements/Image';
 import { FixedProps } from './elements/Fixed';
+import { CustomProps } from './elements/Custom';
 import { LabelProps } from './elements/Label';
 
 export const Box = 'Box';
@@ -41,6 +42,7 @@ export const Grid = 'Grid';
 export const Image = 'Image';
 export const Label = 'Label';
 export const Window = 'Window';
+export const Custom = 'Custom';
 export const Yoga = 'Yoga';
 
 export type {
@@ -52,6 +54,7 @@ export type {
   FlexRootProps,
   GridProps,
   ImageProps,
+  CustomProps,
   LabelProps,
   FixedProps,
 };

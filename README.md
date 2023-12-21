@@ -6,7 +6,7 @@
 
 Please ★ this repo if you found it useful ★ ★ ★
 
-Built with [Node GTK](https://github.com/romgrk/node-gtk)
+Built with [Node GTK](https://github.com/romgrk/node-gtk) and [Gjsify](https://gjsify.org)
 
 ## GTK 4.0 Support Coming Soon!
 

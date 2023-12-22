@@ -1,15 +1,18 @@
 argv
 asian
 ast
+cairo
 camelcase
 cjs
 cspell
 debounce
 debounced
 declarator
+deduplicate
 dharmendra
 dom
 dts
+ellipsize
 enum
 enums
 esm
@@ -20,6 +23,7 @@ fs
 gboolean
 gchar
 gdk
+gdkpixbuf
 gdouble
 gfloat
 gint
@@ -40,6 +44,7 @@ gtk
 gtype
 guint
 gulong
+gunichar
 gushort
 hari
 hexpand
@@ -62,7 +67,9 @@ namespace
 nowrap
 of
 outdir
+paintable
 pango
+pixbuf
 promisify
 psuedo
 rajak
@@ -84,6 +91,7 @@ txt
 type
 typeof
 unmount
+unowned
 unparent
 uri
 usr

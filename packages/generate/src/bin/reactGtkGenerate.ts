@@ -20,27 +20,18 @@
  */
 
 import pkg from '../../package.json';
-import { Generator, Kind } from '../generator';
+import { Generator } from '../generator';
 import { program } from 'commander';
-
-const logger = console;
 
 export default async function main() {
   program
     .version(pkg.version)
     .description('generate react gtk binding')
     .option('-o, --out <path>', 'specify output path')
-    .argument('<kind>', 'specify kind to generate')
     .parse(process.argv);
   const options = program.opts();
-  const kind = program.args[0];
-  if (!Object.values(Kind).includes(kind as Kind)) {
-    logger.error(`invalid kind: ${kind}`);
-    process.exit(1);
-  }
   const generator = new Generator({
     outDir: options.out,
-    kind: kind as Kind,
   });
   await generator.generate();
 }

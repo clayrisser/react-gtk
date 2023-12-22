@@ -141,3 +141,22 @@ export interface GirNamespaceProps {
     }>;
   }>;
 }
+
+export interface GeneratorOptions {
+  outDir: string;
+  rootPath: string;
+}
+
+export interface WidgetElementInterfaceProps {
+  name: string;
+  type: string;
+}
+
+export interface Signal {
+  name: string;
+  returnType: string;
+  params?: {
+    name: string;
+    type: string;
+  }[];
+}

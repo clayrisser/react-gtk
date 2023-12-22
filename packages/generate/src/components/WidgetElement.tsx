@@ -1,7 +1,7 @@
 /**
  * File: /src/components/WidgetElement.tsx
  * Project: @react-gtk/generate
- * File Created: 06-12-2023 07:27:49
+ * File Created: 22-12-2023 04:04:09
  * Author: Clay Risser
  * -----
  * BitSpur (c) Copyright 2017 - 2023
@@ -19,33 +19,18 @@
  * limitations under the License.
  */
 
-import { GirClassElement } from '@ts-for-gir/lib';
 import React from 'react';
+import { ImportType } from '../util';
+import { Signal, WidgetElementInterfaceProps } from '../types';
 import {
   Class,
   ClassMethod,
   Import,
-  Var,
-  VarKind,
   Interface,
   Identifier,
   Export,
-  ExportAllDeclaration,
-  VariableDeclaration,
-  VariableDeclarationKind,
-  ExportNamedDeclaration,
-  VariableDeclarator,
-  ExportSpecifier,
-  ImportDeclaration,
-  TypeAnnotation,
-  TypeParameterInstantiation,
   TypeReference,
-  Literal,
   CallExpression,
-  ClassProperty,
-  AssignmentExpression,
-  ObjectExpression,
-  Property,
   Expression,
   DeclarationType,
   ModuleDeclaration,
@@ -54,7 +39,6 @@ import {
   MethodSignature,
   NewExpression,
 } from 'react-ast';
-import { ImportType, Signal, WidgetElementInterfaceProps } from '../generator';
 
 export interface WidgetElementProps {
   name: string;
@@ -65,17 +49,8 @@ export interface WidgetElementProps {
   interfaceProps?: WidgetElementInterfaceProps[];
 }
 
-export interface WidgetElementExportsProps {
-  widgets: GirClassElement[];
-}
-
-export interface ExportAllWidgetsProps {
-  widgets: GirClassElement[];
-}
-
 export function WidgetElement({
   name,
-  extendedClass = 'Element',
   signals,
   imports,
   interfaceProps,
@@ -91,21 +66,22 @@ export function WidgetElement({
           default={import_.default}
         />
       ))}
-
-      <ModuleDeclaration declaration={DeclarationType.Declare} name="global">
-        <ModuleDeclaration declaration={DeclarationType.Namespace} name="jsx">
-          <InterfaceDeclaration name="IntrinsicElements">
-            <PropertySignature name={name} typeAnnotation={interfaceName} />
-          </InterfaceDeclaration>
-        </ModuleDeclaration>
-      </ModuleDeclaration>
-
       <Export>
         <Interface
           name={interfaceName}
           extends={<Expression identifiers="StyleProps" />}
         >
-          {interfaceProps?.map((interfaceProp) => (
+          {[
+            ...(interfaceProps || []),
+            {
+              name: 'children',
+              type: 'ReactNode',
+            },
+            {
+              name: 'ref',
+              type: `Ref<PublicInstance<Gtk.${name}>>`,
+            },
+          ].map((interfaceProp) => (
             <PropertySignature
               name={interfaceProp.name}
               typeAnnotation={interfaceProp.type}
@@ -126,9 +102,26 @@ export function WidgetElement({
           ))}
         </Interface>
       </Export>
+
+      <ModuleDeclaration declaration={DeclarationType.Declare} name="global">
+        <ModuleDeclaration declaration={DeclarationType.Namespace} name="jsx">
+          <InterfaceDeclaration name="IntrinsicElements">
+            <PropertySignature name={name} typeAnnotation={interfaceName} />
+          </InterfaceDeclaration>
+        </ModuleDeclaration>
+      </ModuleDeclaration>
+
       <Export>
-        <Class name={name} extends={extendedClass}>
-          <ClassProperty name="node" typeAnnotation={`Gtk.${name}`} />
+        <Class
+          name={name}
+          extends="Element"
+          extendsTypeParameters={
+            <>
+              <TypeReference name={`Gtk.${name}`} />
+              <TypeReference name={`${name}Props`} />
+            </>
+          }
+        >
           <ClassMethod
             name="constructor"
             params={[
@@ -137,106 +130,18 @@ export function WidgetElement({
               </Identifier>,
             ]}
           >
-            <Var name="node" kind={VarKind.Const}>
-              <NewExpression name={name}>
-                <Identifier>Gtk</Identifier>
-              </NewExpression>
-            </Var>
-            <CallExpression name="super" arguments={['node', 'props']} />
-            <AssignmentExpression left="this.node">
-              <Identifier>node</Identifier>
-            </AssignmentExpression>
+            <CallExpression
+              name="super"
+              arguments={[
+                <NewExpression key={0} name={name}>
+                  <Identifier>Gtk</Identifier>
+                </NewExpression>,
+                'props',
+              ]}
+            />
           </ClassMethod>
         </Class>
       </Export>
     </>
   );
 }
-
-export const WidgetElementExports = ({
-  widgets,
-}: WidgetElementExportsProps) => {
-  const widgetNames = widgets.map((widget) => widget.$.name);
-  return (
-    <>
-      <ImportDeclaration
-        importKind="type"
-        specifiers={['Element']}
-        source="../../elements/Element"
-      />
-      {widgets.map((widget) => (
-        <Import
-          key={widget.$.name}
-          imports={widget.$.name}
-          from={`./${widget.$.name}`}
-        />
-      ))}
-      <ExportNamedDeclaration>
-        <VariableDeclaration kind={VariableDeclarationKind.Const}>
-          <VariableDeclarator
-            name="elements"
-            typeAnnotation={
-              <TypeAnnotation debug>
-                <TypeReference name="Record">
-                  <TypeParameterInstantiation>
-                    <TypeReference name="string" />
-                    <TypeReference name="typeof Element" />
-                  </TypeParameterInstantiation>
-                </TypeReference>
-              </TypeAnnotation>
-            }
-          >
-            <ObjectExpression>
-              {widgetNames.map((widgetName: string, index: number) => (
-                <Property name={widgetName} key={index} />
-              ))}
-            </ObjectExpression>
-          </VariableDeclarator>
-        </VariableDeclaration>
-      </ExportNamedDeclaration>
-      {widgets.map((widgets) => (
-        <ExportAllDeclaration
-          key={widgets.$.name}
-          source={`./${widgets.$.name}`}
-        />
-      ))}
-    </>
-  );
-};
-
-export const ExportAllWidgets = ({ widgets }: ExportAllWidgetsProps) => {
-  return (
-    <>
-      {widgets.map((widget) => (
-        <Import
-          key={widget.$.name}
-          imports={`${widget.$.name}Props`}
-          from={`./elements/${widget.$.name}`}
-        />
-      ))}
-      {widgets.map((widget) => (
-        <Export key={widget.$.name}>
-          <VariableDeclaration
-            kind={VariableDeclarationKind.Const}
-            key={widget.$.name}
-          >
-            <VariableDeclarator name={widget.$.name}>
-              <Literal>{widget.$.name}</Literal>
-            </VariableDeclarator>
-          </VariableDeclaration>
-        </Export>
-      ))}
-
-      <ExportNamedDeclaration
-        exportKind="type"
-        specifiers={widgets.map((widget) => (
-          <ExportSpecifier
-            key={widget.$.name}
-          >{`${widget.$.name}Props`}</ExportSpecifier>
-        ))}
-      />
-
-      <ExportAllDeclaration source="../render" />
-    </>
-  );
-};

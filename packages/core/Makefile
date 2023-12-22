@@ -45,7 +45,7 @@ $(ACTION)/spellcheck: $(call git_deps,\.(md)$$)
 
 ACTIONS += generate~spellcheck ##
 $(ACTION)/generate: $(call git_deps,\.([jt]sx?)$$)
-	@$(REACT_GTK_GENERATE) elements --out src/generated/elements
+	@$(REACT_GTK_GENERATE) --out src/generated
 	@$(call done,$@)
 
 ACTIONS += lint~generate ##

@@ -22,13 +22,10 @@
 import React from 'react';
 import camelCase from 'lodash.camelcase';
 import { GirClassElement } from '@ts-for-gir/lib';
-import {
-  ExportAllWidgets,
-  WidgetElement,
-  WidgetElementExports,
-  WidgetElementProps,
-} from './components/WidgetElement';
+import { WidgetElement, WidgetElementProps } from './components/WidgetElement';
 import { render } from 'react-ast';
+import { WidgetElementExports } from './components/WidgetElementExports';
+import { ExportAllWidgets } from './components/ExportAllWidgets';
 
 export interface RenderWidgetElementOptions
   extends Omit<WidgetElementProps, 'name'> {}

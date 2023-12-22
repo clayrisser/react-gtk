@@ -54,7 +54,7 @@ import {
   MethodSignature,
   NewExpression,
 } from 'react-ast';
-import { ImportType, Signal } from '../generator';
+import { ImportType, Signal, WidgetElementInterfaceProps } from '../generator';
 
 export interface WidgetElementProps {
   name: string;
@@ -62,6 +62,7 @@ export interface WidgetElementProps {
   importElementPath?: string;
   signals?: Signal[];
   imports?: ImportType[];
+  interfaceProps?: WidgetElementInterfaceProps[];
 }
 
 export interface WidgetElementExportsProps {
@@ -77,6 +78,7 @@ export function WidgetElement({
   extendedClass = 'Element',
   signals,
   imports,
+  interfaceProps,
 }: WidgetElementProps) {
   const interfaceName = `${name}Props`;
   return (
@@ -103,6 +105,13 @@ export function WidgetElement({
           name={interfaceName}
           extends={<Expression identifiers="StyleProps" />}
         >
+          {interfaceProps?.map((interfaceProp) => (
+            <PropertySignature
+              name={interfaceProp.name}
+              typeAnnotation={interfaceProp.type}
+              key={interfaceProp.name}
+            />
+          ))}
           {signals?.map((signal) => (
             <MethodSignature
               name={signal.name}

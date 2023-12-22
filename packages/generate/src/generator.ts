@@ -56,6 +56,11 @@ export interface GeneratorOptions {
   kind: Kind;
 }
 
+export interface WidgetElementInterfaceProps {
+  name: string;
+  type: string;
+}
+
 export interface Signal {
   name: string;
   returnType: string;
@@ -244,10 +249,25 @@ export class Generator {
 
   async generateWidget(widget: GirClassElement) {
     const { signals, imports } = this.getSignalsWithImports(widget);
+    const interfaceProps: WidgetElementInterfaceProps[] = [
+      {
+        name: 'children',
+        type: 'ReactNode',
+      },
+      {
+        name: 'ref',
+        type: `Ref<PublicInstance<Gtk.${widget.$.name}>>`,
+      },
+      {
+        name: 'sizeRequest',
+        type: '[number, number]',
+      },
+    ];
     const generateElementCode = await renderWidgetElement(widget, {
       importElementPath: '../../elements/Element',
       signals,
       imports,
+      interfaceProps,
     });
     await fs.writeFile(
       path.resolve(this.outDir, `${widget.$.name}.tsx`),
@@ -261,17 +281,12 @@ export class Generator {
       { import: ['Element'], from: '../../elements/Element' },
       { default: 'Gtk', from: '@girs/node-gtk-4.0' },
       { import: ['StyleProps'], from: '../../style' },
+      { import: ['PublicInstance'], from: '../../types' },
     ];
 
     return {
       signals: widget['glib:signal']?.map((signal) => {
         const params = signal.parameters?.[0].parameter.map((parameter) => {
-          // let type = this.getType(parameter.type?.[0].$.name);
-          // if (type === parameter.type?.[0].$.name) {
-          //   if (type.includes('.')) {
-          //     this.getImports(imports, type);
-          //   } else type = `Gtk.${type}`;
-          // }
           const type = this.getTypeWithImports(
             parameter.type?.[0].$.name || '',
             imports,
@@ -297,13 +312,10 @@ export class Generator {
 
   getImports(imports: ImportType[], type: string) {
     if (
-      imports.find(
-        (import_) =>
-          import_.default === type || import_.import?.find((i) => i === type),
-      )
+      imports.find((import_) => import_.default === type) ||
+      imports.find((import_) => import_.import?.includes(type))
     )
       return;
-
     const import_ = this.getLibImport(type.split('.')[0]);
     if (import_) {
       imports.push(import_);
@@ -313,6 +325,7 @@ export class Generator {
   getTypeWithImports(type: string, imports?: ImportType[]) {
     if (type.includes('.') && imports) {
       const import_ = this.getLibImport(type.split('.')[0]);
+      console.log(import_);
       if (import_) {
         this.addImport(imports, import_);
       }

@@ -51,6 +51,7 @@ export async function renderWidgetElement(
       importElementPath={options.importElementPath}
       signals={options.signals}
       imports={options.imports}
+      interfaceProps={options.interfaceProps}
     />,
   );
 }

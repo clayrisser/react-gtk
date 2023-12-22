@@ -2,7 +2,7 @@
   "name": "@react-gtk/core",
   "version": "4.0.0",
   "description": "react gtk core",
-  "sideEffects": false,
+  "sideEffects": true,
   "homepage": "https://gitlab.com/bitspur/community/react-gtk",
   "bugs": {
     "url": "https://gitlab.com/bitspur/community/react-gtk/issues",
@@ -63,6 +63,7 @@
     "@girs/node-glib-2.0": "^2.78.0-3.2.6",
     "@girs/node-gobject-2.0": "^2.78.0-3.2.6",
     "@girs/node-graphene-1.0": "^1.0.0-3.2.6",
+    "@girs/node-gsk-4.0": "^4.0.0-3.2.6",
     "@girs/node-gtk-4.0": "^4.12.3-3.2.6",
     "lodash.debounce": "^4.0.8",
     "lodash.kebabcase": "^4.1.1",

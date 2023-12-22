@@ -66,7 +66,7 @@ export interface Signal {
 }
 
 export interface ImportType {
-  import?: string;
+  import?: string[];
   from: string;
   default?: string;
 }
@@ -93,7 +93,7 @@ export class Generator {
 
   async generate() {
     if (typeof this.module === 'undefined') await this.load();
-    // if (this.options.kind === Kind.Elements) await this.generateElements();
+    if (this.options.kind === Kind.Elements) await this.generateElements();
     // await this.generateFunctions();
     // await this.generateEnums();
     // await this.generateInterfaces();
@@ -256,7 +256,13 @@ export class Generator {
   }
 
   getSignalsWithImports(widget: GirClassElement) {
-    const imports: ImportType[] = [];
+    const imports: ImportType[] = [
+      { import: ['ReactNode', 'Ref'], from: 'react' },
+      { import: ['Element'], from: '../../elements/Element' },
+      { default: 'Gtk', from: '@girs/node-gtk-4.0' },
+      { import: ['StyleProps'], from: '../../style' },
+    ];
+
     return {
       signals: widget['glib:signal']?.map((signal) => {
         const params = signal.parameters?.[0].parameter.map((parameter) => {
@@ -290,7 +296,14 @@ export class Generator {
   }
 
   getImports(imports: ImportType[], type: string) {
-    if (imports.find((import_) => import_.import === type)) return;
+    if (
+      imports.find(
+        (import_) =>
+          import_.default === type || import_.import?.find((i) => i === type),
+      )
+    )
+      return;
+
     const import_ = this.getLibImport(type.split('.')[0]);
     if (import_) {
       imports.push(import_);
@@ -496,7 +509,7 @@ export class Generator {
   ) {
     if (this.checkEnum(enums, type)) {
       this.addImport(imports, {
-        import: type,
+        import: [type],
         from: `../enums/${type}`,
       });
     } else if (type.includes('.')) {

@@ -75,18 +75,15 @@ export interface ExportAllWidgetsProps {
 export function WidgetElement({
   name,
   extendedClass = 'Element',
-  importElementPath = '@react-gtk/core',
   signals,
   imports,
 }: WidgetElementProps) {
   const interfaceName = `${name}Props`;
   return (
     <>
-      <Import from={importElementPath} imports="Element" />
-      <Import from="@girs/node-gtk-4.0" default="Gtk" />
-      {imports?.map((import_) => (
+      {imports?.map((import_, i) => (
         <Import
-          key={import_.import}
+          key={`import_.from${i}`}
           from={import_.from}
           imports={import_.import}
           default={import_.default}
@@ -104,7 +101,7 @@ export function WidgetElement({
       <Export>
         <Interface
           name={interfaceName}
-          extends={<Expression identifiers={`Gtk.${name}`} />}
+          extends={<Expression identifiers="StyleProps" />}
         >
           {signals?.map((signal) => (
             <MethodSignature

@@ -38,11 +38,11 @@ import {
   parseDimension,
 } from '../yoga';
 import GObject from '@girs/node-gobject-2.0';
-import { FlexRoot as FlexBoxWidget } from '../widgets/FlexRoot';
+import { Fixed as FixedWidget } from '../widgets/Fixed';
 
 export interface FlexBoxProps extends Omit<StyleProps, 'style'> {
   children?: ReactNode;
-  ref?: Ref<PublicInstance<FlexBoxWidget>>;
+  ref?: Ref<PublicInstance<FixedWidget>>;
   sizeRequest?: [number, number];
   style?: Omit<StyleProp, 'minWidth' | 'minHeight' | 'width' | 'height'> & FlexStyle;
 }
@@ -55,7 +55,7 @@ declare global {
   }
 }
 
-export class FlexBox extends Element<FlexBoxWidget, FlexBoxProps> implements YogaInstance {
+export class FlexBox extends Element<FixedWidget, FlexBoxProps> implements YogaInstance {
   yogaChildren: YogaInstance[] = [];
   yogaNode = Yoga.Node.create();
   yogaParent?: YogaInstance;
@@ -65,7 +65,7 @@ export class FlexBox extends Element<FlexBoxWidget, FlexBoxProps> implements Yog
   private yogaStyle: YogaStyle = {};
 
   constructor(props: FlexBoxProps) {
-    super(new FlexBoxWidget(), props);
+    super(new FixedWidget(), props);
     this.node.hexpand = false;
     this.node.vexpand = false;
   }
@@ -147,7 +147,7 @@ export class FlexBox extends Element<FlexBoxWidget, FlexBoxProps> implements Yog
     this.node.setSizeRequest(width, height);
     if (this.node?.parent) {
       const parentNode = this.node.parent as Gtk.Fixed;
-      if (parentNode && GObject.typeName(parentNode.__gtype__ as unknown as GObject.GType) === 'GtkFixed') {
+      if (parentNode && GObject.typeName(parentNode.__gtype__ as unknown as GObject.GType) === 'ReactGtkFixed') {
         parentNode.move(this.node, left, top);
       }
     }

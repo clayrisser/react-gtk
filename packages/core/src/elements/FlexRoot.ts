@@ -21,10 +21,10 @@
 
 import Yoga from 'yoga-layout/wasm-sync';
 import { DimensionValue } from 'react-native';
-import { StyleProp } from '../style';
-import { parseDimension } from '../yoga';
 import { FlexBox, FlexBoxProps } from './FlexBox';
 import { Instance, YogaInstance } from '../types';
+import { StyleProp } from '../style';
+import { parseDimension } from '../yoga';
 
 export interface FlexRootProps extends Omit<FlexBoxProps, 'style'> {
   style?: Omit<FlexBoxProps['style'], 'minWidth' | 'minHeight' | 'width' | 'height' | 'maxWidth' | 'maxHeight'> &
@@ -48,24 +48,25 @@ export class FlexRoot extends FlexBox {
 
   constructor(props: FlexRootProps) {
     super(props as FlexBoxProps);
-    // this.connected.push(
-    //   this.node.connect('map', () => {
-    //     let timeout: NodeJS.Timeout;
-    //     const interval = setInterval(() => {
-    //       const width = this.node.getAllocatedWidth();
-    //       const height = this.node.getAllocatedHeight();
-    //       if (width > 0 || height > 0) {
-    //         clearInterval(interval);
-    //         clearTimeout(timeout);
-    //         this.allocatedSize = [width, height];
-    //         this.rerenderYogaTree();
-    //       }
-    //     }, 200);
-    //     timeout = setTimeout(() => {
-    //       clearInterval(interval);
-    //     }, 1000);
-    //   }),
-    // );
+    this.connected.push(
+      this.node.connect('map', () => {
+        let timeout: NodeJS.Timeout;
+        const interval = setInterval(() => {
+          const width = this.node.getAllocatedWidth();
+          const height = this.node.getAllocatedHeight();
+          console.log('200', width, height);
+          if (width > 0 || height > 0) {
+            clearInterval(interval);
+            clearTimeout(timeout);
+            this.allocatedSize = [width, height];
+            this.rerenderYogaTree();
+          }
+        }, 200);
+        timeout = setTimeout(() => {
+          clearInterval(interval);
+        }, 1000);
+      }),
+    );
   }
 
   setParent(parent: Instance): void {

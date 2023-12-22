@@ -115,7 +115,7 @@ export class FlexEdge extends Element<Gtk.Box, FlexEdgeProps> implements YogaIns
     this.node.setSizeRequest(width, height);
     if (this.node?.parent) {
       const parentNode = this.node.parent as Gtk.Fixed;
-      if (!parentNode || GObject.typeName(parentNode.__gtype__ as unknown as GObject.GType) !== 'GtkFixed') {
+      if (!parentNode || GObject.typeName(parentNode.__gtype__ as unknown as GObject.GType) !== 'ReactGtkFixed') {
         parentNode.move(this.node, left, top);
       }
     }

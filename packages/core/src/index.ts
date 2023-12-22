@@ -29,7 +29,6 @@ import { FlexRootProps } from './elements/FlexRoot';
 import { GridProps } from './elements/Grid';
 import { ImageProps } from './elements/Image';
 import { FixedProps } from './elements/Fixed';
-import { CustomProps } from './elements/Custom';
 import { LabelProps } from './elements/Label';
 
 export const Box = 'Box';
@@ -54,7 +53,6 @@ export type {
   FlexRootProps,
   GridProps,
   ImageProps,
-  CustomProps,
   LabelProps,
   FixedProps,
 };

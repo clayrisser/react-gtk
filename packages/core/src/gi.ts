@@ -1,7 +1,7 @@
 /*
- *  File: /src/elements/Custom.ts
+ *  File: /src/gi.ts
  *  Project: @react-gtk/core
- *  File Created: 21-12-2023 11:05:43
+ *  File Created: 21-12-2023 12:26:43
  *  Author: Clay Risser
  *  -----
  *  BitSpur (c) Copyright 2017 - 2023
@@ -19,26 +19,9 @@
  *  limitations under the License.
  */
 
-import { Element } from './Element';
-import { Ref } from 'react';
-import { StyleProps } from '../style';
-import { PublicInstance } from '../types';
-import { CustomWidget } from '../widgets/Custom';
+// @ts-ignore
+import gi from 'node-gtk';
 
-export interface CustomProps extends StyleProps {
-  ref?: Ref<PublicInstance<CustomWidget>>;
-}
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      Custom: CustomProps;
-    }
-  }
-}
-
-export class Custom extends Element<CustomWidget, CustomProps> {
-  constructor(props?: CustomProps) {
-    super(new CustomWidget(), props);
-  }
+export function registerClass(_class: any) {
+  gi.registerClass(_class);
 }

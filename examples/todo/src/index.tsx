@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { render, Box, Custom, FlexBox, FlexRoot } from '@react-gtk/core';
+import { render, Box, FlexRoot, FlexBox } from '@react-gtk/core';
 
 export const Example = () => {
   return (
@@ -31,7 +31,6 @@ export const Example = () => {
         backgroundColor: 'green',
       }}
     >
-      <Custom />
       <FlexRoot
         // @ts-ignore
         hexpand
@@ -40,8 +39,7 @@ export const Example = () => {
           // width: 600,
           backgroundColor: 'blue',
         }}
-      />
-      {/*
+      >
         <FlexBox
           style={{
             justifyContent: 'space-between',
@@ -55,7 +53,7 @@ export const Example = () => {
           <FlexBox style={{ width: 60, height: 60, backgroundColor: 'purple' }} />
           <FlexBox style={{ width: 60, height: 60, backgroundColor: 'yellow' }} />
         </FlexBox>
-      </FlexRoot> */}
+      </FlexRoot>
     </Box>
   );
 };

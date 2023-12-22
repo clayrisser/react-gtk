@@ -43,6 +43,7 @@ gulong
 gushort
 hari
 hexpand
+hfw
 homebrew
 homedir
 hydratable
@@ -83,10 +84,12 @@ txt
 type
 typeof
 unmount
+unparent
 uri
 usr
 utf
 utf8
 vexpand
+wfh
 xml
 yarnpkg

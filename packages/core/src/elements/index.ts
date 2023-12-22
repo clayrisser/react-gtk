@@ -30,13 +30,11 @@ import { Image } from './Image';
 import { Instance } from '../types';
 import { Label } from './Label';
 import { Text } from './Text';
-import { Custom } from './Custom';
 // import { elements as generatedElements } from '../generated/elements
 export const elements: Record<string, Instance> = {
   // ...generatedElements,
   Box,
   Button,
-  Custom,
   Fixed,
   FlexBox,
   FlexEdge,

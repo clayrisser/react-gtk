@@ -24,10 +24,15 @@ import { GirClassElement, GirMethodElement } from '@ts-for-gir/lib';
 import React, { ReactNode } from 'react';
 import {
   Export,
+  ExpressionWithTypeArguments,
   Identifier,
   Import,
   Interface,
+  InterfaceTypeReference,
   PropertySignature,
+  TypeAnnotation,
+  TypeParameterInstantiation,
+  TypeReference,
 } from 'react-ast';
 import { lookupType, TypeDefinition } from '../typeUtil';
 
@@ -111,15 +116,27 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
     ));
   }
 
+  function renderExtendsInterface() {
+    if (!extends_) return;
+    const propsInterfaceOmit = propsInterfaceOmitMap[`${class_.$.name}Props`];
+    if (!propsInterfaceOmit?.length) return <Identifier>{extends_}</Identifier>;
+    return (
+      <ExpressionWithTypeArguments key={0} name="Omit">
+        <InterfaceTypeReference>{extends_}</InterfaceTypeReference>
+        <InterfaceTypeReference>
+          {propsInterfaceOmit.map((omit) => `'${omit}'`).join('|')}
+        </InterfaceTypeReference>
+      </ExpressionWithTypeArguments>
+    );
+  }
+
   return (
     <>
       {renderImports()}
       <Export>
         <Interface
           name={`${class_.$.name}Props`}
-          extends={
-            extends_ ? [<Identifier key={0}>{extends_}</Identifier>] : undefined
-          }
+          extends={renderExtendsInterface()}
         >
           {renderPropDefinitions()}
         </Interface>
@@ -159,3 +176,9 @@ export function getPropDefinitions(class_: GirClassElement): PropDefinition[] {
     })
     .filter(Boolean) as PropDefinition[];
 }
+
+const propsInterfaceOmitMap: Record<string, string[]> = {
+  IconViewProps: ['cursor'],
+  MenuButtonProps: ['direction'],
+  TreeViewProps: ['cursor'],
+};

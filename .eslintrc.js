@@ -84,6 +84,7 @@ module.exports = {
     'max-params': 'off',
     'no-param-reassign': 'off',
     'no-promise-executor-return': 'off',
+    'react/no-unescaped-entities': 'off',
   },
   overrides: [
     {

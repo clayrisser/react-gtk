@@ -20,7 +20,6 @@
  */
 
 import React from 'react';
-import camelCase from 'lodash.camelcase';
 import { GirClassElement } from '@ts-for-gir/lib';
 import { WidgetElement, WidgetElementProps } from './components/WidgetElement';
 import { render } from 'react-ast';
@@ -32,25 +31,9 @@ export interface RenderWidgetElementOptions
 
 export async function renderWidgetElement(
   widget: GirClassElement,
-  options: RenderWidgetElementOptions = {},
+  _options: RenderWidgetElementOptions = {},
 ) {
-  const signalProps = widget['glib:signal']?.map((s) =>
-    camelCase(`on-${s.$.name}`),
-  );
-  if (signalProps?.length) {
-    // console.log(`${widget.$.name} signalProps`, signalProps);
-    // TODO: this is how to title case from the camel case (this should happen in the WidgetElement)
-    // console.log(signalProps.map((s) => s.slice(2)));
-  }
-  return render(
-    <WidgetElement
-      name={widget.$.name}
-      importElementPath={options.importElementPath}
-      signals={options.signals}
-      imports={options.imports}
-      interfaceProps={options.interfaceProps}
-    />,
-  );
+  return render(<WidgetElement name={widget.$.name} />);
 }
 
 export async function renderWidgetElementExports(widgets: GirClassElement[]) {

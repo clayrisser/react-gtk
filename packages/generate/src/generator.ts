@@ -19,14 +19,11 @@
  *  limitations under the License.
  */
 
-import camelCase from 'lodash.camelcase';
 import fs from 'fs/promises';
 import path from 'path';
-import { GeneratorOptions, Signal } from './types';
-import { lookupType } from './typeUtil';
-import { lookupLibImport, ImportType } from './util';
-import { loadGtkModule } from './module';
+import { GeneratorOptions } from './types';
 import { GirModule, GirClassElement } from '@ts-for-gir/lib';
+import { loadGtkModule } from './module';
 import { renderPropsInterface } from './renderPropsInterface';
 import {
   renderWidgetElement,
@@ -85,16 +82,7 @@ export class Generator {
 
   async generateWidgetElement(widget: GirClassElement) {
     await this.generatePropsInterface(widget);
-    const { signals, imports: signalImports } = this.getSignals(widget);
-    const imports = this.deduplicateImports([
-      ...this.getImports(widget),
-      ...signalImports,
-    ]);
-    const generateElementCode = await renderWidgetElement(widget, {
-      importElementPath: '../../elements/Element',
-      signals,
-      imports,
-    });
+    const generateElementCode = await renderWidgetElement(widget);
     await fs.writeFile(
       path.resolve(this.outDir, `elements/${widget.$.name}.tsx`),
       generateElementCode,
@@ -103,12 +91,12 @@ export class Generator {
 
   async generatePropsInterface(class_: GirClassElement) {
     if (this.generatedPropsInterfaces.has(class_.$.name)) return;
-    const generatePropsInterfaceCode = await renderPropsInterface(class_, {});
+    const generatePropsInterfaceCode = await renderPropsInterface(class_);
     await fs.mkdir(path.resolve(this.outDir, 'interfaces'), {
       recursive: true,
     });
     await fs.writeFile(
-      path.resolve(this.outDir, `interfaces/${class_.$.name}Props.ts`),
+      path.resolve(this.outDir, `interfaces/${class_.$.name}GObjectProps.ts`),
       generatePropsInterfaceCode,
     );
     this.generatedPropsInterfaces.add(class_.$.name);
@@ -117,82 +105,18 @@ export class Generator {
     await this.generatePropsInterface(parent);
   }
 
-  getImports(_widget: GirClassElement) {
-    const imports: ImportType[] = [
-      { default: 'Gtk', from: '@girs/node-gtk-4.0' },
-      {
-        import: ['Element'],
-        from: `${this.options.rootPath}/elements/Element`,
-      },
-      { import: ['PublicInstance'], from: `${this.options.rootPath}/types` },
-      { import: ['ReactNode', 'Ref'], from: 'react' },
-      { import: ['StyleProps'], from: `${this.options.rootPath}/style` },
-    ];
-    return imports;
-  }
-
-  getSignals(widget: GirClassElement) {
-    const imports: ImportType[] = [];
-    return {
-      signals: widget['glib:signal']?.map((signal) => {
-        const params = signal.parameters?.[0].parameter.map((parameter) => {
-          const type = this.getTypeWithImports(
-            parameter.type?.[0].$.name || '',
-            imports,
-          );
-          return {
-            name: parameter.$.name,
-            type,
-          };
-        });
-        const returnType = this.getTypeWithImports(
-          signal['return-value']?.[0].type?.[0].$.name || '',
-          imports,
-        );
-        return {
-          name: camelCase(`on-${signal.$.name}`),
-          returnType,
-          params,
-        } as Signal;
-      }),
-      imports,
-    };
-  }
-
-  deduplicateImports(imports: ImportType[]) {
-    return imports;
-  }
-
-  getTypeWithImports(type: string, imports?: ImportType[]) {
-    if (type.includes('.') && imports) {
-      const import_ = lookupLibImport(type.split('.')[0]);
-      console.log(import_);
-      if (import_) {
-        this.addImport(imports, import_);
-      }
-    } else {
-      const type_ = lookupType(type);
-      if (type_ === type) {
-        type = `Gtk.${type}`;
-      } else {
-        type = type_;
-      }
-    }
-    return type;
-  }
-
-  getParent(class_: GirClassElement) {
+  private getParent(class_: GirClassElement) {
     const parent = class_.$.parent;
     if (!parent) return;
     return this.classes.find((class_) => class_.$.name === parent);
   }
 
-  get widgets() {
+  private get widgets() {
     const classes = this.classes;
     return classes.filter((class_) => this.isWidget(class_));
   }
 
-  get classes() {
+  private get classes() {
     return this.module.ns.class || [];
   }
 
@@ -202,10 +126,5 @@ export class Generator {
     const parent = this.getParent(class_);
     if (!parent) return false;
     return this.isWidget(parent);
-  }
-
-  private addImport(imports: ImportType[], import_: ImportType) {
-    if (imports.find((imp) => imp.import === import_.import)) return;
-    imports.push(import_);
   }
 }

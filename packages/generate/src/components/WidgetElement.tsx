@@ -20,75 +20,56 @@
  */
 
 import React from 'react';
-import { ImportType } from '../util';
-import { Signal, WidgetElementInterfaceProps } from '../types';
 import {
+  CallExpression,
   Class,
   ClassMethod,
+  DeclarationType,
+  Export,
+  Expression,
+  Identifier,
   Import,
   Interface,
-  Identifier,
-  Export,
-  TypeReference,
-  CallExpression,
-  Expression,
-  DeclarationType,
-  ModuleDeclaration,
-  PropertySignature,
   InterfaceDeclaration,
-  MethodSignature,
+  ModuleDeclaration,
   NewExpression,
+  PropertySignature,
+  TypeReference,
 } from 'react-ast';
 
 export interface WidgetElementProps {
   name: string;
-  extendedClass?: string;
-  importElementPath?: string;
-  signals?: Signal[];
-  imports?: ImportType[];
-  interfaceProps?: WidgetElementInterfaceProps[];
 }
 
-export function WidgetElement({
-  name,
-  signals,
-  imports,
-  interfaceProps,
-}: WidgetElementProps) {
+export function WidgetElement({ name }: WidgetElementProps) {
   const interfaceName = `${name}Props`;
   return (
     <>
-      {imports?.map((import_, i) => (
-        <Import
-          key={`import_.from${i}`}
-          from={import_.from}
-          imports={import_.import}
-          default={import_.default}
-        />
-      ))}
+      <Import from="../../elements/Element" imports={['Element']} />
+      <Import from="../../style" imports={['StyleProps']} />
+      <Import from="../../types" imports={['PublicInstance']} />
+      <Import from="@girs/node-gtk-4.0" default="Gtk" />
+      <Import from="react" imports={['ReactNode', 'Ref']} />
+      <Import
+        from={`../interfaces/${name}GObjectProps`}
+        imports={`${name}GObjectProps`}
+      />
       <Export>
         <Interface
           name={interfaceName}
-          extends={<Expression identifiers="StyleProps" />}
+          extends={
+            <>
+              <Expression identifiers="StyleProps" />
+              <Expression identifiers={`${name}GObjectProps`} />
+            </>
+          }
         >
-          {[
-            ...(interfaceProps || []),
-            {
-              name: 'children',
-              type: 'ReactNode',
-            },
-            {
-              name: 'ref',
-              type: `Ref<PublicInstance<Gtk.${name}>>`,
-            },
-          ].map((interfaceProp) => (
-            <PropertySignature
-              name={interfaceProp.name}
-              typeAnnotation={interfaceProp.type}
-              key={interfaceProp.name}
-            />
-          ))}
-          {signals?.map((signal) => (
+          <PropertySignature name="children" typeAnnotation="ReactNode" />
+          <PropertySignature
+            name="ref"
+            typeAnnotation={`Ref<PublicInstance<Gtk.${name}>>`}
+          />
+          {/* {signals?.map((signal) => (
             <MethodSignature
               name={signal.name}
               params={signal.params?.map((param) => (
@@ -99,10 +80,9 @@ export function WidgetElement({
               key={signal.name}
               returnType={signal.returnType}
             />
-          ))}
+          ))} */}
         </Interface>
       </Export>
-
       <ModuleDeclaration declaration={DeclarationType.Declare} name="global">
         <ModuleDeclaration declaration={DeclarationType.Namespace} name="jsx">
           <InterfaceDeclaration name="IntrinsicElements">
@@ -110,7 +90,6 @@ export function WidgetElement({
           </InterfaceDeclaration>
         </ModuleDeclaration>
       </ModuleDeclaration>
-
       <Export>
         <Class
           name={name}

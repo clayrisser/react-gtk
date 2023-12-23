@@ -19,9 +19,10 @@
  * limitations under the License.
  */
 
+import React, { ReactNode } from 'react';
 import camelCase from 'lodash.camelcase';
 import { GirClassElement, GirMethodElement } from '@ts-for-gir/lib';
-import React, { ReactNode } from 'react';
+import { lookupType, TypeDefinition } from '../typeUtil';
 import {
   Export,
   ExpressionWithTypeArguments,
@@ -30,11 +31,7 @@ import {
   Interface,
   InterfaceTypeReference,
   PropertySignature,
-  TypeAnnotation,
-  TypeParameterInstantiation,
-  TypeReference,
 } from 'react-ast';
-import { lookupType, TypeDefinition } from '../typeUtil';
 
 export interface PropsInterfaceProps {
   class_: GirClassElement;
@@ -43,7 +40,7 @@ export interface PropsInterfaceProps {
 export function PropsInterface({ class_ }: PropsInterfaceProps) {
   const extends_ =
     class_.$.parent && class_.$.parent !== 'GObject.InitiallyUnowned'
-      ? `${class_.$.parent}Props`
+      ? `${class_.$.parent}GObjectProps`
       : undefined;
   const propDefinitions = getPropDefinitions(class_);
 
@@ -118,7 +115,8 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
 
   function renderExtendsInterface() {
     if (!extends_) return;
-    const propsInterfaceOmit = propsInterfaceOmitMap[`${class_.$.name}Props`];
+    const propsInterfaceOmit =
+      propsInterfaceOmitMap[`${class_.$.name}GObjectProps`];
     if (!propsInterfaceOmit?.length) return <Identifier>{extends_}</Identifier>;
     return (
       <ExpressionWithTypeArguments key={0} name="Omit">
@@ -135,7 +133,7 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
       {renderImports()}
       <Export>
         <Interface
-          name={`${class_.$.name}Props`}
+          name={`${class_.$.name}GObjectProps`}
           extends={renderExtendsInterface()}
         >
           {renderPropDefinitions()}
@@ -178,7 +176,7 @@ export function getPropDefinitions(class_: GirClassElement): PropDefinition[] {
 }
 
 const propsInterfaceOmitMap: Record<string, string[]> = {
-  IconViewProps: ['cursor'],
-  MenuButtonProps: ['direction'],
-  TreeViewProps: ['cursor'],
+  IconViewGObjectProps: ['cursor'],
+  MenuButtonGObjectProps: ['direction'],
+  TreeViewGObjectProps: ['cursor'],
 };

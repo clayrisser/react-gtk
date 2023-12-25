@@ -19,7 +19,7 @@
  *  limitations under the License.
  */
 
-export * from './ExportAllWidgets';
+export * from './RootIndex';
 export * from './PropsInterface';
 export * from './WidgetElement';
-export * from './WidgetElementExports';
+export * from './WidgetElementsIndex';

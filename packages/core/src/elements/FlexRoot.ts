@@ -19,7 +19,7 @@
  *  limitations under the License.
  */
 
-import Yoga from 'yoga-layout/wasm-sync';
+import Yoga from 'yoga-layout/sync';
 import { DimensionValue } from 'react-native';
 import { FlexBox, FlexBoxProps } from './FlexBox';
 import { Instance, YogaInstance } from '../types';

@@ -23,7 +23,7 @@ import ReactReconciler from 'react-reconciler';
 import createElement from './createElement';
 import type { Lane } from 'react-reconciler';
 import { DefaultEventPriority } from 'react-reconciler/constants';
-import { Text } from './elements/Text';
+import { Label } from './elements';
 import { logger } from './util';
 import type {
   ChildSet,
@@ -86,7 +86,7 @@ export default ReactReconciler<
     const element = createElement(type, elementProps);
     // TODO: double check type is Text
     if (type !== 'Text' && typeof props.children === 'string') {
-      const textNode = new Text({ text: props.children });
+      const textNode = new Label({ text: props.children });
       element.appendChild(textNode);
     }
     return element;
@@ -110,7 +110,7 @@ export default ReactReconciler<
 
   createTextInstance(text: string, _rootContainerInstance: Container, _hostContext: HostContext): TextInstance {
     logger.trace('createTextInstance');
-    return new Text({ text });
+    return new Label({ text });
   },
 
   getPublicInstance(instance: Instance | TextInstance): PublicInstance {

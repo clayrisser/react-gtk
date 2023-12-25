@@ -21,7 +21,7 @@
 
 import type { Gtk } from '@girs/node-gtk-4.0';
 import type { FlexRoot } from './elements/FlexRoot';
-import type { Node as YogaNode } from 'yoga-layout/wasm-sync';
+import type { Node as YogaNode } from 'yoga-layout/sync';
 
 export type BundleType = 0 | 1;
 
@@ -59,7 +59,7 @@ export type NoTimeout = any;
 
 export type SuspenseInstance = any;
 
-export interface TextInstance<Props = Record<string, any>> extends Instance<Gtk.Text, Props> {}
+export interface TextInstance<Props = Record<string, any>> extends Instance<Gtk.Label, Props> {}
 
 export interface Container extends Instance {}
 

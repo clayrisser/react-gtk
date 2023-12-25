@@ -19,41 +19,20 @@
  *  limitations under the License.
  */
 
-import { Box } from './Box';
-import { Button } from './Button';
-import { Fixed } from './Fixed';
 import { FlexBox } from './FlexBox';
 import { FlexEdge } from './FlexEdge';
 import { FlexRoot } from './FlexRoot';
-import { Grid } from './Grid';
-import { Image } from './Image';
 import { Instance } from '../types';
-import { Label } from './Label';
-import { Text } from './Text';
-// import { elements as generatedElements } from '../generated/elements
+import { elements as generatedElements } from '../generated/elements';
+
 export const elements: Record<string, Instance> = {
-  // ...generatedElements,
-  Box,
-  Button,
-  Fixed,
+  ...generatedElements,
   FlexBox,
   FlexEdge,
   FlexRoot,
-  Grid,
-  Image,
-  Label,
-  Text,
 } as Record<string, any>;
 
-export * from './ApplicationWindow';
-export * from './Box';
-export * from './Button';
+export * from '../generated/elements';
 export * from './Element';
-export * from './Fixed';
 export * from './FlexBox';
 export * from './FlexEdge';
-export * from './Grid';
-export * from './Image';
-export * from './Label';
-export * from './Text';
-// export * from '../generated/elements';

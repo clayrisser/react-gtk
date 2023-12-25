@@ -21,8 +21,12 @@
 
 import React, { ReactNode } from 'react';
 import camelCase from 'lodash.camelcase';
-import { GirClassElement, GirMethodElement } from '@ts-for-gir/lib';
 import { lookupType, TypeDefinition } from '../typeUtil';
+import {
+  GirCallableParamElement,
+  GirClassElement,
+  GirMethodElement,
+} from '@ts-for-gir/lib';
 import {
   Export,
   ExpressionWithTypeArguments,
@@ -30,6 +34,7 @@ import {
   Import,
   Interface,
   InterfaceTypeReference,
+  MethodSignature,
   PropertySignature,
 } from 'react-ast';
 
@@ -42,7 +47,8 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
     class_.$.parent && class_.$.parent !== 'GObject.InitiallyUnowned'
       ? `${class_.$.parent}GObjectProps`
       : undefined;
-  const propDefinitions = getPropDefinitions(class_);
+  const propertyPropDefinitions = getPropertyPropDefinitions(class_);
+  const methodPropDefinitions = getMethodPropDefinitions(class_);
 
   function renderImports() {
     const importedNames = new Set<string>();
@@ -52,63 +58,79 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
         <Import key={0} imports={[extends_]} from={`./${extends_}`} />,
       );
     }
-    propDefinitions.forEach((propDefinition, i) => {
-      (propDefinition.type.items || []).forEach(
-        (typeDefinition: TypeDefinition) => {
-          if (!typeDefinition.importFrom) return;
-          const importedName =
-            typeDefinition.importDefault || typeDefinition.importAs;
-          if (!importedName || importedNames.has(importedName)) return;
-          imports.push(
-            <Import
-              key={
-                propDefinition.name +
-                propDefinition.type.toString() +
-                importedNames.size +
-                i
-              }
-              default={typeDefinition.importDefault}
-              imports={
-                typeDefinition.importAs ? [typeDefinition.importAs] : undefined
-              }
-              from={typeDefinition.importFrom}
-            />,
-          );
-          importedNames.add(importedName);
-        },
-      );
-      if (!propDefinition.type.importFrom) return;
-      const importedName =
-        propDefinition.type.importDefault || propDefinition.type.importAs;
+    propertyPropDefinitions.forEach(({ name, type }, i) => {
+      (type.items || []).forEach((typeDefinition: TypeDefinition) => {
+        if (!typeDefinition.importFrom) return;
+        const importedName =
+          typeDefinition.importDefault || typeDefinition.importAs;
+        if (!importedName || importedNames.has(importedName)) return;
+        imports.push(
+          <Import
+            key={name + type.toString() + importedNames.size + i}
+            default={typeDefinition.importDefault}
+            imports={
+              typeDefinition.importAs ? [typeDefinition.importAs] : undefined
+            }
+            from={typeDefinition.importFrom}
+          />,
+        );
+        importedNames.add(importedName);
+      });
+      if (!type.importFrom) return;
+      const importedName = type.importDefault || type.importAs;
       if (!importedName || importedNames.has(importedName)) return;
       imports.push(
         <Import
-          key={
-            propDefinition.name +
-            propDefinition.type.toString() +
-            importedNames.size +
-            i
-          }
-          default={propDefinition.type.importDefault}
-          imports={
-            propDefinition.type.importAs
-              ? [propDefinition.type.importAs]
-              : undefined
-          }
-          from={propDefinition.type.importFrom}
+          key={name + type.toString() + importedNames.size + i}
+          default={type.importDefault}
+          imports={type.importAs ? [type.importAs] : undefined}
+          from={type.importFrom}
         />,
       );
       importedNames.add(importedName);
     });
+    methodPropDefinitions.forEach(({ parameters }, i) => {
+      parameters.forEach(({ name, type }) => {
+        if (!type.importFrom) return;
+        const importedName = type.importDefault || type.importAs;
+        if (!importedName || importedNames.has(importedName)) return;
+        imports.push(
+          <Import
+            key={name + type.toString() + importedNames.size + i}
+            default={type.importDefault}
+            imports={type.importAs ? [type.importAs] : undefined}
+            from={type.importFrom}
+          />,
+        );
+        importedNames.add(importedName);
+      });
+    });
     return imports;
   }
 
-  function renderPropDefinitions() {
-    return propDefinitions.map((propDefinition) => (
+  function renderPropertyProps() {
+    return propertyPropDefinitions.map(({ name, type }, i) => (
       <PropertySignature
-        name={propDefinition.name}
-        typeAnnotation={propDefinition.type.toString()}
-        key={propDefinition.name}
+        key={name + i}
+        name={name}
+        optional
+        typeAnnotation={type.toString()}
+      />
+    ));
+  }
+
+  function renderMethodProps() {
+    return methodPropDefinitions.map(({ name, parameters }, i) => (
+      <MethodSignature
+        key={name + i}
+        name={name}
+        optional
+        returnType="void"
+        params={parameters.map(({ name, type }, i) => (
+          <Identifier key={name + i} typeAnnotation={type.toString()}>
+            {name}
+          </Identifier>
+        ))}
       />
     ));
   }
@@ -136,21 +158,17 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
           name={`${class_.$.name}GObjectProps`}
           extends={renderExtendsInterface()}
         >
-          {renderPropDefinitions()}
+          {renderPropertyProps()}
+          {renderMethodProps()}
         </Interface>
       </Export>
     </>
   );
 }
 
-export interface PropDefinition {
-  method: GirMethodElement;
-  name: string;
-  parameters: string[];
-  type: TypeDefinition;
-}
-
-export function getPropDefinitions(class_: GirClassElement): PropDefinition[] {
+export function getPropertyPropDefinitions(
+  class_: GirClassElement,
+): PropertyPropDefinition[] {
   return (class_.method || [])
     .filter((m) => m.$.name.startsWith('set_'))
     .map((m) => {
@@ -172,7 +190,49 @@ export function getPropDefinitions(class_: GirClassElement): PropDefinition[] {
               ),
       };
     })
-    .filter(Boolean) as PropDefinition[];
+    .filter(Boolean) as PropertyPropDefinition[];
+}
+
+export function getMethodPropDefinitions(
+  class_: GirClassElement,
+): MethodPropDefinition[] {
+  return (class_['glib:signal'] || []).map((s) => {
+    const parameters =
+      (s.parameters
+        ?.map((p) => {
+          const parameter = p.parameter?.[0];
+          const type = parameter.type?.[0];
+          if (!parameter || !type || !type.$.name) return null;
+          return {
+            name: camelCase(parameter.$.name),
+            parameter,
+            type: new TypeDefinition(lookupType(type.$.name)),
+          } as MethodPropParameter;
+        })
+        .filter(Boolean) as MethodPropParameter[]) || [];
+    return {
+      name: camelCase(`on-${s.$.name}`),
+      parameters,
+    };
+  });
+}
+
+export interface MethodPropParameter {
+  name: string;
+  parameter: GirCallableParamElement;
+  type: TypeDefinition;
+}
+
+export interface MethodPropDefinition {
+  name: string;
+  parameters: MethodPropParameter[];
+}
+
+export interface PropertyPropDefinition {
+  method: GirMethodElement;
+  name: string;
+  parameters: string[];
+  type: TypeDefinition;
 }
 
 const propsInterfaceOmitMap: Record<string, string[]> = {

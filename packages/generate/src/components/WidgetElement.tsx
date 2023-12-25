@@ -20,6 +20,7 @@
  */
 
 import React from 'react';
+import { GirClassElement } from '@ts-for-gir/lib';
 import {
   CallExpression,
   Class,
@@ -38,10 +39,11 @@ import {
 } from 'react-ast';
 
 export interface WidgetElementProps {
-  name: string;
+  widget: GirClassElement;
 }
 
-export function WidgetElement({ name }: WidgetElementProps) {
+export function WidgetElement({ widget }: WidgetElementProps) {
+  const name = widget.$.name;
   const interfaceName = `${name}Props`;
   return (
     <>
@@ -64,9 +66,14 @@ export function WidgetElement({ name }: WidgetElementProps) {
             </>
           }
         >
-          <PropertySignature name="children" typeAnnotation="ReactNode" />
+          <PropertySignature
+            name="children"
+            optional
+            typeAnnotation="ReactNode"
+          />
           <PropertySignature
             name="ref"
+            optional
             typeAnnotation={`Ref<PublicInstance<Gtk.${name}>>`}
           />
           {/* {signals?.map((signal) => (
@@ -84,7 +91,7 @@ export function WidgetElement({ name }: WidgetElementProps) {
         </Interface>
       </Export>
       <ModuleDeclaration declaration={DeclarationType.Declare} name="global">
-        <ModuleDeclaration declaration={DeclarationType.Namespace} name="jsx">
+        <ModuleDeclaration declaration={DeclarationType.Namespace} name="JSX">
           <InterfaceDeclaration name="IntrinsicElements">
             <PropertySignature name={name} typeAnnotation={interfaceName} />
           </InterfaceDeclaration>

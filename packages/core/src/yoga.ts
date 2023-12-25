@@ -19,9 +19,8 @@
  *  limitations under the License.
  */
 
-import Yoga, { Align, FlexDirection, Justify, Overflow, PositionType, Wrap } from 'yoga-layout/wasm-sync';
+import Yoga, { Align, FlexDirection, Justify, Overflow, PositionType, Wrap } from 'yoga-layout/sync';
 import type { FlexStyle, DimensionValue, FlexAlignType } from 'react-native';
-import { YogaInstance } from './types';
 
 export function lookupFlexDirection(flexDirection?: FlexStyle['flexDirection']) {
   switch (flexDirection) {

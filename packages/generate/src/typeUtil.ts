@@ -101,7 +101,7 @@ export const importTypeMap: Record<string, ImportTypeInfo> = {
   },
   Gdk: {
     from: '@girs/node-gdk-4.0',
-    types: ['Cursor', 'Paintable', 'Display', 'Rectangle'],
+    types: ['Cursor', 'Paintable', 'Display', 'Rectangle', 'GLContext'],
   },
   GdkPixbuf: {
     from: '@girs/node-gdkpixbuf-2.0',
@@ -113,7 +113,7 @@ export const importTypeMap: Record<string, ImportTypeInfo> = {
   },
   Gio: {
     from: '@girs/node-gio-2.0',
-    types: ['File', 'MenuModel', 'ListModel', 'Icon', 'Permission'],
+    types: ['File', 'MenuModel', 'ListModel', 'Icon', 'Permission', 'AppInfo'],
   },
   cairo: {
     from: '@girs/node-cairo-1.0',

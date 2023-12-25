@@ -70,15 +70,15 @@
     "@ts-for-gir/lib": "^3.2.6",
     "commander": "^11.1.0",
     "lodash.camelcase": "^4.3.0",
-    "react-ast": "^0.6.9"
+    "react-ast": "^0.6.12"
   },
   "devDependencies": {
-    "@types/lodash.camelcase": "^4",
-    "@types/node": "^20.10.0",
+    "@types/lodash.camelcase": "^4.3.9",
+    "@types/node": "^20.10.5",
     "jest": "^29.7.0",
     "jest-sonar-reporter": "^2.0.0",
     "tsup": "^8.0.1",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.3"
   },
   "engines": {
     "node": ">=16.0.0"

@@ -24,11 +24,12 @@ import path from 'path';
 import { GeneratorOptions } from './types';
 import { GirModule, GirClassElement } from '@ts-for-gir/lib';
 import { loadGtkModule } from './module';
-import { renderPropsInterface } from './renderPropsInterface';
 import {
+  renderPropsInterface,
+  renderRootIndex,
   renderWidgetElement,
-  renderWidgetElementExports,
-} from './renderWidgetElement';
+  renderWidgetElementsIndex,
+} from './render';
 
 export class Generator {
   module!: GirModule;
@@ -36,6 +37,8 @@ export class Generator {
   outDir: string;
 
   options: GeneratorOptions;
+
+  private _widgets?: GirClassElement[];
 
   private generatedPropsInterfaces: Set<string> = new Set();
 
@@ -54,34 +57,19 @@ export class Generator {
 
   async generate() {
     if (typeof this.module === 'undefined') await this.load();
-    await this.generateElements();
-  }
-
-  async generateElements() {
-    if (typeof this.module === 'undefined') await this.load();
-    const { widgets } = this;
     await fs.rm(this.outDir, { recursive: true, force: true });
     await fs.mkdir(path.resolve(this.outDir, 'elements'), { recursive: true });
     await Promise.all(
       this.widgets.map(async (widget) => {
-        this.generateWidgetElement(widget);
+        await this.generateWidgetElement(widget);
+        await this.generatePropsInterface(widget);
       }),
     );
-    const generateElementExportsCode =
-      await renderWidgetElementExports(widgets);
-    await fs.writeFile(
-      path.resolve(this.outDir, 'elements/index.ts'),
-      generateElementExportsCode,
-    );
-    // const generateExportAllWidgetsCode = await renderExportAllWidgets(widgets);
-    // await fs.writeFile(
-    //   path.resolve('src/generated/', 'index.ts'),
-    //   generateExportAllWidgetsCode,
-    // );
+    await this.generateWidgetElementsIndex();
+    await this.generateRootIndex();
   }
 
   async generateWidgetElement(widget: GirClassElement) {
-    await this.generatePropsInterface(widget);
     const generateElementCode = await renderWidgetElement(widget);
     await fs.writeFile(
       path.resolve(this.outDir, `elements/${widget.$.name}.tsx`),
@@ -105,6 +93,20 @@ export class Generator {
     await this.generatePropsInterface(parent);
   }
 
+  async generateRootIndex() {
+    await fs.writeFile(
+      path.resolve(this.outDir, 'index.ts'),
+      await renderRootIndex(this.widgets),
+    );
+  }
+
+  async generateWidgetElementsIndex() {
+    await fs.writeFile(
+      path.resolve(this.outDir, 'elements/index.ts'),
+      await renderWidgetElementsIndex(this.widgets),
+    );
+  }
+
   private getParent(class_: GirClassElement) {
     const parent = class_.$.parent;
     if (!parent) return;
@@ -112,8 +114,10 @@ export class Generator {
   }
 
   private get widgets() {
+    if (this._widgets) return this._widgets;
     const classes = this.classes;
-    return classes.filter((class_) => this.isWidget(class_));
+    this._widgets = classes.filter((class_) => this.isWidget(class_));
+    return this._widgets;
   }
 
   private get classes() {

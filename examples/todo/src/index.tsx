@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { render, Box, FlexRoot, FlexBox } from '@react-gtk/core';
+import { render, Box, FlexRoot, FlexBox, Button, FlexEdge } from '@react-gtk/core';
 
 export const Example = () => {
   return (
@@ -32,7 +32,6 @@ export const Example = () => {
       }}
     >
       <FlexRoot
-        // @ts-ignore
         hexpand
         style={{
           // height: 600,
@@ -50,7 +49,32 @@ export const Example = () => {
           }}
         >
           <FlexBox style={{ width: 60, height: 60, backgroundColor: 'yellow' }} />
-          <FlexBox style={{ width: 60, height: 60, backgroundColor: 'purple' }} />
+          <FlexBox
+            style={{
+              width: 160,
+              height: 160,
+              backgroundColor: 'purple',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <FlexEdge
+              style={{
+                width: 100,
+                height: 60,
+                backgroundColor: 'red',
+              }}
+            >
+              <Button
+                vexpand
+                hexpand
+                label="Click Me!"
+                onClicked={() => {
+                  console.log('Button was clicked!');
+                }}
+              />
+            </FlexEdge>
+          </FlexBox>
           <FlexBox style={{ width: 60, height: 60, backgroundColor: 'yellow' }} />
         </FlexBox>
       </FlexRoot>

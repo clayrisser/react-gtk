@@ -20,41 +20,15 @@
  */
 
 import './gtkPolyfill';
-import { ApplicationWindowProps } from './elements/ApplicationWindow';
-import { BoxProps } from './elements/Box';
-import { ButtonProps } from './elements/Button';
 import { FlexBoxProps } from './elements/FlexBox';
 import { FlexEdgeProps } from './elements/FlexEdge';
 import { FlexRootProps } from './elements/FlexRoot';
-import { GridProps } from './elements/Grid';
-import { ImageProps } from './elements/Image';
-import { FixedProps } from './elements/Fixed';
-import { LabelProps } from './elements/Label';
 
-export const Box = 'Box';
-export const Button = 'Button';
 export const FlexBox = 'FlexBox';
-export const Fixed = 'Fixed';
 export const FlexEdge = 'FlexEdge';
 export const FlexRoot = 'FlexRoot';
-export const Grid = 'Grid';
-export const Image = 'Image';
-export const Label = 'Label';
-export const Window = 'Window';
-export const Custom = 'Custom';
-export const Yoga = 'Yoga';
 
-export type {
-  ApplicationWindowProps,
-  BoxProps,
-  ButtonProps,
-  FlexBoxProps,
-  FlexEdgeProps,
-  FlexRootProps,
-  GridProps,
-  ImageProps,
-  LabelProps,
-  FixedProps,
-};
+export type { FlexBoxProps, FlexEdgeProps, FlexRootProps };
 
+export * from './generated';
 export * from './render';

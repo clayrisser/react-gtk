@@ -22,5 +22,5 @@
 export * from './components';
 export * from './generator';
 export * from './module';
-export * from './renderWidgetElement';
+export * from './render';
 export * from './types';

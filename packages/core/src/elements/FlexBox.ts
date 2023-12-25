@@ -19,12 +19,15 @@
  *  limitations under the License.
  */
 
+import GObject from '@girs/node-gobject-2.0';
 import Gtk from '@girs/node-gtk-4.0';
-import Yoga from 'yoga-layout/wasm-sync';
+import Yoga from 'yoga-layout/sync';
+import type { FixedProps } from '../generated/elements/Fixed';
 import type { FlexStyle } from 'react-native';
-import type { ReactNode, Ref } from 'react';
+import type { Ref } from 'react';
 import { Changes, Instance, PublicInstance, TextInstance, YogaInstance } from '../types';
 import { Element } from './Element';
+import { Fixed as FixedWidget } from '../widgets/Fixed';
 import { FlexRoot } from './FlexRoot';
 import { StyleProp, StyleProps } from '../style';
 import {
@@ -37,13 +40,9 @@ import {
   lookupPosition,
   parseDimension,
 } from '../yoga';
-import GObject from '@girs/node-gobject-2.0';
-import { Fixed as FixedWidget } from '../widgets/Fixed';
 
-export interface FlexBoxProps extends Omit<StyleProps, 'style'> {
-  children?: ReactNode;
+export interface FlexBoxProps extends Omit<StyleProps, 'style'>, Omit<FixedProps, 'ref' | 'style'> {
   ref?: Ref<PublicInstance<FixedWidget>>;
-  sizeRequest?: [number, number];
   style?: Omit<StyleProp, 'minWidth' | 'minHeight' | 'width' | 'height'> & FlexStyle;
 }
 

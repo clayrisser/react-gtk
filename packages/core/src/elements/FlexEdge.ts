@@ -19,19 +19,19 @@
  *  limitations under the License.
  */
 
+import GObject from '@girs/node-gobject-2.0';
 import Gtk from '@girs/node-gtk-4.0';
-import Yoga from 'yoga-layout/wasm-sync';
-import type { ReactNode, Ref } from 'react';
-import { Element } from './Element';
-import { FlexStyle } from 'react-native';
+import Yoga from 'yoga-layout/sync';
+import type { BoxProps } from '../generated/elements/Box';
+import type { Ref } from 'react';
 import { Changes, Instance, YogaInstance } from '../types';
+import { Element } from './Element';
+import { FlexRoot } from './FlexRoot';
+import { FlexStyle } from 'react-native';
 import { StyleProp, StyleProps } from '../style';
 import { YogaStyle, lookupAlign, lookupPosition, parseDimension } from '../yoga';
-import GObject from '@girs/node-gobject-2.0';
-import { FlexRoot } from './FlexRoot';
 
-export interface FlexEdgeProps extends Omit<StyleProps, 'style'> {
-  children?: ReactNode;
+export interface FlexEdgeProps extends Omit<StyleProps, 'style'>, Omit<BoxProps, 'ref' | 'style'> {
   ref?: Ref<Instance>;
   style?: Omit<StyleProp, 'minWidth' | 'minHeight' | 'width' | 'height'> &
     Omit<

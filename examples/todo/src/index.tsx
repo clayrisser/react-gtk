@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { render, Box, FlexRoot, FlexBox, Button, FlexEdge } from '@react-gtk/core';
+import { render } from '@react-gtk/core';
 import App from './App';
 
 (async () => {

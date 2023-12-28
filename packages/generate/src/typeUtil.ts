@@ -97,11 +97,20 @@ export function lookupType(type: string | undefined) {
 export const importTypeMap: Record<string, ImportTypeInfo> = {
   Pango: {
     from: '@girs/node-pango-1.0',
-    types: ['FontMap', 'TabArray', 'WrapMode', 'AttrList', 'EllipsizeMode'],
+    types: [
+      'FontMap',
+      'TabArray',
+      'WrapMode',
+      'AttrList',
+      'EllipsizeMode',
+      'FontDescription',
+      'Language',
+      'Script',
+    ],
   },
   Gdk: {
     from: '@girs/node-gdk-4.0',
-    types: ['Cursor', 'Paintable', 'Display', 'Rectangle', 'GLContext'],
+    types: ['Cursor', 'Paintable', 'Display', 'Rectangle', 'GLContext', 'RGBA'],
   },
   GdkPixbuf: {
     from: '@girs/node-gdkpixbuf-2.0',

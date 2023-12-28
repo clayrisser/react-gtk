@@ -3,7 +3,8 @@
   "private": true,
   "workspaces": [
     "examples/*",
-    "packages/*"
+    "packages/*",
+    "docs"
   ],
   "license": "Apache-2.0",
   "devDependencies": {

@@ -87,5 +87,5 @@
   "files.associations": {
     "Mkpmfile": "makefile"
   },
-  "cSpell.words": ["halign", "zustand"]
+  "cSpell.words": ["halign", "todos", "zustand"]
 }

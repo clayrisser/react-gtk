@@ -20,7 +20,7 @@
  */
 
 import React, { useState } from 'react';
-import { Box, FlowBox } from '@react-gtk/core';
+import { Box, FlowBox, DropDown } from '@react-gtk/core';
 import Gtk from '@girs/node-gtk-4.0';
 import { Header } from './components/Header';
 import { InputSection } from './components/InputSection';
@@ -32,8 +32,15 @@ const App = () => {
   const [toggleAddTasks, setToggleAddTasks] = useState(false);
 
   return (
+    // @ts-ignore
     <Box orientation={Gtk.Orientation.VERTICAL}>
-      <Header title="TODO" />
+      <Box>
+        <DropDown showArrow />
+        <Box style={{ width: 200 }}>
+          <Header title="TODO" />
+        </Box>
+      </Box>
+
       <Box visible={toggleAddTasks || tasks.length > 0 ? false : true} vexpand halign={Gtk.Align.CENTER}>
         <EmptyTaskScreen setToggleAddTasks={setToggleAddTasks} toggleAddTasks={toggleAddTasks} />
       </Box>

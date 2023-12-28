@@ -31,5 +31,5 @@ export const Header = (props: HeaderProps) => {
   const titleWidget = new Gtk.Label();
   titleWidget.setLabel(props.title);
 
-  return <HeaderBar titleWidget={titleWidget} />;
+  return <HeaderBar hexpand titleWidget={titleWidget} />;
 };

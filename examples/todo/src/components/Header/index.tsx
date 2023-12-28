@@ -1,7 +1,7 @@
 /**
- * File: /src/components/TodoItem/index.tsx
+ * File: /src/components/Header/index.tsx
  * Project: @react-gtk/todo-example
- * File Created: 27-12-2023 15:48:28
+ * File Created: 27-12-2023 17:18:52
  * Author: dharmendra
  * -----
  * BitSpur (c) Copyright 2017 - 2023
@@ -20,16 +20,16 @@
  */
 
 import React from 'react';
-import { CheckButton, Box } from '@react-gtk/core';
+import { HeaderBar, Label } from '@react-gtk/core';
+import Gtk from '@girs/node-gtk-4.0';
 
-export interface TodoItemProps {
-  label: string;
+export interface HeaderProps {
+  title: string;
 }
 
-export const TodoItem = (props: TodoItemProps) => {
-  return (
-    <Box>
-      <CheckButton label={props.label} />
-    </Box>
-  );
+export const Header = (props: HeaderProps) => {
+  const titleWidget = new Gtk.Label();
+  titleWidget.setLabel(props.title);
+
+  return <HeaderBar titleWidget={titleWidget} />;
 };

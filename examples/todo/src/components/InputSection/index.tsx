@@ -19,18 +19,36 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import Gtk from '@girs/node-gtk-4.0';
 import { FlowBox, FlowBoxChild, Button, Text } from '@react-gtk/core';
+import useTasksStore from '../../state/useTasksStore';
 
 export const InputSection = () => {
+  const [task, setTask] = useState('');
+  const [setTasks] = useTasksStore((state: any) => [state.setTasks]);
+
+  const handleAddTask = () => {
+    setTasks((tasks: any) => {
+      const newTask = {
+        title: task,
+        completed: false,
+        favorite: false,
+        description: '',
+      };
+      return [...tasks, newTask];
+    });
+    setTask('');
+  };
+  console.log('task', task);
+
   return (
     <FlowBox halign={Gtk.Align.FILL} style={{ minWidth: 350 }}>
       <FlowBoxChild>
-        <Button label="+" />
+        <Button onClicked={handleAddTask} label="+" />
       </FlowBoxChild>
       <FlowBoxChild>
-        <Text placeholderText="Add TODO..." />
+        <Text placeholderText="Add TODO..." onInsertAtCursor={(e) => setTask(e)} />
       </FlowBoxChild>
     </FlowBox>
   );

@@ -20,11 +20,26 @@
  */
 
 import { create } from 'zustand';
+import { nanoid } from 'nanoid';
+
+export interface TaskProps {
+  id: string;
+  title: string;
+  description: string;
+  completed: boolean;
+  favorite: boolean;
+}
 
 const useTasksStore = create((set) => ({
-  tasks: [],
-  addTasks: (tasks: string) => set((state: any) => ({ tasks: [...state.tasks, tasks] })),
-  removeTasks: (tasks: string) => set((state: any) => ({ tasks: state.tasks.filter((t: string) => t !== tasks) })),
+  tasks: [] as TaskProps[],
+  setTasks: (task: TaskProps) =>
+    set((state: any) => ({ tasks: [...state.tasks, { ...task, id: task.id ? task.id : nanoid() }] })),
+  removeTasks: (taskId: string) =>
+    set((state: any) => ({ tasks: state.tasks.filter((task: TaskProps) => task.id !== taskId) })),
+  updateTasks: (taskId: string, task: TaskProps) =>
+    set((state: any) => ({
+      tasks: state.tasks.map((t: TaskProps) => (t.id === taskId ? task : t)),
+    })),
 }));
 
 export default useTasksStore;

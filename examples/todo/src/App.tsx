@@ -20,7 +20,7 @@
  */
 
 import React, { useState } from 'react';
-import { Box, FlowBox, Label, Button } from '@react-gtk/core';
+import { Box, FlowBox } from '@react-gtk/core';
 import Gtk from '@girs/node-gtk-4.0';
 import { Header } from './components/Header';
 import { InputSection } from './components/InputSection';
@@ -28,7 +28,7 @@ import { EmptyTaskScreen } from './components/EmptyTaskScreen';
 import useTasksStore from './state/useTasksStore';
 
 const App = () => {
-  const [tasks, setTasks] = useTasksStore((state: any) => [state.tasks, state.setTasks]);
+  const [tasks] = useTasksStore((state: any) => [state.tasks, state.setTasks]);
   const [toggleAddTasks, setToggleAddTasks] = useState(false);
 
   return (

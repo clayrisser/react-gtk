@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { HeaderBar, Label } from '@react-gtk/core';
+import { HeaderBar } from '@react-gtk/core';
 import Gtk from '@girs/node-gtk-4.0';
 
 export interface HeaderProps {

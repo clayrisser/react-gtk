@@ -1,6 +1,6 @@
 /*
- *  File: /src/state/useTodoStore.ts
- *  Project: @react-gtk/todo-example
+ *  File: /src/state/useTasksStore.ts
+ *  Project: @react-gtk/tasks-example
  *  File Created: 27-12-2023 15:54:30
  *  Author: dharmendra
  *  -----
@@ -19,4 +19,12 @@
  *  limitations under the License.
  */
 
-import { createStore } from 'zustand';
+import { create } from 'zustand';
+
+const useTasksStore = create((set) => ({
+  tasks: [],
+  addTasks: (tasks: string) => set((state: any) => ({ tasks: [...state.tasks, tasks] })),
+  removeTasks: (tasks: string) => set((state: any) => ({ tasks: state.tasks.filter((t: string) => t !== tasks) })),
+}));
+
+export default useTasksStore;

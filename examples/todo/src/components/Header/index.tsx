@@ -21,8 +21,15 @@
 
 import React from 'react';
 import { HeaderBar, Label } from '@react-gtk/core';
-import { Gtk } from '@girs/node-gtk-4.0';
+import Gtk from '@girs/node-gtk-4.0';
 
-export const Header = () => {
-  return <HeaderBar style={{ backgroundColor: 'red' }} />;
+export interface HeaderProps {
+  title: string;
+}
+
+export const Header = (props: HeaderProps) => {
+  const titleWidget = new Gtk.Label();
+  titleWidget.setLabel(props.title);
+
+  return <HeaderBar titleWidget={titleWidget} />;
 };

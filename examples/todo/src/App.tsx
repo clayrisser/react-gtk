@@ -20,20 +20,14 @@
  */
 
 import React from 'react';
-import { Box, Label, HeaderBar, FlowBox, FlowBoxChild } from '@react-gtk/core';
-import { Gtk } from '@girs/node-gtk-4.0';
+import { Box } from '@react-gtk/core';
+import Gtk from '@girs/node-gtk-4.0';
+import { Header } from './components/Header';
 
 const App = () => {
   return (
-    <Box>
-      <FlowBox>
-        <FlowBoxChild>
-          <HeaderBar />
-        </FlowBoxChild>
-        <FlowBoxChild>
-          <Label label="Hello World" />
-        </FlowBoxChild>
-      </FlowBox>
+    <Box orientation={Gtk.Orientation.VERTICAL}>
+      <Header title="TODO" />
     </Box>
   );
 };

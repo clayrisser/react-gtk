@@ -21,8 +21,8 @@
 
 import React from 'react';
 import { render } from '@react-gtk/core';
-import { LabelDemo } from './components/LabelDemo';
+import { ButtonDemo } from './components/ButtonDemo';
 
 (async () => {
-  await render(<LabelDemo />);
+  await render(<ButtonDemo />);
 })();

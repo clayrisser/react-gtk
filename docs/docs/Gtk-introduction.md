@@ -6,19 +6,19 @@ sidebar_position: 1
 
 Discover the power of React-GTK with GTK4 in less than 5 minutes.
 
-## Introduction
+### Introduction
 
 Welcome to React-GTK, a powerful framework that seamlessly integrates GTK4 with React, empowering developers to build robust and customizable graphical user interfaces. This guide will walk you through the essential steps to get started with React-GTK.
 
-## What is React-GTK?
+### What is React-GTK?
 
 React-GTK is a specialized framework that extends GTK4 to leverage the React library for building user interfaces. It enables developers to harness the strengths of both GTK4 and React, combining the rich set of GTK widgets with the declarative and component-based approach of React. This integration facilitates a more intuitive and efficient development process, empowering developers to create sophisticated applications with ease.
 
-## Widgets in React-GTK
+### Widgets in React-GTK
 
 At the core of React-GTK are GTK widgets enhanced with React's component-based architecture. These widgets serve as the fundamental building blocks for constructing your application's user interface. Whether you're working with buttons, input fields, or complex data visualization components, React-GTK provides a seamless integration that allows you to compose your UI using familiar React patterns.
 
-## Prerequisites
+### Prerequisites
 
 Before diving into React-GTK, ensure that you have the necessary dependencies installed:
 
@@ -32,7 +32,7 @@ sudo apt-get install libgtk-4-dev
 brew install gtk4
 ```
 
-## Install React-GTK
+### Install React-GTK
 
 ```bash
 # Using npm

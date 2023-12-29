@@ -21,11 +21,17 @@
 
 import React from 'react';
 import { Label, Box } from '@react-gtk/core';
+import Gtk from '@girs/node-gtk-4.0';
 
 export const LabelDemo = () => {
   return (
-    <Box>
+    <Box
+      // @ts-ignore
+      orientation={Gtk.Orientation.VERTICAL}
+    >
       <Label label="Hello World" style={{ fontSize: '24px', fontWeight: '700' }} />
+      <Label label="Hello World" style={{ fontSize: '34px', fontWeight: '700' }} />
+      <Label label="Hello World" style={{ fontSize: '44px', fontWeight: '700' }} />
     </Box>
   );
 };

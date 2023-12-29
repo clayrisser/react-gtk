@@ -48,7 +48,31 @@ $(ACTION)/lint: $(call git_deps,\.([jt]sx?)$$)
 .PHONY: dev
 dev: ~deps +dev
 +dev:
-	@$(YARN) start
+	@$(YARN) docusaurus start
+
+.PHONY: build
+build: ~deps +build
++build:
+	@$(YARN) docusaurus build
+
+.PHONY: serve
+serve: ~deps +serve
++serve:
+	@$(YARN) docusaurus build
+	@$(YARN) docusaurus serve
+
+
+.PHONY: clean
+clean:
+	@$(YARN) docusaurus clear
+
+.PHONY: write-translations
+write-translations:
+	@$(YARN) docusaurus write-translations
+
+.PHONY: write-heading-ids
+write-heading-ids:
+	@$(YARN) docusaurus write-heading-ids
 
 .PHONY: count
 count:

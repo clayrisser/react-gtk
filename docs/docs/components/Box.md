@@ -18,4 +18,6 @@ export function BoxDemo(){
 }
 ```
 
-![](./img/todo.png)
+**Result**
+
+![](../../assets/box.png)

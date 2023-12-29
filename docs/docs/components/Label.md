@@ -2,11 +2,11 @@
 
 ## overview
 
-The `Label` component in React-GTK is a fundamental element for displaying text within your graphical user interface. It extends GTK4's label functionality and seamlessly integrates with React, providing a flexible and declarative approach to incorporating text content in your applications.
+The `Label` component in `React-GTK` seamlessly integrates with `GTK4`, offering a flexible and declarative approach for displaying text in your graphical user interface. It serves as a fundamental element for text content in React applications.
 
 ## Usage
 
-The Label component inherits from the Element class in React-GTK, which, in turn, extends GTK4's Gtk.Label. It accepts various properties from both StyleProps and LabelGObjectProps, allowing developers to customize the appearance and behavior of the label. The Label component supports child elements through the standard React children prop, enabling you to include additional React nodes or components within the label.
+The `Label` component in React-GTK extends GTK4's Gtk.Label, inheriting from the Element class. It supports customization with properties from `StyleProps` and `LabelGObjectProps`, while also accommodating child elements through the standard React children prop.
 
 ```jsx
 import React from 'react';
@@ -16,6 +16,8 @@ export const LabelDemo = () => {
   return (
     <Box>
       <Label label="Hello World" style={{ fontSize: '24px', fontWeight: '700' }} />
+      <Label label="Hello World" style={{ fontSize: '34px', fontWeight: '700' }} />
+      <Label label="Hello World" style={{ fontSize: '44px', fontWeight: '700' }} />
     </Box>
   );
 };

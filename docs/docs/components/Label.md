@@ -21,11 +21,7 @@ import React from 'react';
 import { Label } from 'path-to-your-label-component';
 
 const MyLabelComponent = () => {
-  return (
-    <Label labelProp="Your Label Text" style={{ fontSize: '14px', color: '#333' }}>
-      {/* Additional child elements or text */}
-    </Label>
-  );
+  return <Label labelProp="Your Label Text" style={{ fontSize: '14px', color: '#333' }} />;
 };
 
 export default MyLabelComponent;

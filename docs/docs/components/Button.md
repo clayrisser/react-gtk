@@ -43,8 +43,7 @@ return (
     <Box
       style={{
         backgroundColor: 'lightgray',
-      }}
-      // @ts-ignore
+      }
       orientation={Gtk.Orientation.VERTICAL}
       spacing={40}
     >

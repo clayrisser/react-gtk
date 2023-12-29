@@ -1,8 +1,8 @@
 /**
- * File: /src/index.tsx
- * Project: @react-gtk/todo-example
- * File Created: 18-12-2023 04:58:18
- * Author: Clay Risser
+ * File: /src/components/LabelDemo/index.tsx
+ * Project: @react-gtk/test-example
+ * File Created: 29-12-2023 12:22:35
+ * Author: K S R PHANI BHUSHAN
  * -----
  * BitSpur (c) Copyright 2017 - 2023
  *
@@ -20,9 +20,12 @@
  */
 
 import React from 'react';
-import { render } from '@react-gtk/core';
-import { LabelDemo } from './components/LabelDemo';
+import { Label, Box } from '@react-gtk/core';
 
-(async () => {
-  await render(<LabelDemo />);
-})();
+export const LabelDemo = () => {
+  return (
+    <Box>
+      <Label label="Hello World" style={{ fontSize: '24px', fontWeight: '700' }} />
+    </Box>
+  );
+};

@@ -26,6 +26,7 @@ import { Header } from './components/Header';
 import { InputSection } from './components/InputSection';
 import { EmptyTaskScreen } from './components/EmptyTaskScreen';
 import useTasksStore from './state/useTasksStore';
+import { TodoItem } from './components/TodoItem';
 
 const App = () => {
   const [tasks] = useTasksStore((state: any) => [state.tasks, state.setTasks]);
@@ -47,6 +48,11 @@ const App = () => {
 
       <FlowBox visible={toggleAddTasks ? true : false} halign={Gtk.Align.CENTER} style={{ padding: '10px' }}>
         <InputSection />
+      </FlowBox>
+      <FlowBox visible={tasks.length > 0 ? true : false} halign={Gtk.Align.CENTER} style={{ padding: '6px' }}>
+        {tasks.map((task: any) => (
+          <TodoItem key={task.id} {...task} />
+        ))}
       </FlowBox>
     </Box>
   );

@@ -1,7 +1,7 @@
 /**
- * File: /src/components/LabelDemo/index.tsx
+ * File: /src/components/SpinnerDemo/index.tsx
  * Project: @react-gtk/test-example
- * File Created: 29-12-2023 12:22:35
+ * File Created: 29-12-2023 15:39:31
  * Author: K S R PHANI BHUSHAN
  * -----
  * BitSpur (c) Copyright 2017 - 2023
@@ -20,18 +20,13 @@
  */
 
 import React from 'react';
-import { Label, Box } from '@react-gtk/core';
+import { Spinner, Box } from '@react-gtk/core';
 import Gtk from '@girs/node-gtk-4.0';
 
-export const LabelDemo = () => {
+export const SpinnerDemo = () => {
   return (
-    <Box
-      // @ts-ignore
-      orientation={Gtk.Orientation.VERTICAL}
-    >
-      <Label label="Hello World" style={{ fontSize: '24px', fontWeight: '700' }} />
-      <Label label="Hello World" style={{ fontSize: '34px', fontWeight: '700' }} />
-      <Label label="Hello World" style={{ fontSize: '44px', fontWeight: '700' }} />
+    <Box valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER}>
+      <Spinner spinning sizeRequest={[50, 100]} />
     </Box>
   );
 };

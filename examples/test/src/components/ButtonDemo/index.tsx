@@ -21,6 +21,7 @@
 
 import React from 'react';
 import { Box, Button } from '@react-gtk/core';
+import Gtk from '@girs/node-gtk-4.0';
 
 export function ButtonDemo() {
   return (
@@ -28,10 +29,21 @@ export function ButtonDemo() {
       style={{
         backgroundColor: 'lightgray',
       }}
+      // @ts-ignore
+      orientation={Gtk.Orientation.VERTICAL}
+      spacing={40}
     >
-      <Button label="Button 1" />
-      <Button label="Button 2" />
-      <Button label="Button 3" />
+      "
+      <Box spacing={40} style={{ height: 40 }}>
+        <Button label="Button 1" style={{ backgroundColor: 'red' }} />
+        <Button label="Button 2" />
+        <Button label="Button 3" style={{ backgroundColor: 'green' }} />
+      </Box>
+      <Box spacing={40} style={{ height: 40 }}>
+        <Button label="Button 4" style={{ backgroundColor: 'green' }} />
+        <Button label="Button 5" />
+        <Button label="Button 6" style={{ backgroundColor: 'red' }} />
+      </Box>
     </Box>
   );
 }

@@ -2,9 +2,19 @@
 
 ## Overview of Button in GTK 4
 
-The GtkButton widget in React GTK 4 is a versatile component designed to trigger a callback function upon button press. It stands out for its ability to accommodate any valid child widget, allowing for the inclusion of a wide range of standard GtkWidget elements. Typically, the GtkLabel is the preferred child widget within a GtkButton.
+**Primary Function**: The GtkButton is designed to respond to user clicks, triggering specified callback functions. It's a key component for user interaction in GTK 4 applications.
 
-This widget simplifies the creation of interactive buttons in GTK 4 applications developed with React, making it a fundamental building block for user interfaces.
+**React Integration**: Seamlessly integrates with React, allowing it to be used as a standard React component. This integration brings in the benefits of React's state management and lifecycle features.
+
+**Customizability**: Offers flexibility in terms of appearance and behavior, enabling developers to tailor the button to fit the specific needs of their applications.
+
+**Simplicity and Versatility**: Designed for ease of use, making the creation of interactive buttons straightforward in GTK 4 applications.
+
+**Performance and Accessibility**: Optimized for both efficiency and accessibility, ensuring applications are fast and accessible to a broad audience, including those with disabilities.
+
+**Essential UI Component**: Acts as a fundamental building block in user interfaces for GTK 4 applications developed using React, enhancing interactivity and functionality.
+
+In summary, the GtkButton in React GTK 4 is an essential, customizable, and React-integrated component, vital for creating interactive and accessible user interfaces in GTK 4 applications.
 
 ### Usage
 
@@ -15,7 +25,7 @@ import { Button } from '@react-gtk/core';
 
 function MyButton() {
   return (
-    <Button label="Click me" onClick={() => console.log('Button clicked!')} />
+    <Button label="Click me" onClicked={() => console.log('Button was clicked!')} />
   );
 }
 
@@ -24,7 +34,9 @@ function MyButton() {
 In this example, we import the Button component from @react-gtk/core and create a button with the label "Click me" and an onClick event handler to handle button clicks.
 
 ```ts
-import { Box,Button } from '@react-gtk/core';
+import React from 'react';
+import { Box, Button } from '@react-gtk/core';
+import Gtk from '@girs/node-gtk-4.0';
 
 export function ButtonDemo(){
 return (
@@ -32,10 +44,21 @@ return (
       style={{
         backgroundColor: 'lightgray',
       }}
+      // @ts-ignore
+      orientation={Gtk.Orientation.VERTICAL}
+      spacing={40}
     >
-      <Button label="Button 1" />
-      <Button label="Button 2" />
-      <Button label="Button 3" />
+      "
+      <Box spacing={40} style={{ height: 40 }}>
+        <Button label="Button 1" style={{ backgroundColor: 'red' }} />
+        <Button label="Button 2" />
+        <Button label="Button 3" style={{ backgroundColor: 'green' }} />
+      </Box>
+      <Box spacing={40} style={{ height: 40 }}>
+        <Button label="Button 4" style={{ backgroundColor: 'green' }} />
+        <Button label="Button 5" />
+        <Button label="Button 6" style={{ backgroundColor: 'red' }} />
+      </Box>
     </Box>
   );
 }

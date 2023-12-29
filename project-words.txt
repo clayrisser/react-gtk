@@ -7,6 +7,7 @@ camelcase
 cjs
 clsx
 cspell
+dracula
 debounce
 debounced
 declarator
@@ -19,6 +20,8 @@ ellipsize
 enum
 enums
 esm
+facebook
+favicon
 finishings
 flatpak
 focusable
@@ -51,11 +54,15 @@ gulong
 gunichar
 gushort
 hari
+href
+horiz
 hexpand
 hfw
 homebrew
 homedir
 hydratable
+idx
+Svg
 jsx
 kebabcase
 kerning
@@ -80,12 +87,14 @@ rajak
 reconciler
 renderer
 rerender
+repo
 risser
 rmdir
 scrollable
 snapd
 struct
 subtree
+tagline
 tooltip
 transpile
 typecheck
@@ -95,6 +104,7 @@ tsx
 txt
 type
 typeof
+undraw
 unmount
 unowned
 unparent

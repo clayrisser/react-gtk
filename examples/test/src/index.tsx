@@ -21,8 +21,8 @@
 
 import React from 'react';
 import { render } from '@react-gtk/core';
-import { BoxDemo } from './components/BoxDemo';
+import { LabelDemo } from './components/LabelDemo';
 
 (async () => {
-  await render(<BoxDemo />);
+  await render(<LabelDemo />);
 })();

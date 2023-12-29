@@ -20,68 +20,9 @@
  */
 
 import React from 'react';
-import { Box, Button, FlexBox, FlexEdge, FlexRoot, render } from '@react-gtk/core';
-
-export const Example = () => {
-  return (
-    <Box
-      style={{
-        width: 400,
-        height: 400,
-        backgroundColor: 'green',
-      }}
-    >
-      <FlexRoot
-        hexpand
-        style={{
-          // height: 600,
-          // width: 600,
-          backgroundColor: 'blue',
-        }}
-      >
-        <FlexBox
-          style={{
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'red',
-          }}
-        >
-          <FlexBox style={{ width: 60, height: 60, backgroundColor: 'yellow' }} />
-          <FlexBox
-            style={{
-              width: 160,
-              height: 160,
-              backgroundColor: 'purple',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <FlexEdge
-              style={{
-                width: 100,
-                height: 60,
-                backgroundColor: 'red',
-              }}
-            >
-              <Button
-                vexpand
-                hexpand
-                label="Click Me!"
-                onClicked={() => {
-                  console.log('Button was clicked!');
-                }}
-              />
-            </FlexEdge>
-          </FlexBox>
-          <FlexBox style={{ width: 60, height: 60, backgroundColor: 'yellow' }} />
-        </FlexBox>
-      </FlexRoot>
-    </Box>
-  );
-};
+import { render } from '@react-gtk/core';
+import { BoxDemo } from './components/BoxDemo';
 
 (async () => {
-  await render(<Example />);
+  await render(<BoxDemo />);
 })();

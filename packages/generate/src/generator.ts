@@ -22,9 +22,14 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { GeneratorOptions } from './types';
-import { GirModule, GirClassElement } from '@ts-for-gir/lib';
+import {
+  GirModule,
+  GirClassElement,
+  GirInterfaceElement,
+} from '@ts-for-gir/lib';
 import { loadGtkModule } from './module';
 import {
+  renderInterface,
   renderPropsInterface,
   renderRootIndex,
   renderWidgetElement,
@@ -59,14 +64,30 @@ export class Generator {
     if (typeof this.module === 'undefined') await this.load();
     await fs.rm(this.outDir, { recursive: true, force: true });
     await fs.mkdir(path.resolve(this.outDir, 'elements'), { recursive: true });
-    await Promise.all(
-      this.widgets.map(async (widget) => {
+    await Promise.all([
+      ...this.widgets.map(async (widget) => {
         await this.generateWidgetElement(widget);
         await this.generatePropsInterface(widget);
       }),
-    );
+      ...(this.module.ns.interface?.map(async (interface_) => {
+        await this.generateInterface(interface_);
+      }) || []),
+    ]);
     await this.generateWidgetElementsIndex();
-    await this.generateRootIndex();
+  }
+
+  async generateInterface(interface_: GirInterfaceElement) {
+    const generateInterfaceCode = await renderInterface(interface_);
+    await fs.mkdir(path.resolve(this.outDir, 'interfaces'), {
+      recursive: true,
+    });
+    await fs.writeFile(
+      path.resolve(
+        this.outDir,
+        `interfaces/${interface_.$.name}GObjectProps.ts`,
+      ),
+      generateInterfaceCode,
+    );
   }
 
   async generateWidgetElement(widget: GirClassElement) {

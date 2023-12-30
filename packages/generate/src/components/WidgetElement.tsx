@@ -45,6 +45,7 @@ export interface WidgetElementProps {
 export function WidgetElement({ widget }: WidgetElementProps) {
   const name = widget.$.name;
   const interfaceName = `${name}Props`;
+
   return (
     <>
       <Import from="../../elements/Element" imports={['Element']} />

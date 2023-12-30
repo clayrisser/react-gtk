@@ -20,12 +20,13 @@
  */
 
 import React from 'react';
-import { GirClassElement } from '@ts-for-gir/lib';
+import { GirClassElement, GirInterfaceElement } from '@ts-for-gir/lib';
 import { PropsInterface } from './components/PropsInterface';
 import { RootIndex } from './components';
 import { WidgetElement } from './components/WidgetElement';
 import { WidgetElementsIndex } from './components/WidgetElementsIndex';
 import { render } from 'react-ast';
+import { NamespaceInterface } from './components/NamespaceInterface';
 
 export async function renderPropsInterface(class_: GirClassElement) {
   return render(<PropsInterface class_={class_} />);
@@ -41,4 +42,8 @@ export async function renderWidgetElementsIndex(widgets: GirClassElement[]) {
 
 export async function renderRootIndex(widgets: GirClassElement[]) {
   return render(<RootIndex widgets={widgets} />);
+}
+
+export async function renderInterface(interface_: GirInterfaceElement) {
+  return render(<NamespaceInterface interface_={interface_} />);
 }

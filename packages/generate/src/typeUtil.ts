@@ -122,7 +122,16 @@ export const importTypeMap: Record<string, ImportTypeInfo> = {
   },
   Gio: {
     from: '@girs/node-gio-2.0',
-    types: ['File', 'MenuModel', 'ListModel', 'Icon', 'Permission', 'AppInfo'],
+    types: [
+      'File',
+      'MenuModel',
+      'ListModel',
+      'Icon',
+      'Permission',
+      'AppInfo',
+      'ActionGroup',
+      'ActionMap',
+    ],
   },
   cairo: {
     from: '@girs/node-cairo-1.0',
@@ -130,7 +139,7 @@ export const importTypeMap: Record<string, ImportTypeInfo> = {
   },
   GLib: {
     from: '@girs/node-glib-2.0',
-    types: ['DestroyNotify', 'Error'],
+    types: ['DestroyNotify', 'Error', 'Variant'],
   },
 };
 

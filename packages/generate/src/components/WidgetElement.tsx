@@ -22,6 +22,7 @@
 import React from 'react';
 import { GirClassElement } from '@ts-for-gir/lib';
 import {
+  BlockStatement,
   CallExpression,
   Class,
   ClassMethod,
@@ -30,13 +31,17 @@ import {
   Expression,
   Identifier,
   Import,
-  Interface,
   InterfaceDeclaration,
+  IntersectionType,
   ModuleDeclaration,
   NewExpression,
   PropertySignature,
+  TypeAliasDeclaration,
+  TypeAnnotation,
+  TypeParameterInstantiation,
   TypeReference,
 } from 'react-ast';
+import { TypeDefinition } from '../typeUtil';
 
 export interface WidgetElementProps {
   widget: GirClassElement;
@@ -45,6 +50,26 @@ export interface WidgetElementProps {
 export function WidgetElement({ widget }: WidgetElementProps) {
   const name = widget.$.name;
   const interfaceName = `${name}Props`;
+  const importsSet = new Set<string>([
+    'Element',
+    'StyleProps',
+    'PublicInstance',
+    'Gtk',
+    'ReactNode',
+    'Ref',
+    `${name}GObjectProps`,
+  ]);
+  const imports: TypeDefinition[] =
+    widget.implements?.reduce((acc: TypeDefinition[], implement_) => {
+      if (implement_.$.name.includes('.')) {
+        const [import_] = implement_.$.name.split('.');
+        if (!importsSet.has(import_)) {
+          importsSet.add(import_);
+          acc.push(new TypeDefinition(implement_.$.name));
+        }
+      }
+      return acc;
+    }, []) || [];
 
   return (
     <>
@@ -57,7 +82,17 @@ export function WidgetElement({ widget }: WidgetElementProps) {
         from={`../interfaces/${name}GObjectProps`}
         imports={`${name}GObjectProps`}
       />
-      {/* {widget.implements?.map((implement_, i) => {
+      {imports.map((import_) => {
+        if (!import_.importDefault) return null;
+        return (
+          <Import
+            from={import_.importFrom}
+            default={import_.importDefault}
+            key={import_.importDefault}
+          />
+        );
+      })}
+      {widget.implements?.map((implement_, i) => {
         const interfaceName = `${implement_.$.name}GObjectProps`;
         if (interfaceName.includes('.')) return null;
         return (
@@ -67,47 +102,40 @@ export function WidgetElement({ widget }: WidgetElementProps) {
             key={`${interfaceName}${i}`}
           />
         );
-      })} */}
+      })}
 
       <Export>
-        <Interface
-          name={interfaceName}
-          extends={
-            <>
-              <Expression identifiers="StyleProps" />
-              <Expression identifiers={`${name}GObjectProps`} />
-              {/* {widget.implements?.map((implements_, i) => (
-                <Expression
-                  identifiers={`${implements_.$.name}GObjectProps`}
-                  key={`${implements_.$.name}${i}`}
-                />
-              ))} */}
-            </>
-          }
-        >
-          <PropertySignature
-            name="children"
-            optional
-            typeAnnotation="ReactNode"
-          />
-          <PropertySignature
-            name="ref"
-            optional
-            typeAnnotation={`Ref<PublicInstance<Gtk.${name}>>`}
-          />
-          {/* {signals?.map((signal) => (
-            <MethodSignature
-              name={signal.name}
-              params={signal.params?.map((param) => (
-                <Identifier key={param.name} typeAnnotation={param.type}>
-                  {param.name}
-                </Identifier>
-              ))}
-              key={signal.name}
-              returnType={signal.returnType}
-            />
-          ))} */}
-        </Interface>
+        <TypeAliasDeclaration name={interfaceName}>
+          <IntersectionType>
+            <BlockStatement>
+              <PropertySignature
+                name="children"
+                optional
+                typeAnnotation="ReactNode"
+              />
+              <PropertySignature
+                name="ref"
+                optional
+                typeAnnotation={`Ref<PublicInstance<Gtk.${name}>>`}
+              />
+            </BlockStatement>
+            <Expression identifiers="StyleProps" />
+            <Expression identifiers={`${name}GObjectProps`} />
+            {widget.implements?.map((implement_, i) => {
+              return (
+                <TypeReference name="Partial" key={i}>
+                  <TypeParameterInstantiation>
+                    <TypeReference
+                      name={`${implement_.$.name}${
+                        implement_.$.name.includes('.') ? '' : 'GObjectProps'
+                      }`}
+                    />
+                  </TypeParameterInstantiation>
+                </TypeReference>
+              );
+            })}
+          </IntersectionType>
+        </TypeAliasDeclaration>
       </Export>
       <ModuleDeclaration declaration={DeclarationType.Declare} name="global">
         <ModuleDeclaration declaration={DeclarationType.Namespace} name="JSX">

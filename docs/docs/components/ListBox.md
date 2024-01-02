@@ -17,7 +17,6 @@ This widget integrates seamlessly with React, allowing for dynamic and responsiv
 A simple example to demonstrate how to use the ListBox widget in React GTK 4:
 
 ```jsx
-
 import React from 'react';
 import Gtk from '@girs/node-gtk-4.0';
 import { ListBox, ListBoxRow, Label } from '@react-gtk/core';
@@ -36,7 +35,6 @@ function App() {
 }
 
 export default App;
-
 ```
 
 **Result**

@@ -70,10 +70,11 @@ export class Generator {
         await this.generatePropsInterface(widget);
       }),
       ...(this.module.ns.interface?.map(async (interface_) => {
-        await this.generateInterface(interface_);
+        // await this.generateInterface(interface_);
       }) || []),
     ]);
     await this.generateWidgetElementsIndex();
+    await this.generateRootIndex();
   }
 
   async generateInterface(interface_: GirInterfaceElement) {

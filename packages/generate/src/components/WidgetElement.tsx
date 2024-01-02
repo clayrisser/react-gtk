@@ -57,6 +57,18 @@ export function WidgetElement({ widget }: WidgetElementProps) {
         from={`../interfaces/${name}GObjectProps`}
         imports={`${name}GObjectProps`}
       />
+      {/* {widget.implements?.map((implement_, i) => {
+        const interfaceName = `${implement_.$.name}GObjectProps`;
+        if (interfaceName.includes('.')) return null;
+        return (
+          <Import
+            from={`../interfaces/${interfaceName}`}
+            imports={`${interfaceName}`}
+            key={`${interfaceName}${i}`}
+          />
+        );
+      })} */}
+
       <Export>
         <Interface
           name={interfaceName}
@@ -64,6 +76,12 @@ export function WidgetElement({ widget }: WidgetElementProps) {
             <>
               <Expression identifiers="StyleProps" />
               <Expression identifiers={`${name}GObjectProps`} />
+              {/* {widget.implements?.map((implements_, i) => (
+                <Expression
+                  identifiers={`${implements_.$.name}GObjectProps`}
+                  key={`${implements_.$.name}${i}`}
+                />
+              ))} */}
             </>
           }
         >

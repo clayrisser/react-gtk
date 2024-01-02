@@ -69,9 +69,9 @@ export class Generator {
         await this.generateWidgetElement(widget);
         await this.generatePropsInterface(widget);
       }),
-      ...(this.module.ns.interface?.map(async (interface_) => {
-        // await this.generateInterface(interface_);
-      }) || []),
+      // ...(this.module.ns.interface?.map(async (interface_) => {
+      //   await this.generateInterface(interface_);
+      // }) || []),
     ]);
     await this.generateWidgetElementsIndex();
     await this.generateRootIndex();

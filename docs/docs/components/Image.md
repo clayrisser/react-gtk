@@ -17,7 +17,6 @@ This widget simplifies the displaying of images in GTK 4 applications developed 
 A simple example to demonstrate how to use GtkButton widget in React GTK 4:
 
 ```jsx
-
 import React from 'react';
 import Gtk from '@girs/node-gtk-4.0';
 import { Image, Box, Label } from '@react-gtk/core';
@@ -25,8 +24,8 @@ import { Image, Box, Label } from '@react-gtk/core';
 function App() {
   return (
     <Box style={{ backgroundColor: 'lightgray' }}>
-    <Label label="Welcome to GtkImage Component" halign={Gtk.Align.CENTER} />
-       <Image
+      <Label label="Welcome to GtkImage Component" halign={Gtk.Align.CENTER} />
+      <Image
         fromFile="/docs/assets/box.png"
         canFocus={true}
         halign={Gtk.Align.CENTER}
@@ -40,16 +39,14 @@ function App() {
 }
 
 export default App;
-
 ```
 
 ## Result
 
 Some issue image is not displaying(need to fix it)
 
-
-_This comprehensive guide covers everything you need to know about using the 
- GtkImage in GTK 4 and its integration with React Native GTK4 for building native GTK4 applications using React._
+_This comprehensive guide covers everything you need to know about using the
+GtkImage in GTK 4 and its integration with React Native GTK4 for building native GTK4 applications using React._
 
 ## Properties
 

@@ -69,6 +69,7 @@ kerning
 lalit
 lang
 linux
+lightgray
 lpi
 microtask
 minify
@@ -116,3 +117,4 @@ vexpand
 wfh
 xml
 yarnpkg
+

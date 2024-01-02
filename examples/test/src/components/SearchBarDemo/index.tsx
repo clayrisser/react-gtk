@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Box, Label, ColorButton } from '@react-gtk/core';
+import { Box, ColorButton } from '@react-gtk/core';
 import Gtk from '@girs/node-gtk-4.0';
 
 export const SearchBarDemo = () => {

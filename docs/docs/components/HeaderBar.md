@@ -13,10 +13,10 @@ The GtkHeaderBar widget in React GTK 4 is a customizable container that can hold
 This widget offers an intuitive way to design and manipulate the header bar of your applications, enhancing the overall user experience in GTK 4 applications built with React.
 
 ## Usage
+
 A simple example to demonstrate how to use the HeaderBar widget in React GTK 4:
 
 ```jsx
-
 import React from 'react';
 import Gtk from '@girs/node-gtk-4.0';
 import { HeaderBar, Box } from '@react-gtk/core';
@@ -37,7 +37,6 @@ function App() {
 }
 
 export default App;
-
 ```
 
 **Result**
@@ -92,8 +91,3 @@ List of properties associated with the GtkHeaderBar widget:
 - name: (listed twice) A unique name for the widget, used for identification.
 
 This guide provides a detailed look at the GtkHeaderBar in GTK 4 and its integration with React Native GTK4 for building native GTK4 applications using React.
-
-
-
-
-

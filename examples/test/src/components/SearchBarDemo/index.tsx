@@ -1,8 +1,8 @@
 /**
- * File: /src/index.tsx
- * Project: @react-gtk/todo-example
- * File Created: 18-12-2023 04:58:18
- * Author: Clay Risser
+ * File: /src/components/SearchBarDemo/index.tsx
+ * Project: @react-gtk/test-example
+ * File Created: 30-12-2023 10:14:00
+ * Author: K S R PHANI BHUSHAN
  * -----
  * BitSpur (c) Copyright 2017 - 2023
  *
@@ -20,9 +20,17 @@
  */
 
 import React from 'react';
-import { render } from '@react-gtk/core';
-import ListBoxDemo from './components/ListBoxDemo';
+import { Box, Label, ColorButton } from '@react-gtk/core';
+import Gtk from '@girs/node-gtk-4.0';
 
-(async () => {
-  await render(<ListBoxDemo />);
-})();
+export const SearchBarDemo = () => {
+  return (
+    <Box valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER}>
+      <Box>
+        <ColorButton style={{ width: 70 }} tooltipText="please select the color" />
+      </Box>
+    </Box>
+  );
+};
+
+export default SearchBarDemo;

@@ -1,7 +1,7 @@
 /**
- * File: /src/index.tsx
- * Project: @react-gtk/todo-example
- * File Created: 18-12-2023 04:58:18
+ * File: /src/components/HeaderBarDemo/index.tsx
+ * Project: @react-gtk/test-example
+ * File Created: 29-12-2023 17:18:37
  * Author: Clay Risser
  * -----
  * BitSpur (c) Copyright 2017 - 2023
@@ -20,9 +20,22 @@
  */
 
 import React from 'react';
-import { render } from '@react-gtk/core';
-import ListBoxDemo from './components/ListBoxDemo';
+import Gtk from '@girs/node-gtk-4.0';
+import { HeaderBar, Box } from '@react-gtk/core';
 
-(async () => {
-  await render(<ListBoxDemo />);
-})();
+function App() {
+  return (
+    <Box style={{ backgroundColor: '#C0C7AD' }}>
+      <HeaderBar
+        titleWidget={new Gtk.Label({ label: 'My Application' })}
+        showTitleButtons={true}
+        decorationLayout="icon:minimize,maximize,close"
+        valign={Gtk.Align.START}
+        visible={true}
+        hexpand
+      />
+    </Box>
+  );
+}
+
+export default App;

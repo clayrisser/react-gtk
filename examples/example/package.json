@@ -1,0 +1,67 @@
+{
+  "name": "@react-gtk/example-example",
+  "version": "4.0.0",
+  "private": true,
+  "description": "react gtk test example",
+  "sideEffects": false,
+  "homepage": "https://gitlab.com/bitspur/community/react-gtk",
+  "bugs": {
+    "url": "https://gitlab.com/bitspur/community/react-gtk/issues",
+    "email": "support@bitspur.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/bitspur/community/react-gtk"
+  },
+  "license": "Apache-2.0",
+  "author": "BitSpur <email@clayrisser.com> (https://clayrisser.com)",
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "react-native": "src/index.ts",
+  "source": "src/index.ts",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "keywords": [
+    "elements",
+    "react",
+    "gtk"
+  ],
+  "eslintIgnore": [
+    "lib"
+  ],
+  "jest": {
+    "testRegex": "\\.(spec|test)\\.[cm]?[jt]sx?$",
+    "testEnvironment": "node",
+    "verbose": true,
+    "testResultsProcessor": "jest-sonar-reporter",
+    "testPathIgnorePatterns": [
+      "<rootDir>/lib/"
+    ]
+  },
+  "jestSonar": {
+    "reportPath": ".mkpm/mkpm/.tmp/reports",
+    "reportFile": "test-report.xml",
+    "indent": 4
+  },
+  "dependencies": {
+    "@react-gtk/core": "^4.0.0",
+    "react": "^18.2.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "zustand": "^4.4.7"
+  }
+}

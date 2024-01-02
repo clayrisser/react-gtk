@@ -33,7 +33,6 @@ const App = () => {
   const [toggleAddTasks, setToggleAddTasks] = useState(false);
 
   return (
-    // @ts-ignore
     <Box orientation={Gtk.Orientation.VERTICAL}>
       <Box>
         <DropDown showArrow />
@@ -41,7 +40,6 @@ const App = () => {
           <Header title="TODO" />
         </Box>
       </Box>
-
       <Box visible={toggleAddTasks || tasks.length > 0 ? false : true} vexpand halign={Gtk.Align.CENTER}>
         <EmptyTaskScreen setToggleAddTasks={setToggleAddTasks} toggleAddTasks={toggleAddTasks} />
       </Box>

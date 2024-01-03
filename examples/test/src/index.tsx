@@ -21,8 +21,8 @@
 
 import React from 'react';
 import { render } from '@react-gtk/core';
-import ListBoxDemo from './components/ListBoxDemo';
+import { SwitchDemo } from './components/SwitchDemo';
 
 (async () => {
-  await render(<ListBoxDemo />);
+  await render(<SwitchDemo />);
 })();

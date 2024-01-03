@@ -1,10 +1,10 @@
 /**
- * File: /src/components/ListBoxDemo/index.tsx
+ * File: /src/components/SwitchDemo/index.tsx
  * Project: @react-gtk/test-example
- * File Created: 29-12-2023 18:08:51
+ * File Created: 02-01-2024 11:22:59
  * Author: Clay Risser
  * -----
- * BitSpur (c) Copyright 2017 - 2023
+ * BitSpur (c) Copyright 2017 - 2024
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,27 +20,25 @@
  */
 
 import React from 'react';
-import { ListBox, ListBoxRow, Label, Box } from '@react-gtk/core';
+import { Box, Switch } from '@react-gtk/core';
+import Gtk from '@girs/node-gtk-4.0';
 
-function App() {
+export const SwitchDemo = () => {
+  const handleActivate = () => {
+    console.log('Switch activated');
+  };
+
   return (
-    <Box style={{ backgroundColor: 'red' }}>
-      <ListBox style={{ height: 450, width: 650 }} vexpand>
-        <ListBoxRow>
-          <Label label="Item 1" />
-        </ListBoxRow>
-        <ListBoxRow>
-          <Label label="Item 2" />
-        </ListBoxRow>
-        <ListBoxRow>
-          <Label label="Item 3" />
-        </ListBoxRow>
-        <ListBoxRow>
-          <Label label="Item 4" />
-        </ListBoxRow>
-      </ListBox>
+    <Box>
+      <Box
+        // @ts-ignore
+        orientation={Gtk.Orientation.VERTICAL}
+        style={{ backgroundColor: 'lightblue' }}
+      >
+        <Switch active={true} onActivate={handleActivate} />
+        <Switch active={false} onActivate={handleActivate} />
+        <Switch active={true} onActivate={handleActivate} />
+      </Box>
     </Box>
   );
-}
-
-export default App;
+};

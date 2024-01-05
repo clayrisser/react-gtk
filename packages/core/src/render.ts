@@ -22,7 +22,7 @@
 import GLib from '@girs/node-glib-2.0';
 import Gtk from '@girs/node-gtk-4.0';
 import Renderer from './reconciler';
-import { ApplicationWindow } from './elements';
+import { ApplicationWindow } from './elements/ApplicationWindow';
 import { BundleType } from 'react-reconciler';
 import { dev } from './util';
 
@@ -37,7 +37,7 @@ export async function render(
   return new Promise((resolve) => {
     if (!app) app = new Gtk.Application(applicationId, 0);
     app.on('activate', () => {
-      const window = new ApplicationWindow(app!);
+      const window = new ApplicationWindow(app!, {});
       window.node.on('close-request', () => {
         app?.quit();
         loop.quit();

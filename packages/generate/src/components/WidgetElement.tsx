@@ -51,7 +51,7 @@ export function WidgetElement({ widget }: WidgetElementProps) {
       <Import from="../../style" imports={['StyleProps']} />
       <Import from="../../types" imports={['PublicInstance']} />
       <Import from="@girs/node-gtk-4.0" default="Gtk" />
-      <Import from="react" imports={['ReactNode', 'Ref']} />
+      <Import from="react" imports={['ReactNode', 'MutableRefObject']} />
       <Import
         from={`../interfaces/${name}GObjectProps`}
         imports={`${name}GObjectProps`}
@@ -74,20 +74,8 @@ export function WidgetElement({ widget }: WidgetElementProps) {
           <PropertySignature
             name="ref"
             optional
-            typeAnnotation={`Ref<PublicInstance<Gtk.${name}>>`}
+            typeAnnotation={`MutableRefObject<PublicInstance<Gtk.${name}> | undefined>`}
           />
-          {/* {signals?.map((signal) => (
-            <MethodSignature
-              name={signal.name}
-              params={signal.params?.map((param) => (
-                <Identifier key={param.name} typeAnnotation={param.type}>
-                  {param.name}
-                </Identifier>
-              ))}
-              key={signal.name}
-              returnType={signal.returnType}
-            />
-          ))} */}
         </Interface>
       </Export>
       <ModuleDeclaration declaration={DeclarationType.Declare} name="global">

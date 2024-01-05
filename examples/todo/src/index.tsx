@@ -19,66 +19,34 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import { render, Box, FlexRoot, FlexBox, Button, FlexEdge } from '@react-gtk/core';
+import React, { useRef } from 'react';
+import { render, Text, Box, FlowBox, FlexRoot, FlexBox, Button, FlexEdge, PublicInstance } from '@react-gtk/core';
+import Gtk from '@girs/node-gtk-4.0';
 
 export const Example = () => {
+  const textRef = useRef<PublicInstance<Gtk.Text>>();
   return (
-    <Box
+    <FlowBox
       style={{
-        width: 400,
-        height: 400,
         backgroundColor: 'green',
       }}
     >
-      <FlexRoot
+      <Button
+        vexpand
         hexpand
-        style={{
-          // height: 600,
-          // width: 600,
-          backgroundColor: 'blue',
+        label="Click Me!"
+        onClicked={() => {
+          console.log('Button was clicked!');
         }}
-      >
-        <FlexBox
-          style={{
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'red',
-          }}
-        >
-          <FlexBox style={{ width: 60, height: 60, backgroundColor: 'yellow' }} />
-          <FlexBox
-            style={{
-              width: 160,
-              height: 160,
-              backgroundColor: 'purple',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <FlexEdge
-              style={{
-                width: 100,
-                height: 60,
-                backgroundColor: 'red',
-              }}
-            >
-              <Button
-                vexpand
-                hexpand
-                label="Click Me!"
-                onClicked={() => {
-                  console.log('Button was clicked!');
-                }}
-              />
-            </FlexEdge>
-          </FlexBox>
-          <FlexBox style={{ width: 60, height: 60, backgroundColor: 'yellow' }} />
-        </FlexBox>
-      </FlexRoot>
-    </Box>
+      />
+      <Text
+        ref={textRef}
+        // @ts-ignore
+        onChanged={() => {
+          console.log(textRef.current?.node.text);
+        }}
+      />
+    </FlowBox>
   );
 };
 

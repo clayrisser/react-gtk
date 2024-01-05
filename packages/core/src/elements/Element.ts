@@ -174,10 +174,12 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
           this.setStyle(value, Gtk.STYLE_PROVIDER_PRIORITY_FALLBACK);
         } else if (/^on[A-Z]/.test(key)) {
           const signal = kebabCase(key.slice(2));
-          if (this.availableSignals.has(signal)) {
+          try {
             if (signal in this.connectedSignals) this.node!.disconnect(this.connectedSignals[signal]);
             this.connectedSignals[signal] = this.node!.connect(signal, value);
-          } else {
+          } catch (err) {
+            const error = err as Error;
+            if (error.toString().indexOf('TypeError: Signal name is invalid') <= -1) throw err;
             logger.warn(`signal ${signal} is not available on ${this.type}`);
           }
         } else if (key in this.node!) {

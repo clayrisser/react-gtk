@@ -1,7 +1,7 @@
 /*
- *  File: /src/index.ts
+ *  File: /src/elements/ApplicationWindow.ts
  *  Project: @react-gtk/core
- *  File Created: 29-11-2023 00:26:45
+ *  File Created: 28-11-2023 23:41:23
  *  Author: Clay Risser
  *  -----
  *  BitSpur (c) Copyright 2017 - 2023
@@ -19,17 +19,12 @@
  *  limitations under the License.
  */
 
-import './gtkPolyfill';
-import { FlexBoxProps } from './elements/FlexBox';
-import { FlexEdgeProps } from './elements/FlexEdge';
-import { FlexRootProps } from './elements/FlexRoot';
+import Gtk from '@girs/node-gtk-4.0';
+import { ApplicationWindowProps } from '../generated/elements/ApplicationWindow';
+import { Element } from './Element';
 
-export const FlexBox = 'FlexBox';
-export const FlexEdge = 'FlexEdge';
-export const FlexRoot = 'FlexRoot';
-
-export type { FlexBoxProps, FlexEdgeProps, FlexRootProps };
-
-export * from './generated';
-export * from './render';
-export * from './types';
+export class ApplicationWindow extends Element<Gtk.ApplicationWindow, ApplicationWindowProps> {
+  constructor(app: Gtk.Application, props: ApplicationWindowProps) {
+    super(new Gtk.ApplicationWindow(app), props);
+  }
+}

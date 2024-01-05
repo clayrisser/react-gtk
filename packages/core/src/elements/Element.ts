@@ -173,10 +173,11 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
         } else if (key === 'fallbackStyle') {
           this.setStyle(value, Gtk.STYLE_PROVIDER_PRIORITY_FALLBACK);
         } else if (/^on[A-Z]/.test(key)) {
-          const signal = kebabCase(key.slice(2));
+          let signal = kebabCase(key.slice(2));
+          if (/^notify-/.test(signal)) signal = `notify::${signal.slice(7)}`;
           try {
             if (signal in this.connectedSignals) this.node!.disconnect(this.connectedSignals[signal]);
-            this.connectedSignals[signal] = this.node!.connect(signal, value);
+            this.connectedSignals[signal] = this.node!.connect(signal, (...args: any[]) => value(this.node, ...args));
           } catch (err) {
             const error = err as Error;
             if (error.toString().indexOf('TypeError: Signal name is invalid') <= -1) throw err;

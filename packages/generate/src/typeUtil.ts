@@ -101,7 +101,7 @@ export const importTypeMap: Record<string, ImportTypeInfo> = {
   },
   Gdk: {
     from: '@girs/node-gdk-4.0',
-    types: ['Cursor', 'Paintable', 'Display', 'Rectangle', 'GLContext'],
+    types: ['Cursor', 'Paintable', 'Display', 'Rectangle', 'GLContext', 'RGBA'],
   },
   GdkPixbuf: {
     from: '@girs/node-gdkpixbuf-2.0',
@@ -121,7 +121,7 @@ export const importTypeMap: Record<string, ImportTypeInfo> = {
   },
   GLib: {
     from: '@girs/node-glib-2.0',
-    types: ['DestroyNotify', 'Error'],
+    types: ['DestroyNotify', 'Error', 'Variant'],
   },
 };
 

@@ -43,21 +43,21 @@ export interface PropsInterfaceProps {
 }
 
 export function PropsInterface({ class_ }: PropsInterfaceProps) {
-  const extends_ =
-    class_.$.parent && class_.$.parent !== 'GObject.InitiallyUnowned'
-      ? `${class_.$.parent}GObjectProps`
-      : undefined;
+  const extends_: string[] = [];
+  if (class_.$.parent && class_.$.parent !== 'GObject.InitiallyUnowned') {
+    extends_.push(`${class_.$.parent}GObjectProps`);
+  }
+  class_.implements?.forEach((implement) => {
+    extends_.push(`${implement.$.name.replace(/.+\./, '')}GObjectProps`);
+  });
   const propertyPropDefinitions = getPropertyPropDefinitions(class_);
   const methodPropDefinitions = getMethodPropDefinitions(class_);
 
   function renderImports() {
     const importedNames = new Set<string>();
-    const imports: ReactNode[] = [];
-    if (extends_) {
-      imports.push(
-        <Import key={0} imports={[extends_]} from={`./${extends_}`} />,
-      );
-    }
+    const imports: ReactNode[] = extends_.map((extend, i) => (
+      <Import key={extend + i} imports={[extend]} from={`./${extend}`} />
+    ));
     propertyPropDefinitions.forEach(({ name, type }, i) => {
       (type.items || []).forEach((typeDefinition: TypeDefinition) => {
         if (!typeDefinition.importFrom) return;
@@ -136,13 +136,16 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
   }
 
   function renderExtendsInterface() {
-    if (!extends_) return;
     const propsInterfaceOmit =
       propsInterfaceOmitMap[`${class_.$.name}GObjectProps`];
-    if (!propsInterfaceOmit?.length) return <Identifier>{extends_}</Identifier>;
+    if (!propsInterfaceOmit?.length) {
+      return extends_.map((extend, i) => (
+        <Identifier key={extend + i}>{extend}</Identifier>
+      ));
+    }
     return (
-      <ExpressionWithTypeArguments key={0} name="Omit">
-        <InterfaceTypeReference>{extends_}</InterfaceTypeReference>
+      <ExpressionWithTypeArguments name="Omit">
+        <InterfaceTypeReference>{extends_.join('&')}</InterfaceTypeReference>
         <InterfaceTypeReference>
           {propsInterfaceOmit.map((omit) => `'${omit}'`).join('|')}
         </InterfaceTypeReference>
@@ -212,14 +215,20 @@ export function getMethodPropDefinitions(
         .filter(Boolean) as MethodPropParameter[]) || [];
     return {
       name: camelCase(`on-${s.$.name}`),
-      parameters,
+      parameters: [
+        {
+          name: 'node',
+          type: new TypeDefinition(lookupType(class_.$.name)),
+        },
+        ...parameters,
+      ],
     };
   });
 }
 
 export interface MethodPropParameter {
   name: string;
-  parameter: GirCallableParamElement;
+  parameter?: GirCallableParamElement;
   type: TypeDefinition;
 }
 

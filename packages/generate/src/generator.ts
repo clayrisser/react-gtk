@@ -22,7 +22,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { GeneratorOptions } from './types';
-import { GirModule, GirClassElement } from '@ts-for-gir/lib';
+import { GirModule, GirClassElement, GirImplements } from '@ts-for-gir/lib';
 import { loadGtkModule } from './module';
 import {
   renderPropsInterface,
@@ -89,8 +89,14 @@ export class Generator {
     );
     this.generatedPropsInterfaces.add(class_.$.name);
     const parent = this.getParent(class_);
-    if (!parent) return;
-    await this.generatePropsInterface(parent);
+    if (parent) await this.generatePropsInterface(parent);
+    await Promise.all(
+      this.getImplements(class_)?.map(async (interface_) => {
+        if (interface_?.$.name) {
+          await this.generatePropsInterface(interface_ as GirClassElement);
+        }
+      }) || [],
+    );
   }
 
   async generateRootIndex() {
@@ -113,15 +119,29 @@ export class Generator {
     return this.classes.find((class_) => class_.$.name === parent);
   }
 
+  private getImplements(class_: GirClassElement) {
+    return class_.implements?.map((implement: GirImplements) =>
+      this.interfaces.find(
+        (interface_) => interface_.$.name === implement.$.name,
+      ),
+    );
+  }
+
   private get widgets() {
     if (this._widgets) return this._widgets;
     const classes = this.classes;
-    this._widgets = classes.filter((class_) => this.isWidget(class_));
+    this._widgets = classes.filter((class_) => {
+      return this.isWidget(class_) && class_.$.name !== 'ApplicationWindow';
+    });
     return this._widgets;
   }
 
   private get classes() {
     return this.module.ns.class || [];
+  }
+
+  private get interfaces() {
+    return this.module.ns.interface || [];
   }
 
   private isWidget(class_: GirClassElement): boolean {

@@ -20,8 +20,18 @@
  */
 
 import Gtk from '@girs/node-gtk-4.0';
-import { ApplicationWindowProps } from '../generated/elements/ApplicationWindow';
 import { Element } from './Element';
+import { PublicInstance } from '../types';
+import { ReactNode, MutableRefObject } from 'react';
+import { StyleProps } from '../style';
+// import { ApplicationWindowGObjectProps } from '../interfaces/ApplicationWindowGObjectProps';
+
+type ApplicationWindowGObjectProps = any;
+
+export interface ApplicationWindowProps extends StyleProps, ApplicationWindowGObjectProps {
+  children?: ReactNode;
+  ref?: MutableRefObject<PublicInstance<Gtk.ApplicationWindow> | undefined>;
+}
 
 export class ApplicationWindow extends Element<Gtk.ApplicationWindow, ApplicationWindowProps> {
   constructor(app: Gtk.Application, props: ApplicationWindowProps) {

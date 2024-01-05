@@ -19,12 +19,10 @@
  * limitations under the License.
  */
 
-import React, { useRef } from 'react';
-import { render, Text, Box, FlowBox, FlexRoot, FlexBox, Button, FlexEdge, PublicInstance } from '@react-gtk/core';
-import Gtk from '@girs/node-gtk-4.0';
+import React from 'react';
+import { render, Text, FlowBox, Button } from '@react-gtk/core';
 
 export const Example = () => {
-  const textRef = useRef<PublicInstance<Gtk.Text>>();
   return (
     <FlowBox
       style={{
@@ -35,15 +33,13 @@ export const Example = () => {
         vexpand
         hexpand
         label="Click Me!"
-        onClicked={() => {
+        onClicked={(_node) => {
           console.log('Button was clicked!');
         }}
       />
       <Text
-        ref={textRef}
-        // @ts-ignore
-        onChanged={() => {
-          console.log(textRef.current?.node.text);
+        onChanged={(node) => {
+          console.log(node.text);
         }}
       />
     </FlowBox>

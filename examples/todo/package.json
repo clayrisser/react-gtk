@@ -61,6 +61,7 @@
     "node": ">=16.0.0"
   },
   "devDependencies": {
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "zustand": "^4.4.7"
   }
 }

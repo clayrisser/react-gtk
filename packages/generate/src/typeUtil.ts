@@ -97,7 +97,16 @@ export function lookupType(type: string | undefined) {
 export const importTypeMap: Record<string, ImportTypeInfo> = {
   Pango: {
     from: '@girs/node-pango-1.0',
-    types: ['FontMap', 'TabArray', 'WrapMode', 'AttrList', 'EllipsizeMode'],
+    types: [
+      'FontMap',
+      'TabArray',
+      'WrapMode',
+      'AttrList',
+      'EllipsizeMode',
+      'FontDescription',
+      'Language',
+      'Script',
+    ],
   },
   Gdk: {
     from: '@girs/node-gdk-4.0',
@@ -113,7 +122,16 @@ export const importTypeMap: Record<string, ImportTypeInfo> = {
   },
   Gio: {
     from: '@girs/node-gio-2.0',
-    types: ['File', 'MenuModel', 'ListModel', 'Icon', 'Permission', 'AppInfo'],
+    types: [
+      'File',
+      'MenuModel',
+      'ListModel',
+      'Icon',
+      'Permission',
+      'AppInfo',
+      'ActionGroup',
+      'ActionMap',
+    ],
   },
   cairo: {
     from: '@girs/node-cairo-1.0',

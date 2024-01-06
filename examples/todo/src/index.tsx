@@ -22,7 +22,7 @@
 import React from 'react';
 import { render, Text, FlowBox, Button } from '@react-gtk/core';
 
-export const Example = () => {
+export const App = () => {
   return (
     <FlowBox
       style={{
@@ -47,5 +47,5 @@ export const Example = () => {
 };
 
 (async () => {
-  await render(<Example />);
+  await render(<App />);
 })();

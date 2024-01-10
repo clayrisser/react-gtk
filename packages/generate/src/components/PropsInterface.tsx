@@ -43,6 +43,7 @@ export interface PropsInterfaceProps {
 }
 
 export function PropsInterface({ class_ }: PropsInterfaceProps) {
+  // console.log('class_', class_.doc);
   const extends_: string[] = [];
   if (class_.$.parent && class_.$.parent !== 'GObject.InitiallyUnowned') {
     extends_.push(`${class_.$.parent}GObjectProps`);

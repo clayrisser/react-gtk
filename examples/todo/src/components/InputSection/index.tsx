@@ -22,33 +22,38 @@
 import React, { useState } from 'react';
 import Gtk from '@girs/node-gtk-4.0';
 import { FlowBox, FlowBoxChild, Button, Text } from '@react-gtk/core';
-import useTasksStore from '../../state/useTasksStore';
+import useTodoStore from '../../state/useTodoStore';
 
 export const InputSection = () => {
-  const [task, setTask] = useState('');
-  const [setTasks] = useTasksStore((state: any) => [state.setTasks]);
+  const [title, setTitle] = useState('');
+  const addTodo = useTodoStore((state: any) => state.addTodo);
 
-  const handleAddTask = () => {
-    setTasks((tasks: any) => {
-      const newTask = {
-        title: task,
-        completed: false,
-        favorite: false,
-        description: '',
-      };
-      return [...tasks, newTask];
+  const handleAddTodo = () => {
+    if (!title) return;
+    addTodo({
+      title,
+      completed: false,
+      favorite: false,
+      description: '',
+      id: Date.now(),
     });
-    setTask('');
+    setTitle('');
   };
-  console.log('task', task);
 
   return (
-    <FlowBox halign={Gtk.Align.FILL} style={{ minWidth: 350 }}>
+    <FlowBox
+      halign={Gtk.Align.FILL}
+      style={{ minWidth: 350, borderStyle: 'solid', borderColor: 'skyBlue', borderWidth: 2 }}
+    >
       <FlowBoxChild>
-        <Button onClicked={handleAddTask} label="+" />
+        <Button style={{ borderStyle: 'none' }} onClicked={handleAddTodo} label="+" />
       </FlowBoxChild>
       <FlowBoxChild>
-        <Text placeholderText="Add TODO..." onInsertAtCursor={(e) => setTask(e)} />
+        <Text
+          text={title}
+          placeholderText="Add TODO..."
+          onChanged={(node: Gtk.Editable) => setTitle(node.text as string)}
+        />
       </FlowBoxChild>
     </FlowBox>
   );

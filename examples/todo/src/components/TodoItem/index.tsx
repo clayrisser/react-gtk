@@ -21,42 +21,29 @@
 
 import React from 'react';
 import Gtk from '@girs/node-gtk-4.0';
-import { Box, CheckButton, Label, FlowBoxChild, FlowBox } from '@react-gtk/core';
-import { TaskProps } from '../../state/useTasksStore';
+import { Box, CheckButton, Label, FlexBox, FlowBox } from '@react-gtk/core';
+import { TodoProps } from '../../utils/todoProps';
+import useTodoStore from '../../state/useTodoStore';
 
-export interface TodoItemProps extends TaskProps {
-  onToggleFavorite: (id: string) => void;
+export const TodoItem = (props: TodoProps) => {
+  const { id, title, completed, favorite, description } = props;
+  const [toggleFavorite, toggleCompleted] = useTodoStore((state: any) => [state.toggleFavorite, state.toggleCompleted]);
 
-  onToggleCompleted: (id: string) => void;
-}
-
-export const TodoItem = (props: TodoItemProps) => {
-  const { id, title, completed, favorite, description, onToggleCompleted, onToggleFavorite } = props;
+  function handleFavorite() {
+    toggleFavorite(id);
+  }
+  function handleCompleted() {
+    toggleCompleted(id);
+  }
 
   return (
-    <Box
-      orientation={Gtk.Orientation.VERTICAL}
-      valign={Gtk.Align.START}
-      style={{ padding: '5px', backgroundColor: 'yellow' }}
-    >
-      <FlowBox orientation={Gtk.Orientation.VERTICAL} style={{ backgroundColor: 'red' }}>
-        <FlowBoxChild>
-          <CheckButton active={completed} />
-        </FlowBoxChild>
-        <FlowBoxChild>
-          <Label label={title || 'No Task '} />
-        </FlowBoxChild>
-        <FlowBoxChild>
-          <CheckButton
-            active={favorite}
-            onToggled={() => {
-              onToggleFavorite(id);
-            }}
-            onActivate={() => {
-              onToggleFavorite(id);
-            }}
-          />
-        </FlowBoxChild>
+    <Box orientation={Gtk.Orientation.VERTICAL} style={{ padding: '5px', minWidth: 300, backgroundColor: 'red' }}>
+      <FlowBox>
+        <CheckButton active={completed} onToggled={handleCompleted} />
+
+        <Label label={title} />
+
+        <CheckButton active={favorite} onToggled={handleFavorite} />
       </FlowBox>
     </Box>
   );

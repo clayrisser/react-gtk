@@ -1,5 +1,5 @@
 /**
- * File: /src/components/EmptyTaskScreen/index.tsx
+ * File: /src/screens/EmptyTaskScreen/index.tsx
  * Project: @react-gtk/todo-example
  * File Created: 28-12-2023 12:01:49
  * Author: dharmendra
@@ -33,10 +33,14 @@ export const EmptyTaskScreen = (props: EmptyTaskScreenProps) => {
   return (
     <FlowBox valign={Gtk.Align.CENTER}>
       <FlowBoxChild style={{ padding: '40px', backgroundColor: 'transparent' }}>
-        <Label style={{ fontFamily: 'Italic', fontSize: '24px' }} label="Tasks Will Appear Here" />
+        <Label style={{ fontSize: '24px' }} label="Tasks Will Appear Here" />
       </FlowBoxChild>
-      <FlowBoxChild>
-        <Button onClicked={() => setToggleAddTasks(!toggleAddTasks)} label="Add Tasks..." />
+      <FlowBoxChild style={{ height: 80 }}>
+        <Button
+          style={{ backgroundColor: 'skyBlue', color: 'white', fontSize: '18px' }}
+          onClicked={() => setToggleAddTasks(!toggleAddTasks)}
+          label="Add Tasks..."
+        />
       </FlowBoxChild>
     </FlowBox>
   );

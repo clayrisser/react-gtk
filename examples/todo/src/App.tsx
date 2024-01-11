@@ -20,9 +20,8 @@
  */
 
 import React, { useState } from 'react';
-import { Box, FlowBox, DropDown, ScrolledWindow, Scrollbar } from '@react-gtk/core';
+import { Box, ScrolledWindow } from '@react-gtk/core';
 import Gtk from '@girs/node-gtk-4.0';
-import { Header } from './components/Header';
 import { InputSection } from './components/InputSection';
 import { EmptyTaskScreen } from './screens/EmptyTaskScreen';
 import useTodoStore from './state/useTodoStore';

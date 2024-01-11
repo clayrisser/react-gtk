@@ -40,9 +40,7 @@ export const TodoItem = (props: TodoProps) => {
     <Box orientation={Gtk.Orientation.VERTICAL} style={{ padding: '5px', minWidth: 300, backgroundColor: 'red' }}>
       <FlowBox>
         <CheckButton active={completed} onToggled={handleCompleted} />
-
         <Label label={title} />
-
         <CheckButton active={favorite} onToggled={handleFavorite} />
       </FlowBox>
     </Box>

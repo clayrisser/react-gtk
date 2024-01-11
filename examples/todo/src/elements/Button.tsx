@@ -1,8 +1,8 @@
 /**
- * File: /src/components/DropDownList/index.tsx
+ * File: /src/elements/Button.tsx
  * Project: @react-gtk/todo-example
- * File Created: 11-01-2024 11:42:13
- * Author: Clay Risser
+ * File Created: 11-01-2024 17:25:21
+ * Author: dharmendra
  * -----
  * BitSpur (c) Copyright 2017 - 2024
  *
@@ -19,17 +19,14 @@
  * limitations under the License.
  */
 
-import React, { Ref } from 'react';
-import { Box, DropDown } from '@react-gtk/core';
+import React from 'react';
 import Gtk from '@girs/node-gtk-4.0';
+import { Button, render } from '@react-gtk/core';
 
-export const DropDownList = () => {
-  const fruitList = new Gtk.StringList();
-  fruitList.splice(0, 0, ['Apple', 'Banana', 'Pineapple', 'Carrot']);
-
-  return (
-    <Box>
-      <DropDown ref={} model={fruitList} showArrow={true} selected={2} sensitive={true} />
-    </Box>
-  );
+export const ButtonElement = () => {
+  return <Button label="Button" />;
 };
+
+(async () => {
+  await render(<ButtonElement />);
+})();

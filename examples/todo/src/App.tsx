@@ -20,39 +20,40 @@
  */
 
 import React, { useState } from 'react';
-import { Box, FlowBox, DropDown } from '@react-gtk/core';
+import { Box, FlowBox, DropDown, ScrolledWindow, Scrollbar } from '@react-gtk/core';
 import Gtk from '@girs/node-gtk-4.0';
 import { Header } from './components/Header';
 import { InputSection } from './components/InputSection';
-import { EmptyTaskScreen } from './components/EmptyTaskScreen';
-import useTasksStore from './state/useTasksStore';
+import { EmptyTaskScreen } from './screens/EmptyTaskScreen';
+import useTodoStore from './state/useTodoStore';
 import { TodoItem } from './components/TodoItem';
 
 const App = () => {
-  const [tasks] = useTasksStore((state: any) => [state.tasks, state.setTasks]);
+  const todos = useTodoStore((state: any) => state.todos);
   const [toggleAddTasks, setToggleAddTasks] = useState(false);
 
   return (
-    <Box orientation={Gtk.Orientation.VERTICAL}>
-      <Box>
-        <DropDown showArrow />
-        <Box style={{ width: 200 }}>
-          <Header title="TODO" />
+    <ScrolledWindow vexpand>
+      <Box orientation={Gtk.Orientation.VERTICAL}>
+        <Box visible={toggleAddTasks || todos.length > 0 ? false : true} vexpand halign={Gtk.Align.CENTER}>
+          <EmptyTaskScreen setToggleAddTasks={setToggleAddTasks} toggleAddTasks={toggleAddTasks} />
+        </Box>
+
+        <Box
+          orientation={Gtk.Orientation.VERTICAL}
+          visible={todos.length > 0 ? true : false}
+          halign={Gtk.Align.CENTER}
+          style={{ padding: '6px' }}
+        >
+          {todos.map((todo: any) => (
+            <TodoItem key={todo.id} {...todo} />
+          ))}
+        </Box>
+        <Box visible={toggleAddTasks ? true : false} halign={Gtk.Align.CENTER} style={{ padding: '10px' }}>
+          <InputSection />
         </Box>
       </Box>
-      <Box visible={toggleAddTasks || tasks.length > 0 ? false : true} vexpand halign={Gtk.Align.CENTER}>
-        <EmptyTaskScreen setToggleAddTasks={setToggleAddTasks} toggleAddTasks={toggleAddTasks} />
-      </Box>
-
-      <FlowBox visible={toggleAddTasks ? true : false} halign={Gtk.Align.CENTER} style={{ padding: '10px' }}>
-        <InputSection />
-      </FlowBox>
-      <FlowBox visible={tasks.length > 0 ? true : false} halign={Gtk.Align.CENTER} style={{ padding: '6px' }}>
-        {tasks.map((task: any) => (
-          <TodoItem key={task.id} {...task} />
-        ))}
-      </FlowBox>
-    </Box>
+    </ScrolledWindow>
   );
 };
 

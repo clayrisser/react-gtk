@@ -22,6 +22,9 @@
 import React from 'react';
 import { render } from '@react-gtk/core';
 import App from './App';
+import { Box, FlowBox, Button, Text } from '@react-gtk/core';
+import Gtk from '@girs/node-gtk-4.0';
+import { Header } from './components/Header';
 
 // export const App = () => {
 //   return (
@@ -48,5 +51,12 @@ import App from './App';
 // };
 
 (async () => {
-  await render(<App />);
+  await render(
+    <Box orientation={Gtk.Orientation.VERTICAL}>
+      <Box style={{ width: 200 }}>
+        <Header title="TODO" />
+      </Box>
+      <App />
+    </Box>,
+  );
 })();

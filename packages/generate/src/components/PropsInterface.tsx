@@ -42,6 +42,8 @@ export interface PropsInterfaceProps {
   class_: GirClassElement;
 }
 
+const comments: Record<string, Record<string, string[]>> = {};
+
 export function PropsInterface({ class_ }: PropsInterfaceProps) {
   // console.log('class_', class_.doc);
   const extends_: string[] = [];
@@ -121,19 +123,22 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
   }
 
   function renderMethodProps() {
-    return methodPropDefinitions.map(({ name, parameters }, i) => (
-      <MethodSignature
-        key={name + i}
-        name={name}
-        optional
-        returnType="void"
-        params={parameters.map(({ name, type }, i) => (
-          <Identifier key={name + i} typeAnnotation={type.toString()}>
-            {name}
-          </Identifier>
-        ))}
-      />
-    ));
+    return methodPropDefinitions.map(({ name, parameters }, i) => {
+      comments[class_.$.name][name] = [];
+      return (
+        <MethodSignature
+          key={name + i}
+          name={name}
+          optional
+          returnType="void"
+          params={parameters.map(({ name, type }, i) => (
+            <Identifier key={name + i} typeAnnotation={type.toString()}>
+              {name}
+            </Identifier>
+          ))}
+        />
+      );
+    });
   }
 
   function renderExtendsInterface() {

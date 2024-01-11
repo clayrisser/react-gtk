@@ -20,7 +20,7 @@
  */
 
 import React, { useState } from 'react';
-import { Box, FlowBox, DropDown } from '@react-gtk/core';
+import { Box, FlowBox, DropDown, ScrolledWindow, Scrollbar } from '@react-gtk/core';
 import Gtk from '@girs/node-gtk-4.0';
 import { Header } from './components/Header';
 import { InputSection } from './components/InputSection';
@@ -33,30 +33,27 @@ const App = () => {
   const [toggleAddTasks, setToggleAddTasks] = useState(false);
 
   return (
-    <Box orientation={Gtk.Orientation.VERTICAL}>
-      <Box>
-        {/* <DropDown showArrow /> */}
-        <Box style={{ width: 200 }}>
-          <Header title="TODO" />
+    <ScrolledWindow vexpand>
+      <Box orientation={Gtk.Orientation.VERTICAL}>
+        <Box visible={toggleAddTasks || todos.length > 0 ? false : true} vexpand halign={Gtk.Align.CENTER}>
+          <EmptyTaskScreen setToggleAddTasks={setToggleAddTasks} toggleAddTasks={toggleAddTasks} />
+        </Box>
+
+        <Box
+          orientation={Gtk.Orientation.VERTICAL}
+          visible={todos.length > 0 ? true : false}
+          halign={Gtk.Align.CENTER}
+          style={{ padding: '6px' }}
+        >
+          {todos.map((todo: any) => (
+            <TodoItem key={todo.id} {...todo} />
+          ))}
+        </Box>
+        <Box visible={toggleAddTasks ? true : false} halign={Gtk.Align.CENTER} style={{ padding: '10px' }}>
+          <InputSection />
         </Box>
       </Box>
-      <Box visible={toggleAddTasks || todos.length > 0 ? false : true} vexpand halign={Gtk.Align.CENTER}>
-        <EmptyTaskScreen setToggleAddTasks={setToggleAddTasks} toggleAddTasks={toggleAddTasks} />
-      </Box>
-      <Box
-        orientation={Gtk.Orientation.VERTICAL}
-        visible={todos.length > 0 ? true : false}
-        halign={Gtk.Align.CENTER}
-        style={{ padding: '6px' }}
-      >
-        {todos.map((todo: any) => (
-          <TodoItem key={todo.id} {...todo} />
-        ))}
-      </Box>
-      <Box visible={toggleAddTasks ? true : false} halign={Gtk.Align.CENTER} style={{ padding: '10px' }}>
-        <InputSection />
-      </Box>
-    </Box>
+    </ScrolledWindow>
   );
 };
 

@@ -22,7 +22,7 @@
 import React from 'react';
 import Gtk from '@girs/node-gtk-4.0';
 import { Button, FlowBox, FlowBoxChild, Label } from '@react-gtk/core';
-import DropDownList from '../DropDownList';
+import { DropDownList } from '../../components/DropDownList';
 
 export interface EmptyTaskScreenProps {
   setToggleAddTasks: (toggle: boolean) => void;
@@ -44,7 +44,6 @@ export const EmptyTaskScreen = (props: EmptyTaskScreenProps) => {
           label="Add Tasks..."
         />
       </FlowBoxChild>
-
       <DropDownList />
     </FlowBox>
   );

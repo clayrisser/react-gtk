@@ -1,8 +1,8 @@
 /**
- * File: /src/components/DropDownList/index.tsx
+ * File: /src/elements/DropDown.tsx
  * Project: @react-gtk/todo-example
- * File Created: 11-01-2024 11:42:13
- * Author: Clay Risser
+ * File Created: 11-01-2024 17:35:18
+ * Author: dharmendra
  * -----
  * BitSpur (c) Copyright 2017 - 2024
  *
@@ -18,9 +18,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import React, { Ref } from 'react';
-import { Box, DropDown } from '@react-gtk/core';
+import React from 'react';
+import { Box, DropDown, render } from '@react-gtk/core';
 import Gtk from '@girs/node-gtk-4.0';
 
 export const DropDownList = () => {
@@ -29,7 +28,11 @@ export const DropDownList = () => {
 
   return (
     <Box>
-      <DropDown ref={} model={fruitList} showArrow={true} selected={2} sensitive={true} />
+      <DropDown model={fruitList} showArrow={true} selected={2} sensitive={true} />
     </Box>
   );
 };
+
+(async () => {
+  await render(<DropDownList />);
+})();

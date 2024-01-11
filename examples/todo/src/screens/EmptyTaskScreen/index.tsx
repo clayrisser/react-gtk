@@ -44,7 +44,6 @@ export const EmptyTaskScreen = (props: EmptyTaskScreenProps) => {
           label="Add Tasks..."
         />
       </FlowBoxChild>
-      <DropDownList />
     </FlowBox>
   );
 };

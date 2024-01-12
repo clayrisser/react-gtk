@@ -21,7 +21,10 @@
 
 import React from 'react';
 import { GirClassElement } from '@ts-for-gir/lib';
-import { PropsInterface } from './components/PropsInterface';
+import {
+  PropsInterface,
+  InterfaceDocumentation,
+} from './components/PropsInterface';
 import { RootIndex } from './components';
 import { WidgetElement } from './components/WidgetElement';
 import { WidgetElementsIndex } from './components/WidgetElementsIndex';
@@ -41,4 +44,10 @@ export async function renderWidgetElementsIndex(widgets: GirClassElement[]) {
 
 export async function renderRootIndex(widgets: GirClassElement[]) {
   return render(<RootIndex widgets={widgets} />);
+}
+
+export async function renderInterfaceDocumentation(class_: GirClassElement) {
+  return render(<InterfaceDocumentation class_={class_} />, {
+    prettier: false,
+  });
 }

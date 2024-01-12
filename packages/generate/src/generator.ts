@@ -25,6 +25,7 @@ import { GeneratorOptions } from './types';
 import { GirModule, GirClassElement, GirImplements } from '@ts-for-gir/lib';
 import { loadGtkModule } from './module';
 import {
+  renderInterfaceDocumentation,
   renderPropsInterface,
   renderRootIndex,
   renderWidgetElement,
@@ -87,6 +88,17 @@ export class Generator {
       path.resolve(this.outDir, `interfaces/${class_.$.name}GObjectProps.ts`),
       generatePropsInterfaceCode,
     );
+
+    const generatePropsInterfaceCodeDocs =
+      await renderInterfaceDocumentation(class_);
+    await fs.writeFile(
+      path.resolve(
+        this.outDir,
+        `interfaces/${class_.$.name}GObjectPropsDocs.json`,
+      ),
+      generatePropsInterfaceCodeDocs,
+    );
+
     this.generatedPropsInterfaces.add(class_.$.name);
     const parent = this.getParent(class_);
     if (parent) await this.generatePropsInterface(parent);

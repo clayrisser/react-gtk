@@ -41,9 +41,7 @@ import {
   ObjectExpression,
   Property,
   PropertySignature,
-  Smart,
   StringLiteral,
-  Var,
   VariableDeclaration,
   VariableDeclarationKind,
   VariableDeclarator,
@@ -123,19 +121,25 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
   }
 
   function renderPropertyProps() {
-    return propertyPropDefinitions.map(({ name, type }, i) => (
-      <PropertySignature
-        key={name + i}
-        name={name}
-        optional
-        typeAnnotation={type.toString()}
-      />
-    ));
+    return propertyPropDefinitions.map(({ name, type, comment }, i) => {
+      if (comment) {
+        comments[class_.$.name] = comments[class_.$.name] || {};
+        comments[class_.$.name][name] = comment.split('\n');
+      }
+
+      return (
+        <PropertySignature
+          key={name + i}
+          name={name}
+          optional
+          typeAnnotation={type.toString()}
+        />
+      );
+    });
   }
 
   function renderMethodProps() {
     return methodPropDefinitions.map(({ name, parameters, comment }, i) => {
-      // @ts-ignore
       // comments[class_.$.name][name] = [];
       if (comment) {
         comments[class_.$.name] = comments[class_.$.name] || {};
@@ -156,21 +160,6 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
         />
       );
     });
-  }
-  function renderMethodDocumentation() {
-    return (
-      <VariableDeclaration kind={VariableDeclarationKind.Const}>
-        <VariableDeclarator name="documentation">
-          <ObjectExpression>
-            {methodPropDefinitions.map(({ name }, i) => (
-              <Property key={name + i} name={name}>
-                <Literal>{comments[class_.$.name]?.[name]}</Literal>
-              </Property>
-            ))}
-          </ObjectExpression>
-        </VariableDeclarator>
-      </VariableDeclaration>
-    );
   }
 
   function renderExtendsInterface() {
@@ -203,7 +192,6 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
           {renderMethodProps()}
         </Interface>
       </Export>
-      {renderMethodDocumentation()}
     </>
   );
 }
@@ -220,6 +208,7 @@ export function getPropertyPropDefinitions(
         .map((t) => lookupType(t));
       if (!parameters.length) return null;
       return {
+        comment: m.doc?.[0]?._,
         method: m,
         name: camelCase(m.$.name.replace(/^set_/, '')),
         parameters,
@@ -266,6 +255,25 @@ export function getMethodPropDefinitions(
   });
 }
 
+export function InterfaceDocumentation({ class_ }: PropsInterfaceProps) {
+  const propertyPropDefinitions = getPropertyPropDefinitions(class_);
+  const methodPropDefinitions = getMethodPropDefinitions(class_);
+  return (
+    <ObjectExpression>
+      {propertyPropDefinitions.map(({ name }, i) => (
+        <Property key={name + i} name={<StringLiteral>{name}</StringLiteral>}>
+          <Literal>{comments[class_.$.name]?.[name]}</Literal>
+        </Property>
+      ))}
+      {methodPropDefinitions.map(({ name }, i) => (
+        <Property key={name + i} name={<StringLiteral>{name}</StringLiteral>}>
+          <Literal>{comments[class_.$.name]?.[name]}</Literal>
+        </Property>
+      ))}
+    </ObjectExpression>
+  );
+}
+
 export interface MethodPropParameter {
   name: string;
   parameter?: GirCallableParamElement;
@@ -283,6 +291,7 @@ export interface PropertyPropDefinition {
   name: string;
   parameters: string[];
   type: TypeDefinition;
+  comment?: string;
 }
 
 const propsInterfaceOmitMap: Record<string, string[]> = {

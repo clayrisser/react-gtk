@@ -28,14 +28,25 @@ import {
   GirMethodElement,
 } from '@ts-for-gir/lib';
 import {
+  ArrayExpression,
+  Code,
   Export,
   ExpressionWithTypeArguments,
   Identifier,
   Import,
   Interface,
   InterfaceTypeReference,
+  Literal,
   MethodSignature,
+  ObjectExpression,
+  Property,
   PropertySignature,
+  Smart,
+  StringLiteral,
+  Var,
+  VariableDeclaration,
+  VariableDeclarationKind,
+  VariableDeclarator,
 } from 'react-ast';
 
 export interface PropsInterfaceProps {
@@ -123,8 +134,14 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
   }
 
   function renderMethodProps() {
-    return methodPropDefinitions.map(({ name, parameters }, i) => {
-      comments[class_.$.name][name] = [];
+    return methodPropDefinitions.map(({ name, parameters, comment }, i) => {
+      // @ts-ignore
+      // comments[class_.$.name][name] = [];
+      if (comment) {
+        comments[class_.$.name] = comments[class_.$.name] || {};
+        comments[class_.$.name][name] = comment.split('\n');
+      }
+
       return (
         <MethodSignature
           key={name + i}
@@ -139,6 +156,21 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
         />
       );
     });
+  }
+  function renderMethodDocumentation() {
+    return (
+      <VariableDeclaration kind={VariableDeclarationKind.Const}>
+        <VariableDeclarator name="documentation">
+          <ObjectExpression>
+            {methodPropDefinitions.map(({ name }, i) => (
+              <Property key={name + i} name={name}>
+                <Literal>{comments[class_.$.name]?.[name]}</Literal>
+              </Property>
+            ))}
+          </ObjectExpression>
+        </VariableDeclarator>
+      </VariableDeclaration>
+    );
   }
 
   function renderExtendsInterface() {
@@ -171,6 +203,7 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
           {renderMethodProps()}
         </Interface>
       </Export>
+      {renderMethodDocumentation()}
     </>
   );
 }
@@ -220,6 +253,7 @@ export function getMethodPropDefinitions(
         })
         .filter(Boolean) as MethodPropParameter[]) || [];
     return {
+      comment: s.doc?.[0]?._,
       name: camelCase(`on-${s.$.name}`),
       parameters: [
         {
@@ -241,6 +275,7 @@ export interface MethodPropParameter {
 export interface MethodPropDefinition {
   name: string;
   parameters: MethodPropParameter[];
+  comment?: string;
 }
 
 export interface PropertyPropDefinition {

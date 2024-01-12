@@ -1,8 +1,8 @@
 /**
- * File: /src/elements/DropDown.tsx
+ * File: /src/elements/Calender.tsx
  * Project: @react-gtk/todo-example
- * File Created: 11-01-2024 17:35:18
- * Author: dharmendra
+ * File Created: 12-01-2024 17:16:00
+ * Author: Clay Risser
  * -----
  * BitSpur (c) Copyright 2017 - 2024
  *
@@ -18,21 +18,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import React from 'react';
-import { Box, DropDown, render } from '@react-gtk/core';
+import { render, Box, Calendar } from '@react-gtk/core';
 import Gtk from '@girs/node-gtk-4.0';
 
-export const DropDownList = () => {
-  const fruitList = new Gtk.StringList();
-  fruitList.splice(0, 0, ['Apple', 'Banana', 'Pineapple', 'Carrot']);
+export const CalendarElement = () => {
+  const handleDaySelected = (node: any) => {
+    // Logic when a day is selected
+    console.log('Day selected:', node);
+  };
 
   return (
     <Box orientation={Gtk.Orientation.VERTICAL}>
-      <DropDown model={fruitList} showArrow={true} selected={2} sensitive={true} />
+      <Calendar showDayNames={true} showHeading={true} showWeekNumbers={false} onDaySelected={handleDaySelected} />
     </Box>
   );
 };
 
 (async () => {
-  await render(<DropDownList />);
+  await render(<CalendarElement />);
 })();

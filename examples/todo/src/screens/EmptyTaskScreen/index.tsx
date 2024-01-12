@@ -19,10 +19,9 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import Gtk from '@girs/node-gtk-4.0';
-import { Button, FlowBox, FlowBoxChild, Label } from '@react-gtk/core';
-import { DropDownList } from '../../components/DropDownList';
+import { Button, FlowBox, FlowBoxChild, Label, StackSidebar, Box, Stack } from '@react-gtk/core';
 
 export interface EmptyTaskScreenProps {
   setToggleAddTasks: (toggle: boolean) => void;
@@ -32,18 +31,32 @@ export interface EmptyTaskScreenProps {
 export const EmptyTaskScreen = (props: EmptyTaskScreenProps) => {
   const { setToggleAddTasks, toggleAddTasks } = props;
 
+  // State to manage the visibility of the sidebar
+  const [sidebarVisible, setSidebarVisible] = useState(true);
+
+  // Function to toggle the sidebar visibility
+  const toggleSidebar = () => {
+    setSidebarVisible(!sidebarVisible);
+  };
+
   return (
-    <FlowBox valign={Gtk.Align.CENTER}>
-      <FlowBoxChild style={{ padding: '40px', backgroundColor: 'transparent' }}>
-        <Label style={{ fontSize: '24px' }} label="Tasks Will Appear Here" />
-      </FlowBoxChild>
-      <FlowBoxChild style={{ height: 80 }}>
-        <Button
-          style={{ backgroundColor: 'skyBlue', color: 'white', fontSize: '18px' }}
-          onClicked={() => setToggleAddTasks(!toggleAddTasks)}
-          label="Add Tasks..."
-        />
-      </FlowBoxChild>
-    </FlowBox>
+    <Box orientation={Gtk.Orientation.HORIZONTAL}>
+      {sidebarVisible && <StackSidebar>{/* Place your sidebar content here */}</StackSidebar>}
+
+      <Button label={sidebarVisible ? 'Hide Sidebar' : 'Show Sidebar'} onClicked={toggleSidebar} />
+
+      <FlowBox valign={Gtk.Align.CENTER}>
+        <FlowBoxChild style={{ padding: '40px', backgroundColor: 'transparent' }}>
+          <Label style={{ fontSize: '24px' }} label="Tasks Will Appear Here" />
+        </FlowBoxChild>
+        <FlowBoxChild style={{ height: 80 }}>
+          <Button
+            style={{ backgroundColor: 'skyBlue', color: 'white', fontSize: '18px' }}
+            onClicked={() => setToggleAddTasks(!toggleAddTasks)}
+            label="Add Tasks..."
+          />
+        </FlowBoxChild>
+      </FlowBox>
+    </Box>
   );
 };

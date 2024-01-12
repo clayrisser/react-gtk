@@ -1,8 +1,8 @@
 /**
- * File: /src/elements/DropDown.tsx
+ * File: /src/elements/CheckButton.tsx
  * Project: @react-gtk/todo-example
- * File Created: 11-01-2024 17:35:18
- * Author: dharmendra
+ * File Created: 12-01-2024 16:32:52
+ * Author: Clay Risser
  * -----
  * BitSpur (c) Copyright 2017 - 2024
  *
@@ -18,21 +18,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from 'react';
-import { Box, DropDown, render } from '@react-gtk/core';
+
+import React, { useState } from 'react';
+import { render, Box, CheckButton } from '@react-gtk/core';
 import Gtk from '@girs/node-gtk-4.0';
 
-export const DropDownList = () => {
-  const fruitList = new Gtk.StringList();
-  fruitList.splice(0, 0, ['Apple', 'Banana', 'Pineapple', 'Carrot']);
+export const CheckButtonElement = () => {
+  const [isActive, setIsActive] = useState(false);
+
+  const handleToggle = (node: any) => {
+    setIsActive(node.active);
+    console.log(`CheckButton is now ${node.active ? 'active' : 'inactive'}`);
+  };
 
   return (
     <Box orientation={Gtk.Orientation.VERTICAL}>
-      <DropDown model={fruitList} showArrow={true} selected={2} sensitive={true} />
+      <CheckButton label="Check me" useUnderline={true} active={isActive} onToggled={handleToggle} />
     </Box>
   );
 };
 
 (async () => {
-  await render(<DropDownList />);
+  await render(<CheckButtonElement />);
 })();

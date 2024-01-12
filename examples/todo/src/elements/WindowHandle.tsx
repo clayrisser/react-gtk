@@ -1,8 +1,8 @@
 /**
- * File: /src/elements/DropDown.tsx
+ * File: /src/elements/WindowHandle.tsx
  * Project: @react-gtk/todo-example
- * File Created: 11-01-2024 17:35:18
- * Author: dharmendra
+ * File Created: 12-01-2024 16:52:22
+ * Author: Clay Risser
  * -----
  * BitSpur (c) Copyright 2017 - 2024
  *
@@ -18,21 +18,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import React from 'react';
-import { Box, DropDown, render } from '@react-gtk/core';
-import Gtk from '@girs/node-gtk-4.0';
+import { render, Button, WindowHandle } from '@react-gtk/core';
 
-export const DropDownList = () => {
-  const fruitList = new Gtk.StringList();
-  fruitList.splice(0, 0, ['Apple', 'Banana', 'Pineapple', 'Carrot']);
-
+export const WindowHandleElement = () => {
   return (
-    <Box orientation={Gtk.Orientation.VERTICAL}>
-      <DropDown model={fruitList} showArrow={true} selected={2} sensitive={true} />
-    </Box>
+    <WindowHandle>
+      <Button label="Click Me" onClicked={() => console.log('Button clicked')} />
+    </WindowHandle>
   );
 };
 
 (async () => {
-  await render(<DropDownList />);
+  await render(<WindowHandleElement />);
 })();

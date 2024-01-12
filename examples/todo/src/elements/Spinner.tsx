@@ -1,8 +1,8 @@
 /**
- * File: /src/elements/DropDown.tsx
+ * File: /src/elements/Spinner.tsx
  * Project: @react-gtk/todo-example
- * File Created: 11-01-2024 17:35:18
- * Author: dharmendra
+ * File Created: 12-01-2024 15:53:05
+ * Author: Clay Risser
  * -----
  * BitSpur (c) Copyright 2017 - 2024
  *
@@ -18,21 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import React from 'react';
-import { Box, DropDown, render } from '@react-gtk/core';
-import Gtk from '@girs/node-gtk-4.0';
+import { render, Spinner } from '@react-gtk/core';
 
-export const DropDownList = () => {
-  const fruitList = new Gtk.StringList();
-  fruitList.splice(0, 0, ['Apple', 'Banana', 'Pineapple', 'Carrot']);
-
-  return (
-    <Box orientation={Gtk.Orientation.VERTICAL}>
-      <DropDown model={fruitList} showArrow={true} selected={2} sensitive={true} />
-    </Box>
-  );
+export const SpinnerElement = () => {
+  return <Spinner spinning={true} />;
 };
 
 (async () => {
-  await render(<DropDownList />);
+  await render(<SpinnerElement />);
 })();

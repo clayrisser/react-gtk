@@ -1,8 +1,8 @@
 /**
- * File: /src/elements/DropDown.tsx
+ * File: /src/components/StackSidebar/index.tsx
  * Project: @react-gtk/todo-example
- * File Created: 11-01-2024 17:35:18
- * Author: dharmendra
+ * File Created: 12-01-2024 12:22:15
+ * Author: Clay Risser
  * -----
  * BitSpur (c) Copyright 2017 - 2024
  *
@@ -18,21 +18,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from 'react';
-import { Box, DropDown, render } from '@react-gtk/core';
+
+import React, { useState } from 'react';
+import { Box, Stack, Label } from '@react-gtk/core';
 import Gtk from '@girs/node-gtk-4.0';
 
-export const DropDownList = () => {
-  const fruitList = new Gtk.StringList();
-  fruitList.splice(0, 0, ['Apple', 'Banana', 'Pineapple', 'Carrot']);
+export const StackSidebar = () => {
+  const [selectedPage, setSelectedPage] = useState('page1');
+
+  const handlePageSwitch = (pageName: any) => {
+    setSelectedPage(pageName);
+  };
 
   return (
-    <Box orientation={Gtk.Orientation.VERTICAL}>
-      <DropDown model={fruitList} showArrow={true} selected={2} sensitive={true} />
+    <Box orientation={Gtk.Orientation.HORIZONTAL}>
+      <Stack visibleChildName={selectedPage}>
+        <Label name="page1" label="Page 1 Content" />
+        <Label name="page2" label="Page 2 Content" />
+        <Label name="page3" label="Page 3 Content" />
+      </Stack>
     </Box>
   );
 };
-
-(async () => {
-  await render(<DropDownList />);
-})();

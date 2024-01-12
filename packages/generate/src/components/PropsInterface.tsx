@@ -34,19 +34,13 @@ import {
   Import,
   Interface,
   InterfaceTypeReference,
-  Literal,
   MethodSignature,
-  ObjectExpression,
-  Property,
   PropertySignature,
-  StringLiteral,
 } from 'react-ast';
 
 export interface PropsInterfaceProps {
   class_: GirClassElement;
 }
-
-const comments: Record<string, Record<string, string[]>> = {};
 
 export function PropsInterface({ class_ }: PropsInterfaceProps) {
   // console.log('class_', class_.doc);
@@ -116,12 +110,7 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
   }
 
   function renderPropertyProps() {
-    return propertyPropDefinitions.map(({ name, type, comment }, i) => {
-      if (comment) {
-        comments[class_.$.name] = comments[class_.$.name] || {};
-        comments[class_.$.name][name] = comment.split('\n');
-      }
-
+    return propertyPropDefinitions.map(({ name, type }, i) => {
       return (
         <PropertySignature
           key={name + i}
@@ -134,12 +123,7 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
   }
 
   function renderMethodProps() {
-    return methodPropDefinitions.map(({ name, parameters, comment }, i) => {
-      if (comment) {
-        comments[class_.$.name] = comments[class_.$.name] || {};
-        comments[class_.$.name][name] = comment.split('\n');
-      }
-
+    return methodPropDefinitions.map(({ name, parameters }, i) => {
       return (
         <MethodSignature
           key={name + i}
@@ -247,25 +231,6 @@ export function getMethodPropDefinitions(
       ],
     };
   });
-}
-
-export function InterfaceDocumentation({ class_ }: PropsInterfaceProps) {
-  const propertyPropDefinitions = getPropertyPropDefinitions(class_);
-  const methodPropDefinitions = getMethodPropDefinitions(class_);
-  return (
-    <ObjectExpression>
-      {propertyPropDefinitions.map(({ name }, i) => (
-        <Property key={name + i} name={<StringLiteral>{name}</StringLiteral>}>
-          <Literal>{comments[class_.$.name]?.[name]}</Literal>
-        </Property>
-      ))}
-      {methodPropDefinitions.map(({ name }, i) => (
-        <Property key={name + i} name={<StringLiteral>{name}</StringLiteral>}>
-          <Literal>{comments[class_.$.name]?.[name]}</Literal>
-        </Property>
-      ))}
-    </ObjectExpression>
-  );
 }
 
 export interface MethodPropParameter {

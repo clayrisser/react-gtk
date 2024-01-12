@@ -21,14 +21,12 @@
 
 import React from 'react';
 import { GirClassElement } from '@ts-for-gir/lib';
-import {
-  PropsInterface,
-  InterfaceDocumentation,
-} from './components/PropsInterface';
+import { PropsInterface } from './components/PropsInterface';
 import { RootIndex } from './components';
 import { WidgetElement } from './components/WidgetElement';
 import { WidgetElementsIndex } from './components/WidgetElementsIndex';
 import { render } from 'react-ast';
+import { InterfaceDocumentation } from './components/PropsInterfaceDocs';
 
 export async function renderPropsInterface(class_: GirClassElement) {
   return render(<PropsInterface class_={class_} />);

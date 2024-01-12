@@ -28,8 +28,6 @@ import {
   GirMethodElement,
 } from '@ts-for-gir/lib';
 import {
-  ArrayExpression,
-  Code,
   Export,
   ExpressionWithTypeArguments,
   Identifier,
@@ -42,9 +40,6 @@ import {
   Property,
   PropertySignature,
   StringLiteral,
-  VariableDeclaration,
-  VariableDeclarationKind,
-  VariableDeclarator,
 } from 'react-ast';
 
 export interface PropsInterfaceProps {
@@ -140,7 +135,6 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
 
   function renderMethodProps() {
     return methodPropDefinitions.map(({ name, parameters, comment }, i) => {
-      // comments[class_.$.name][name] = [];
       if (comment) {
         comments[class_.$.name] = comments[class_.$.name] || {};
         comments[class_.$.name][name] = comment.split('\n');

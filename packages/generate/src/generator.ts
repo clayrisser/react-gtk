@@ -94,7 +94,7 @@ export class Generator {
     await fs.writeFile(
       path.resolve(
         this.outDir,
-        `interfaces/${class_.$.name}GObjectPropsDocs.json`,
+        `interfaces/${class_.$.name}GObjectPropsDocs.js`,
       ),
       generatePropsInterfaceCodeDocs,
     );

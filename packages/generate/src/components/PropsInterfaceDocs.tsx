@@ -25,7 +25,15 @@ import {
   getMethodPropDefinitions,
   getPropertyPropDefinitions,
 } from './PropsInterface';
-import { Literal, ObjectExpression, Property, StringLiteral } from 'react-ast';
+import {
+  AssignmentExpression,
+  Identifier,
+  Literal,
+  MemberExpression,
+  ObjectExpression,
+  Property,
+  StringLiteral,
+} from 'react-ast';
 
 export function InterfaceDocumentation({ class_ }: PropsInterfaceProps) {
   const comments: Record<string, Record<string, string[]>> = {};
@@ -49,17 +57,25 @@ export function InterfaceDocumentation({ class_ }: PropsInterfaceProps) {
   });
 
   return (
-    <ObjectExpression>
-      {propertyPropDefinitions.map(({ name }, i) => (
-        <Property key={name + i} name={<StringLiteral>{name}</StringLiteral>}>
-          <Literal>{comments[class_.$.name]?.[name]}</Literal>
-        </Property>
-      ))}
-      {methodPropDefinitions.map(({ name }, i) => (
-        <Property key={name + i} name={<StringLiteral>{name}</StringLiteral>}>
-          <Literal>{comments[class_.$.name]?.[name]}</Literal>
-        </Property>
-      ))}
-    </ObjectExpression>
+    <AssignmentExpression
+      left={
+        <MemberExpression name="exports">
+          <Identifier>module</Identifier>
+        </MemberExpression>
+      }
+    >
+      <ObjectExpression>
+        {propertyPropDefinitions.map(({ name }, i) => (
+          <Property key={name + i} name={<Identifier>{name}</Identifier>}>
+            <Literal>{comments[class_.$.name]?.[name]}</Literal>
+          </Property>
+        ))}
+        {methodPropDefinitions.map(({ name }, i) => (
+          <Property key={name + i} name={<Identifier>{name}</Identifier>}>
+            <Literal>{comments[class_.$.name]?.[name]}</Literal>
+          </Property>
+        ))}
+      </ObjectExpression>
+    </AssignmentExpression>
   );
 }

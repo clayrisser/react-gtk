@@ -1,42 +1,14 @@
 # app
 .env
 /.changeset/*.md
-/null
-debug.json
 
 # node
-**/.expo/*
-**/.next/*
 *.tsbuildinfo
 .DS_Store
-.env
-.env.development.local
 .env.local
-.env.production.local
-.env.test.local
-.graphqlconfig
 .idea
+.make/
 .pnpm-debug.log*
-.tamagui
-.vercel
-.yarn/*
-/build
 node_modules/
-/out/
-THUMBS_DB
-graphql.config.*
 npm-debug.log*
-schema.graphql
 thumbs.db
-turbo-build.log
-yarn-debug.log*
-yarn-error.log*
-!.yarn/cache
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-
-# mkpm
-.mkpm/mkpm

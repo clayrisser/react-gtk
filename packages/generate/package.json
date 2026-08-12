@@ -52,28 +52,12 @@
   },
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.9",
-    "@types/node": "^20.10.5",
-    "@types/react": "^18.2.45",
-    "jest": "^29.7.0",
-    "jest-sonar-reporter": "^2.0.0",
-    "tsup": "^8.0.1",
-    "typescript": "^5.3.3"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "testPathIgnorePatterns": [
-      "<rootDir>/lib/"
-    ],
-    "testRegex": "\\.(spec|test)\\.[cm]?[jt]sx?$",
-    "testResultsProcessor": "jest-sonar-reporter",
-    "verbose": true
+    "@types/node": "^26.2.0",
+    "@types/react": "^18.3.31",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
   },
   "engines": {
-    "node": ">=16.0.0"
-  },
-  "jestSonar": {
-    "reportPath": ".mkpm/mkpm/.tmp/reports",
-    "reportFile": "test-report.xml",
-    "indent": 4
+    "node": ">=20.19.0"
   }
 }

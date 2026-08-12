@@ -32,26 +32,30 @@ configure:
 
 .PHONY: deps ~deps
 ~deps: node_modules/.modules.yaml
-node_modules/.modules.yaml: pnpm-lock.yaml $(shell $(GIT) ls-files | grep -E '(^|/)package\.json$$')
+# The empty rule shields the manifests from the sub-Makefile proxy patterns
+# below, which would otherwise treat them as buildable targets.
+MANIFESTS := $(shell $(GIT) ls-files | grep -E '(^|/)package\.json$$')
+$(MANIFESTS): ;
+node_modules/.modules.yaml: pnpm-lock.yaml $(MANIFESTS)
 	@$(MAKE) deps
 deps: FORCE
 	@$(PNPM) install
 
 .PHONY: build
-build: packages/generate/build packages/core/build
+build: ~deps packages/generate/build packages/core/build
 
 .PHONY: generate
-generate: packages/core/generate
+generate: ~deps packages/core/generate
 
 .PHONY: typecheck
-typecheck: packages/generate/typecheck packages/core/typecheck build \
+typecheck: ~deps packages/generate/typecheck packages/core/typecheck build \
 	examples/example/typecheck examples/test/typecheck examples/todo/typecheck
 
 .PHONY: test
 test: test/unit
 
 .PHONY: test/unit
-test/unit: packages/generate/test/unit packages/core/test/unit
+test/unit: ~deps packages/generate/test/unit packages/core/test/unit
 
 .PHONY: format
 format: configure ~deps
@@ -91,17 +95,17 @@ purge: clean
 
 .PHONY: packages/core packages/generate examples/example examples/test examples/todo docs \
 	packages/core/% packages/generate/% examples/example/% examples/test/% examples/todo/% docs/%
-packages/core packages/generate examples/example examples/test examples/todo docs: configure ~deps FORCE
+packages/core packages/generate examples/example examples/test examples/todo docs: configure FORCE
 	@$(MAKE) -C $@
-packages/core/%: configure ~deps FORCE
+packages/core/%: configure FORCE
 	@$(MAKE) -C packages/core $*
-packages/generate/%: configure ~deps FORCE
+packages/generate/%: configure FORCE
 	@$(MAKE) -C packages/generate $*
-examples/example/%: configure ~deps FORCE
+examples/example/%: configure FORCE
 	@$(MAKE) -C examples/example $*
-examples/test/%: configure ~deps FORCE
+examples/test/%: configure FORCE
 	@$(MAKE) -C examples/test $*
-examples/todo/%: configure ~deps FORCE
+examples/todo/%: configure FORCE
 	@$(MAKE) -C examples/todo $*
-docs/%: configure ~deps FORCE
+docs/%: configure FORCE
 	@$(MAKE) -C docs $*

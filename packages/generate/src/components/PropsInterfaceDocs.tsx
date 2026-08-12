@@ -20,11 +20,7 @@
  */
 
 import React from 'react';
-import {
-  PropsInterfaceProps,
-  getMethodPropDefinitions,
-  getPropertyPropDefinitions,
-} from './PropsInterface';
+import { PropsInterfaceProps, getMethodPropDefinitions, getPropertyPropDefinitions } from './PropsInterface';
 import {
   AssignmentExpression,
   Identifier,

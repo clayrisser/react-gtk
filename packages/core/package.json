@@ -2,34 +2,6 @@
   "name": "@react-gtk/core",
   "version": "4.0.0",
   "description": "react gtk core",
-  "sideEffects": true,
-  "homepage": "https://gitlab.com/bitspur/community/react-gtk",
-  "bugs": {
-    "url": "https://gitlab.com/bitspur/community/react-gtk/issues",
-    "email": "support@bitspur.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://gitlab.com/bitspur/community/react-gtk"
-  },
-  "license": "Apache-2.0",
-  "author": "BitSpur <email@clayrisser.com> (https://clayrisser.com)",
-  "main": "lib/index.js",
-  "module": "lib/index.mjs",
-  "react-native": "src/index.ts",
-  "source": "src/index.ts",
-  "types": "lib/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./lib/index.mjs",
-      "require": "./lib/index.js",
-      "types": "./lib/index.d.ts"
-    }
-  },
-  "files": [
-    "lib",
-    "src"
-  ],
   "keywords": [
     "bridge",
     "desktop",
@@ -41,19 +13,33 @@
     "react-native",
     "render"
   ],
-  "jest": {
-    "testRegex": "\\.(spec|test)\\.[cm]?[jt]sx?$",
-    "testEnvironment": "node",
-    "verbose": true,
-    "testResultsProcessor": "jest-sonar-reporter",
-    "testPathIgnorePatterns": [
-      "<rootDir>/lib/"
-    ]
+  "homepage": "https://gitlab.com/bitspur/community/react-gtk",
+  "bugs": {
+    "url": "https://gitlab.com/bitspur/community/react-gtk/issues",
+    "email": "support@bitspur.com"
   },
-  "jestSonar": {
-    "reportPath": ".mkpm/mkpm/.tmp/reports",
-    "reportFile": "test-report.xml",
-    "indent": 4
+  "license": "Apache-2.0",
+  "author": "BitSpur <email@clayrisser.com> (https://clayrisser.com)",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/bitspur/community/react-gtk"
+  },
+  "source": "src/index.ts",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "sideEffects": true,
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "types": "lib/index.d.ts",
+  "react-native": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
   },
   "dependencies": {
     "@girs/node-gdk-4.0": "^4.0.0-3.2.6",
@@ -86,7 +72,21 @@
     "tsup": "^8.0.1",
     "typescript": "^5.3.3"
   },
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "<rootDir>/lib/"
+    ],
+    "testRegex": "\\.(spec|test)\\.[cm]?[jt]sx?$",
+    "testResultsProcessor": "jest-sonar-reporter",
+    "verbose": true
+  },
   "engines": {
     "node": ">=16.0.0"
+  },
+  "jestSonar": {
+    "reportPath": ".mkpm/mkpm/.tmp/reports",
+    "reportFile": "test-report.xml",
+    "indent": 4
   }
 }

@@ -52,10 +52,7 @@ export function WidgetElement({ widget }: WidgetElementProps) {
       <Import from="../../types" imports={['PublicInstance']} />
       <Import from="@girs/node-gtk-4.0" default="Gtk" />
       <Import from="react" imports={['ReactNode', 'MutableRefObject']} />
-      <Import
-        from={`../interfaces/${name}GObjectProps`}
-        imports={`${name}GObjectProps`}
-      />
+      <Import from={`../interfaces/${name}GObjectProps`} imports={`${name}GObjectProps`} />
       <Export>
         <Interface
           name={interfaceName}
@@ -66,11 +63,7 @@ export function WidgetElement({ widget }: WidgetElementProps) {
             </>
           }
         >
-          <PropertySignature
-            name="children"
-            optional
-            typeAnnotation="ReactNode"
-          />
+          <PropertySignature name="children" optional typeAnnotation="ReactNode" />
           <PropertySignature
             name="ref"
             optional

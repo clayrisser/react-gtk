@@ -32,9 +32,10 @@ const logger = console;
 let _propertyList: string[] | undefined;
 let _availableSignals: Set<string> | undefined;
 
-export abstract class Element<Node extends GtkNode = GtkNode, Props extends Record<string, any> = Record<string, any>>
-  implements Instance<Node, Props>
-{
+export abstract class Element<
+  Node extends GtkNode = GtkNode,
+  Props extends Record<string, any> = Record<string, any>,
+> implements Instance<Node, Props> {
   static defaultProps: Record<string, any> = {};
 
   static propTypes: object = {};

@@ -40,18 +40,11 @@ export const RootIndex = ({ widgets }: RootIndexProps) => {
   return (
     <>
       {widgets.map((widget) => (
-        <Import
-          key={widget.$.name}
-          imports={`${widget.$.name}Props`}
-          from={`./elements/${widget.$.name}`}
-        />
+        <Import key={widget.$.name} imports={`${widget.$.name}Props`} from={`./elements/${widget.$.name}`} />
       ))}
       {widgets.map((widget) => (
         <Export key={widget.$.name}>
-          <VariableDeclaration
-            kind={VariableDeclarationKind.Const}
-            key={widget.$.name}
-          >
+          <VariableDeclaration kind={VariableDeclarationKind.Const} key={widget.$.name}>
             <VariableDeclarator name={widget.$.name}>
               <Literal>{widget.$.name}</Literal>
             </VariableDeclarator>
@@ -61,9 +54,7 @@ export const RootIndex = ({ widgets }: RootIndexProps) => {
       <ExportNamedDeclaration
         exportKind="type"
         specifiers={widgets.map((widget) => (
-          <ExportSpecifier
-            key={widget.$.name}
-          >{`${widget.$.name}Props`}</ExportSpecifier>
+          <ExportSpecifier key={widget.$.name}>{`${widget.$.name}Props`}</ExportSpecifier>
         ))}
       />
     </>

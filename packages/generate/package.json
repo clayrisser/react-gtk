@@ -54,8 +54,10 @@
     "@types/lodash.camelcase": "^4.3.9",
     "@types/node": "^26.2.0",
     "@types/react": "^18.3.31",
+    "@vitest/coverage-v8": "^4.1.10",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.10"
   },
   "engines": {
     "node": ">=20.19.0"

@@ -1,5 +1,6 @@
 # app
 .env
+.env.bak
 /.changeset/*.md
 
 # node

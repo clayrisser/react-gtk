@@ -36,9 +36,6 @@
     "react",
     "gtk"
   ],
-  "eslintIgnore": [
-    "lib"
-  ],
   "jest": {
     "testRegex": "\\.(spec|test)\\.[cm]?[jt]sx?$",
     "testEnvironment": "node",

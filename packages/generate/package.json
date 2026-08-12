@@ -46,9 +46,6 @@
     "react-native",
     "render"
   ],
-  "eslintIgnore": [
-    "lib"
-  ],
   "jest": {
     "testRegex": "\\.(spec|test)\\.[cm]?[jt]sx?$",
     "testEnvironment": "node",

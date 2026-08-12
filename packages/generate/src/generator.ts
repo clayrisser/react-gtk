@@ -23,6 +23,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { GeneratorOptions } from './types';
 import { GirModule, GirClassElement, GirImplements } from '@ts-for-gir/lib';
+import { classesMissingFromTypings } from './typeUtil';
 import { loadGtkModule } from './module';
 import {
   renderInterfaceDocumentation,
@@ -128,7 +129,7 @@ export class Generator {
     if (this._widgets) return this._widgets;
     const classes = this.classes;
     this._widgets = classes.filter((class_) => {
-      return this.isWidget(class_) && class_.$.name !== 'ApplicationWindow';
+      return this.isWidget(class_) && class_.$.name !== 'ApplicationWindow' && !classesMissingFromTypings.has(class_.$.name);
     });
     return this._widgets;
   }

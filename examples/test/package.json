@@ -37,10 +37,12 @@
     }
   },
   "dependencies": {
+    "@girs/node-gtk-4.0": "^4.12.3-3.2.6",
     "@react-gtk/core": "workspace:^",
     "react": "^18.2.0"
   },
   "devDependencies": {
+    "@types/react": "^18.2.45",
     "ts-node": "^10.9.2",
     "zustand": "^4.4.7"
   },

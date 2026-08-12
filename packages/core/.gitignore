@@ -1,3 +1,3 @@
-/.tsbuildinfo
-/lib
-/src/generated
+/coverage/
+/lib/
+/src/generated/

@@ -21,7 +21,7 @@
 
 import React, { ReactNode } from 'react';
 import camelCase from 'lodash.camelcase';
-import { lookupType, TypeDefinition } from '../typeUtil';
+import { lookupType, TypeDefinition, typesMissingFromTypings } from '../typeUtil';
 import { GirCallableParamElement, GirClassElement, GirMethodElement } from '@ts-for-gir/lib';
 import {
   Export,
@@ -175,7 +175,12 @@ export function getPropertyPropDefinitions(class_: GirClassElement): PropertyPro
               ),
       };
     })
-    .filter(Boolean) as PropertyPropDefinition[];
+    .filter(
+      (definition) =>
+        definition &&
+        !typesMissingFromTypings.has(definition.type.toString()) &&
+        !(definition.type.items || []).some((item) => typesMissingFromTypings.has(item.toString())),
+    ) as PropertyPropDefinition[];
 }
 
 export function getMethodPropDefinitions(class_: GirClassElement): MethodPropDefinition[] {

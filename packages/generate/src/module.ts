@@ -27,7 +27,10 @@ async function loadModule(girModule = 'Gtk-4.0') {
   const moduleLoader = new ModuleLoader({
     environment: 'gjs',
     girDirectories: [
-      '/opt/homebrew/Cellar/gtk4/4.12.4/share/gir-1.0',
+      // GIR_DIRECTORIES allows pointing at gir files in non-standard
+      // locations (path-delimiter separated, highest priority).
+      ...(process.env.GIR_DIRECTORIES?.split(path.delimiter).filter(Boolean) || []),
+      '/opt/homebrew/share/gir-1.0',
       '/usr/lib/x86_64-linux-gnu/mutter-10',
       '/usr/lib/x86_64-linux-gnu/mutter-11',
       '/usr/lib/x86_64-linux-gnu/mutter-12',

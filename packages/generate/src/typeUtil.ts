@@ -121,9 +121,16 @@ export const importTypeMap: Record<string, ImportTypeInfo> = {
   },
   GLib: {
     from: '@girs/node-glib-2.0',
-    types: ['DestroyNotify', 'Error', 'Variant'],
+    types: ['DateTime', 'DestroyNotify', 'Error', 'Variant'],
   },
 };
+
+// Gtk classes and enums introduced after GTK 4.12 are missing from the pinned
+// @girs/node-gtk-4.0 typings, so skip them when generating from a newer
+// system gir. Drop entries as the typings catch up.
+export const classesMissingFromTypings = new Set(['GraphicsOffload', 'PopoverBin']);
+
+export const typesMissingFromTypings = new Set(['Gtk.GraphicsOffloadEnabled', 'Gtk.WindowGravity']);
 
 export class TypeDefinition {
   public importAs?: string;

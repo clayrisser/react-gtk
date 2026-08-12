@@ -20,7 +20,6 @@
  */
 
 import { defineConfig } from 'tsup';
-import transpileModules from './transpileModules';
 
 export default defineConfig({
   bundle: true,
@@ -31,9 +30,7 @@ export default defineConfig({
   format: ['cjs', 'esm'],
   minify: false,
   outDir: 'lib',
-  publicDir: './public',
   skipNodeModulesBundle: true,
-  noExternal: transpileModules,
   splitting: true,
   target: 'es2022',
 });

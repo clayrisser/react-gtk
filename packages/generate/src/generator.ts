@@ -129,7 +129,9 @@ export class Generator {
     if (this._widgets) return this._widgets;
     const classes = this.classes;
     this._widgets = classes.filter((class_) => {
-      return this.isWidget(class_) && class_.$.name !== 'ApplicationWindow' && !classesMissingFromTypings.has(class_.$.name);
+      return (
+        this.isWidget(class_) && class_.$.name !== 'ApplicationWindow' && !classesMissingFromTypings.has(class_.$.name)
+      );
     });
     return this._widgets;
   }

@@ -23,9 +23,9 @@ describe('buildCssDeclaration', () => {
     expect(buildCssDeclaration({ backgroundColor: 'red' }, 'backgroundColor', 'red')).toBe(
       '  background-image: none;\n  background-color: red;',
     );
-    expect(
-      buildCssDeclaration({ backgroundColor: 'red', backgroundImage: 'none' }, 'backgroundColor', 'red'),
-    ).toBe('  background-color: red;');
+    expect(buildCssDeclaration({ backgroundColor: 'red', backgroundImage: 'none' }, 'backgroundColor', 'red')).toBe(
+      '  background-color: red;',
+    );
   });
 
   it('ignores pseudo class keys and unknown properties', () => {

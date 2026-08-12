@@ -14,16 +14,16 @@
     "react-native",
     "render"
   ],
-  "homepage": "https://gitlab.com/bitspur/community/react-gtk",
+  "homepage": "https://gitlab.com/bitspur/misc/react-gtk",
   "bugs": {
-    "url": "https://gitlab.com/bitspur/community/react-gtk/issues",
+    "url": "https://gitlab.com/bitspur/misc/react-gtk/issues",
     "email": "support@bitspur.com"
   },
   "license": "Apache-2.0",
   "author": "BitSpur <email@clayrisser.com> (https://clayrisser.com)",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/bitspur/community/react-gtk"
+    "url": "https://gitlab.com/bitspur/misc/react-gtk"
   },
   "bin": {
     "react-gtk-generate": "./bin/reactGtkGenerate.mjs"
@@ -41,7 +41,6 @@
     }
   },
   "dependencies": {
-    "@react-hook/merged-ref": "^1.3.2",
     "@ts-for-gir/cli": "^3.2.6",
     "@ts-for-gir/generator-typescript": "^3.2.6",
     "@ts-for-gir/lib": "^3.2.6",

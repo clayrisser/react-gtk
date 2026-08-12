@@ -67,7 +67,7 @@ lint: configure ~deps
 
 .PHONY: spellcheck
 spellcheck: configure ~deps
-	@$(CSPELL) lint --no-progress .
+	@$(CSPELL) lint --no-progress '**/*.md'
 
 .PHONY: version
 version: configure ~deps

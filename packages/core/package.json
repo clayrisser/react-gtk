@@ -13,16 +13,16 @@
     "react-native",
     "render"
   ],
-  "homepage": "https://gitlab.com/bitspur/community/react-gtk",
+  "homepage": "https://gitlab.com/bitspur/misc/react-gtk",
   "bugs": {
-    "url": "https://gitlab.com/bitspur/community/react-gtk/issues",
+    "url": "https://gitlab.com/bitspur/misc/react-gtk/issues",
     "email": "support@bitspur.com"
   },
   "license": "Apache-2.0",
   "author": "BitSpur <email@clayrisser.com> (https://clayrisser.com)",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/bitspur/community/react-gtk"
+    "url": "https://gitlab.com/bitspur/misc/react-gtk"
   },
   "source": "src/index.ts",
   "files": [
@@ -52,7 +52,6 @@
     "@girs/node-gsk-4.0": "^4.0.0-3.2.6",
     "@girs/node-gtk-4.0": "^4.12.3-3.2.6",
     "@girs/node-pango-1.0": "^1.51.0-3.2.6",
-    "lodash.debounce": "^4.0.8",
     "lodash.kebabcase": "^4.1.1",
     "node-gtk": "^0.12.0",
     "prop-types": "^15.8.1",
@@ -63,7 +62,6 @@
   },
   "devDependencies": {
     "@react-gtk/generate": "workspace:^",
-    "@types/lodash.debounce": "^4.0.9",
     "@types/lodash.kebabcase": "^4.1.9",
     "@types/node": "^26.2.0",
     "@types/prop-types": "^15.7.11",

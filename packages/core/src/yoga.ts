@@ -133,7 +133,7 @@ export function parseDimension(
   if (!dimension) return;
   if (typeof dimension === 'number') return dimension;
   if (auto && dimension === 'auto') return dimension;
-  if (percentage && typeof dimension === 'string' && /%$/.test(dimension)) return dimension;
+  if (percentage && typeof dimension === 'string' && dimension.endsWith('%')) return dimension;
   dimension = parseInt(dimension.toString(), 10);
   if (Number.isFinite(dimension)) return dimension;
   return;

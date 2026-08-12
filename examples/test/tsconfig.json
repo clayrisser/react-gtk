@@ -30,14 +30,7 @@
       "WebWorker.ImportScripts",
       "Webworker.Iterable"
     ],
-    "typeRoots": [
-      "@react-gtk/core/types"
-    ]
+    "typeRoots": ["@react-gtk/core/types"]
   },
-  "include": [
-    "src",
-    "tests",
-    "*.ts",
-    "*.js"
-  ]
+  "include": ["src", "tests", "*.ts", "*.js"]
 }

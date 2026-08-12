@@ -8,16 +8,16 @@
     "gtk",
     "react"
   ],
-  "homepage": "https://gitlab.com/bitspur/community/react-gtk",
+  "homepage": "https://gitlab.com/bitspur/misc/react-gtk",
   "bugs": {
-    "url": "https://gitlab.com/bitspur/community/react-gtk/issues",
+    "url": "https://gitlab.com/bitspur/misc/react-gtk/issues",
     "email": "support@bitspur.com"
   },
   "license": "Apache-2.0",
   "author": "BitSpur <email@clayrisser.com> (https://clayrisser.com)",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/bitspur/community/react-gtk"
+    "url": "https://gitlab.com/bitspur/misc/react-gtk"
   },
   "source": "src/index.ts",
   "files": [

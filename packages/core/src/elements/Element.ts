@@ -175,7 +175,7 @@ export abstract class Element<
           this.setStyle(value, Gtk.STYLE_PROVIDER_PRIORITY_FALLBACK);
         } else if (/^on[A-Z]/.test(key)) {
           let signal = kebabCase(key.slice(2));
-          if (/^notify-/.test(signal)) signal = `notify::${signal.slice(7)}`;
+          if (signal.startsWith('notify-')) signal = `notify::${signal.slice(7)}`;
           try {
             if (signal in this.connectedSignals) this.node!.disconnect(this.connectedSignals[signal]);
             this.connectedSignals[signal] = this.node!.connect(signal, (...args: any[]) => value(this.node, ...args));

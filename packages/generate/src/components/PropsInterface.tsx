@@ -21,12 +21,8 @@
 
 import React, { ReactNode } from 'react';
 import camelCase from 'lodash.camelcase';
-import { lookupType, TypeDefinition } from '../typeUtil';
-import {
-  GirCallableParamElement,
-  GirClassElement,
-  GirMethodElement,
-} from '@ts-for-gir/lib';
+import { lookupType, TypeDefinition, typesMissingFromTypings } from '../typeUtil';
+import { GirCallableParamElement, GirClassElement, GirMethodElement } from '@ts-for-gir/lib';
 import {
   Export,
   ExpressionWithTypeArguments,
@@ -62,16 +58,13 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
     propertyPropDefinitions.forEach(({ name, type }, i) => {
       (type.items || []).forEach((typeDefinition: TypeDefinition) => {
         if (!typeDefinition.importFrom) return;
-        const importedName =
-          typeDefinition.importDefault || typeDefinition.importAs;
+        const importedName = typeDefinition.importDefault || typeDefinition.importAs;
         if (!importedName || importedNames.has(importedName)) return;
         imports.push(
           <Import
             key={name + type.toString() + importedNames.size + i}
             default={typeDefinition.importDefault}
-            imports={
-              typeDefinition.importAs ? [typeDefinition.importAs] : undefined
-            }
+            imports={typeDefinition.importAs ? [typeDefinition.importAs] : undefined}
             from={typeDefinition.importFrom}
           />,
         );
@@ -111,14 +104,7 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
 
   function renderPropertyProps() {
     return propertyPropDefinitions.map(({ name, type }, i) => {
-      return (
-        <PropertySignature
-          key={name + i}
-          name={name}
-          optional
-          typeAnnotation={type.toString()}
-        />
-      );
+      return <PropertySignature key={name + i} name={name} optional typeAnnotation={type.toString()} />;
     });
   }
 
@@ -141,19 +127,14 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
   }
 
   function renderExtendsInterface() {
-    const propsInterfaceOmit =
-      propsInterfaceOmitMap[`${class_.$.name}GObjectProps`];
+    const propsInterfaceOmit = propsInterfaceOmitMap[`${class_.$.name}GObjectProps`];
     if (!propsInterfaceOmit?.length) {
-      return extends_.map((extend, i) => (
-        <Identifier key={extend + i}>{extend}</Identifier>
-      ));
+      return extends_.map((extend, i) => <Identifier key={extend + i}>{extend}</Identifier>);
     }
     return (
       <ExpressionWithTypeArguments name="Omit">
         <InterfaceTypeReference>{extends_.join('&')}</InterfaceTypeReference>
-        <InterfaceTypeReference>
-          {propsInterfaceOmit.map((omit) => `'${omit}'`).join('|')}
-        </InterfaceTypeReference>
+        <InterfaceTypeReference>{propsInterfaceOmit.map((omit) => `'${omit}'`).join('|')}</InterfaceTypeReference>
       </ExpressionWithTypeArguments>
     );
   }
@@ -162,10 +143,7 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
     <>
       {renderImports()}
       <Export>
-        <Interface
-          name={`${class_.$.name}GObjectProps`}
-          extends={renderExtendsInterface()}
-        >
+        <Interface name={`${class_.$.name}GObjectProps`} extends={renderExtendsInterface()}>
           {renderPropertyProps()}
           {renderMethodProps()}
         </Interface>
@@ -174,9 +152,7 @@ export function PropsInterface({ class_ }: PropsInterfaceProps) {
   );
 }
 
-export function getPropertyPropDefinitions(
-  class_: GirClassElement,
-): PropertyPropDefinition[] {
+export function getPropertyPropDefinitions(class_: GirClassElement): PropertyPropDefinition[] {
   return (class_.method || [])
     .filter((m) => m.$.name.startsWith('set_'))
     .map((m) => {
@@ -199,12 +175,15 @@ export function getPropertyPropDefinitions(
               ),
       };
     })
-    .filter(Boolean) as PropertyPropDefinition[];
+    .filter(
+      (definition) =>
+        definition &&
+        !typesMissingFromTypings.has(definition.type.toString()) &&
+        !(definition.type.items || []).some((item) => typesMissingFromTypings.has(item.toString())),
+    ) as PropertyPropDefinition[];
 }
 
-export function getMethodPropDefinitions(
-  class_: GirClassElement,
-): MethodPropDefinition[] {
+export function getMethodPropDefinitions(class_: GirClassElement): MethodPropDefinition[] {
   return (class_['glib:signal'] || []).map((s) => {
     const parameters =
       (s.parameters

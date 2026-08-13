@@ -97,16 +97,7 @@ export function lookupType(type: string | undefined) {
 export const importTypeMap: Record<string, ImportTypeInfo> = {
   Pango: {
     from: '@girs/node-pango-1.0',
-    types: [
-      'FontMap',
-      'TabArray',
-      'WrapMode',
-      'AttrList',
-      'EllipsizeMode',
-      'FontDescription',
-      'Language',
-      'Script',
-    ],
+    types: ['FontMap', 'TabArray', 'WrapMode', 'AttrList', 'EllipsizeMode', 'FontDescription', 'Language', 'Script'],
   },
   Gdk: {
     from: '@girs/node-gdk-4.0',
@@ -122,16 +113,7 @@ export const importTypeMap: Record<string, ImportTypeInfo> = {
   },
   Gio: {
     from: '@girs/node-gio-2.0',
-    types: [
-      'File',
-      'MenuModel',
-      'ListModel',
-      'Icon',
-      'Permission',
-      'AppInfo',
-      'ActionGroup',
-      'ActionMap',
-    ],
+    types: ['File', 'MenuModel', 'ListModel', 'Icon', 'Permission', 'AppInfo', 'ActionGroup', 'ActionMap'],
   },
   cairo: {
     from: '@girs/node-cairo-1.0',
@@ -139,9 +121,16 @@ export const importTypeMap: Record<string, ImportTypeInfo> = {
   },
   GLib: {
     from: '@girs/node-glib-2.0',
-    types: ['DestroyNotify', 'Error', 'Variant'],
+    types: ['DateTime', 'DestroyNotify', 'Error', 'Variant'],
   },
 };
+
+// Gtk classes and enums introduced after GTK 4.12 are missing from the pinned
+// @girs/node-gtk-4.0 typings, so skip them when generating from a newer
+// system gir. Drop entries as the typings catch up.
+export const classesMissingFromTypings = new Set(['GraphicsOffload', 'PopoverBin']);
+
+export const typesMissingFromTypings = new Set(['Gtk.GraphicsOffloadEnabled', 'Gtk.WindowGravity']);
 
 export class TypeDefinition {
   public importAs?: string;
@@ -161,13 +150,8 @@ export class TypeDefinition {
   }
 
   lookupImportType(type: string) {
-    const importType = Object.entries(importTypeMap).reduce<
-      ImportType | undefined
-    >(
-      (
-        importType: ImportType | undefined,
-        [importDefault, importTypeInfo]: [string, ImportTypeInfo],
-      ) => {
+    const importType = Object.entries(importTypeMap).reduce<ImportType | undefined>(
+      (importType: ImportType | undefined, [importDefault, importTypeInfo]: [string, ImportTypeInfo]) => {
         if (importType) return importType;
         if (type.indexOf('.') !== -1) {
           const [importDefault, typeValue] = type.split('.');
@@ -203,10 +187,7 @@ export class TypeDefinition {
   }
 
   toString(): string {
-    if (this.type === 'array')
-      return `[${(this.items || [])
-        .map((t: TypeDefinition) => t.toString())
-        .join(', ')}]`;
+    if (this.type === 'array') return `[${(this.items || []).map((t: TypeDefinition) => t.toString()).join(', ')}]`;
     return this.type;
   }
 }

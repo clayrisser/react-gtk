@@ -20,20 +20,8 @@
  */
 
 import React from 'react';
-import {
-  PropsInterfaceProps,
-  getMethodPropDefinitions,
-  getPropertyPropDefinitions,
-} from './PropsInterface';
-import {
-  AssignmentExpression,
-  Identifier,
-  Literal,
-  MemberExpression,
-  ObjectExpression,
-  Property,
-  StringLiteral,
-} from 'react-ast';
+import { PropsInterfaceProps, getMethodPropDefinitions, getPropertyPropDefinitions } from './PropsInterface';
+import { AssignmentExpression, Identifier, Literal, MemberExpression, ObjectExpression, Property } from 'react-ast';
 
 export function InterfaceDocumentation({ class_ }: PropsInterfaceProps) {
   const comments: Record<string, Record<string, string[]>> = {};

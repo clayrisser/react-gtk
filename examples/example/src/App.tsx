@@ -21,7 +21,7 @@
 
 import React from 'react';
 import Gtk from '@girs/node-gtk-4.0';
-import { Box, HeaderBar, FlowBox, FlowBoxChild, Label, Text } from '@react-gtk/core';
+import { Box, HeaderBar, FlowBox, FlowBoxChild, Label } from '@react-gtk/core';
 
 const App = () => {
   const titleWidget = new Gtk.Label();

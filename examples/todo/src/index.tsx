@@ -20,35 +20,10 @@
  */
 
 import React from 'react';
-import { render } from '@react-gtk/core';
+import { Box, render } from '@react-gtk/core';
 import App from './App';
-import { Box, FlowBox, Button, Text } from '@react-gtk/core';
 import Gtk from '@girs/node-gtk-4.0';
 import { Header } from './components/Header';
-
-// export const App = () => {
-//   return (
-//     <FlowBox
-//       style={{
-//         backgroundColor: 'green',
-//       }}
-//     >
-//       <Button
-//         vexpand
-//         hexpand
-//         label="Click Me!"
-//         onClicked={(_node) => {
-//           console.log('Button was clicked!');
-//         }}
-//       />
-//       <Text
-//         onChanged={(node) => {
-//           console.log(node.text);
-//         }}
-//       />
-//     </FlowBox>
-//   );
-// };
 
 (async () => {
   await render(

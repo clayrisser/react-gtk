@@ -1,0 +1,7 @@
+packages:
+  - packages/*
+  - examples/*
+  - docs
+
+patchedDependencies:
+  '@ts-for-gir/lib@3.3.0': patches/@ts-for-gir__lib@3.3.0.patch

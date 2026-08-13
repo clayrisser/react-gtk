@@ -41,11 +41,7 @@ export const WidgetElementsIndex = ({ widgets }: WidgetElementsIndexProps) => {
   return (
     <>
       {widgets.map((widget) => (
-        <Import
-          key={widget.$.name}
-          imports={widget.$.name}
-          from={`./${widget.$.name}`}
-        />
+        <Import key={widget.$.name} imports={widget.$.name} from={`./${widget.$.name}`} />
       ))}
       <ExportNamedDeclaration>
         <VariableDeclaration kind={VariableDeclarationKind.Const}>
@@ -59,10 +55,7 @@ export const WidgetElementsIndex = ({ widgets }: WidgetElementsIndexProps) => {
         </VariableDeclaration>
       </ExportNamedDeclaration>
       {widgets.map((widgets) => (
-        <ExportAllDeclaration
-          key={widgets.$.name}
-          source={`./${widgets.$.name}`}
-        />
+        <ExportAllDeclaration key={widgets.$.name} source={`./${widgets.$.name}`} />
       ))}
     </>
   );

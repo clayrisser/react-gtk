@@ -24,11 +24,7 @@ import { Box, Stack, Label } from '@react-gtk/core';
 import Gtk from '@girs/node-gtk-4.0';
 
 export const StackSidebar = () => {
-  const [selectedPage, setSelectedPage] = useState('page1');
-
-  const handlePageSwitch = (pageName: any) => {
-    setSelectedPage(pageName);
-  };
+  const [selectedPage] = useState('page1');
 
   return (
     <Box orientation={Gtk.Orientation.HORIZONTAL}>

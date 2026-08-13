@@ -21,7 +21,7 @@
 
 import React, { useState } from 'react';
 import Gtk from '@girs/node-gtk-4.0';
-import { Button, FlowBox, FlowBoxChild, Label, StackSidebar, Box, Stack } from '@react-gtk/core';
+import { Button, FlowBox, FlowBoxChild, Label, StackSidebar, Box } from '@react-gtk/core';
 
 export interface EmptyTaskScreenProps {
   setToggleAddTasks: (toggle: boolean) => void;

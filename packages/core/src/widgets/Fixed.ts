@@ -117,7 +117,7 @@ export class Fixed extends Gtk.Widget {
   setChildTransform(widget: Gtk.Widget, transform: Gsk.Transform | null): void {
     if (!widget || widget.parent !== this || !transform) return;
     const layoutChild = this.getLayoutChild(widget);
-    layoutChild.setTransform && layoutChild.setTransform(transform);
+    layoutChild.setTransform?.(transform);
   }
 
   getChildTransform(widget: Gtk.Widget): Gsk.Transform | null {

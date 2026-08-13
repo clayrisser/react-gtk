@@ -3,23 +3,32 @@
   "version": "4.0.0",
   "private": true,
   "description": "react gtk todo example",
-  "sideEffects": false,
-  "homepage": "https://gitlab.com/bitspur/community/react-gtk",
+  "keywords": [
+    "elements",
+    "gtk",
+    "react"
+  ],
+  "homepage": "https://gitlab.com/bitspur/misc/react-gtk",
   "bugs": {
-    "url": "https://gitlab.com/bitspur/community/react-gtk/issues",
+    "url": "https://gitlab.com/bitspur/misc/react-gtk/issues",
     "email": "support@bitspur.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://gitlab.com/bitspur/community/react-gtk"
   },
   "license": "Apache-2.0",
   "author": "BitSpur <email@clayrisser.com> (https://clayrisser.com)",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/bitspur/misc/react-gtk"
+  },
+  "source": "src/index.ts",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "sideEffects": false,
   "main": "lib/index.js",
   "module": "lib/index.mjs",
-  "react-native": "src/index.ts",
-  "source": "src/index.ts",
   "types": "lib/index.d.ts",
+  "react-native": "src/index.ts",
   "exports": {
     ".": {
       "import": "./lib/index.mjs",
@@ -27,41 +36,16 @@
       "types": "./lib/index.d.ts"
     }
   },
-  "files": [
-    "lib",
-    "src"
-  ],
-  "keywords": [
-    "elements",
-    "react",
-    "gtk"
-  ],
-  "eslintIgnore": [
-    "lib"
-  ],
-  "jest": {
-    "testRegex": "\\.(spec|test)\\.[cm]?[jt]sx?$",
-    "testEnvironment": "node",
-    "verbose": true,
-    "testResultsProcessor": "jest-sonar-reporter",
-    "testPathIgnorePatterns": [
-      "<rootDir>/lib/"
-    ]
-  },
-  "jestSonar": {
-    "reportPath": ".mkpm/mkpm/.tmp/reports",
-    "reportFile": "test-report.xml",
-    "indent": 4
-  },
   "dependencies": {
-    "@react-gtk/core": "^4.0.0",
-    "react": "^18.2.0"
-  },
-  "engines": {
-    "node": ">=16.0.0"
+    "@girs/node-gtk-4.0": "^4.12.3-3.2.6",
+    "@react-gtk/core": "workspace:^",
+    "react": "^18.3.1",
+    "zustand": "^4.5.7"
   },
   "devDependencies": {
-    "ts-node": "^10.9.2",
-    "zustand": "^4.4.7"
+    "@types/react": "^18.3.31"
+  },
+  "engines": {
+    "node": ">=20.19.0"
   }
 }

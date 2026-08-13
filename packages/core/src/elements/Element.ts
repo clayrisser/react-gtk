@@ -32,9 +32,10 @@ const logger = console;
 let _propertyList: string[] | undefined;
 let _availableSignals: Set<string> | undefined;
 
-export abstract class Element<Node extends GtkNode = GtkNode, Props extends Record<string, any> = Record<string, any>>
-  implements Instance<Node, Props>
-{
+export abstract class Element<
+  Node extends GtkNode = GtkNode,
+  Props extends Record<string, any> = Record<string, any>,
+> implements Instance<Node, Props> {
   static defaultProps: Record<string, any> = {};
 
   static propTypes: object = {};
@@ -174,7 +175,7 @@ export abstract class Element<Node extends GtkNode = GtkNode, Props extends Reco
           this.setStyle(value, Gtk.STYLE_PROVIDER_PRIORITY_FALLBACK);
         } else if (/^on[A-Z]/.test(key)) {
           let signal = kebabCase(key.slice(2));
-          if (/^notify-/.test(signal)) signal = `notify::${signal.slice(7)}`;
+          if (signal.startsWith('notify-')) signal = `notify::${signal.slice(7)}`;
           try {
             if (signal in this.connectedSignals) this.node!.disconnect(this.connectedSignals[signal]);
             this.connectedSignals[signal] = this.node!.connect(signal, (...args: any[]) => value(this.node, ...args));

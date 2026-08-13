@@ -1,0 +1,14 @@
+diff --git a/lib/gir-parser.js b/lib/gir-parser.js
+index 9d9e1462aa3af9eacacdcd5690bf1e26f021359a..d3561f297cea7c57571b011e4569504ab0ee395f 100644
+--- a/lib/gir-parser.js
++++ b/lib/gir-parser.js
+@@ -48,6 +48,9 @@ const parser = new XMLParser({
+     attributeNamePrefix: '',
+     attributesGroupName: '$',
+     textNodeName: '_',
++    // gir files are large, trusted, local XML documents; the default
++    // fast-xml-parser entity expansion budget is far too small for them
++    processEntities: { maxTotalExpansions: Infinity },
+     ignoreAttributes: false,
+     removeNSPrefix: false,
+     allowBooleanAttributes: true,

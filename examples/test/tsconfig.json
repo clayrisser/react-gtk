@@ -32,12 +32,5 @@
     ],
     "typeRoots": ["@react-gtk/core/types"]
   },
-  "ts-node": {
-    "swc": true,
-    "transpileOnly": true,
-    "compilerOptions": {
-      "module": "commonjs"
-    }
-  },
   "include": ["src", "tests", "*.ts", "*.js"]
 }

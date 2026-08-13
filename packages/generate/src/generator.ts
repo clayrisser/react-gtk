@@ -23,6 +23,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { GeneratorOptions } from './types';
 import { GirModule, GirClassElement, GirImplements } from '@ts-for-gir/lib';
+import { classesMissingFromTypings } from './typeUtil';
 import { loadGtkModule } from './module';
 import {
   renderInterfaceDocumentation,
@@ -72,10 +73,7 @@ export class Generator {
 
   async generateWidgetElement(widget: GirClassElement) {
     const generateElementCode = await renderWidgetElement(widget);
-    await fs.writeFile(
-      path.resolve(this.outDir, `elements/${widget.$.name}.tsx`),
-      generateElementCode,
-    );
+    await fs.writeFile(path.resolve(this.outDir, `elements/${widget.$.name}.tsx`), generateElementCode);
   }
 
   async generatePropsInterface(class_: GirClassElement) {
@@ -89,13 +87,9 @@ export class Generator {
       generatePropsInterfaceCode,
     );
 
-    const generatePropsInterfaceCodeDocs =
-      await renderInterfaceDocumentation(class_);
+    const generatePropsInterfaceCodeDocs = await renderInterfaceDocumentation(class_);
     await fs.writeFile(
-      path.resolve(
-        this.outDir,
-        `interfaces/${class_.$.name}GObjectPropsDocs.js`,
-      ),
+      path.resolve(this.outDir, `interfaces/${class_.$.name}GObjectPropsDocs.js`),
       generatePropsInterfaceCodeDocs,
     );
 
@@ -112,17 +106,11 @@ export class Generator {
   }
 
   async generateRootIndex() {
-    await fs.writeFile(
-      path.resolve(this.outDir, 'index.ts'),
-      await renderRootIndex(this.widgets),
-    );
+    await fs.writeFile(path.resolve(this.outDir, 'index.ts'), await renderRootIndex(this.widgets));
   }
 
   async generateWidgetElementsIndex() {
-    await fs.writeFile(
-      path.resolve(this.outDir, 'elements/index.ts'),
-      await renderWidgetElementsIndex(this.widgets),
-    );
+    await fs.writeFile(path.resolve(this.outDir, 'elements/index.ts'), await renderWidgetElementsIndex(this.widgets));
   }
 
   private getParent(class_: GirClassElement) {
@@ -133,9 +121,7 @@ export class Generator {
 
   private getImplements(class_: GirClassElement) {
     return class_.implements?.map((implement: GirImplements) =>
-      this.interfaces.find(
-        (interface_) => interface_.$.name === implement.$.name,
-      ),
+      this.interfaces.find((interface_) => interface_.$.name === implement.$.name),
     );
   }
 
@@ -143,7 +129,9 @@ export class Generator {
     if (this._widgets) return this._widgets;
     const classes = this.classes;
     this._widgets = classes.filter((class_) => {
-      return this.isWidget(class_) && class_.$.name !== 'ApplicationWindow';
+      return (
+        this.isWidget(class_) && class_.$.name !== 'ApplicationWindow' && !classesMissingFromTypings.has(class_.$.name)
+      );
     });
     return this._widgets;
   }

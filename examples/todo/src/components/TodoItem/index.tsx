@@ -21,12 +21,12 @@
 
 import React from 'react';
 import Gtk from '@girs/node-gtk-4.0';
-import { Box, CheckButton, Label, FlexBox, FlowBox } from '@react-gtk/core';
+import { Box, CheckButton, Label, FlowBox } from '@react-gtk/core';
 import { TodoProps } from '../../utils/todoProps';
 import useTodoStore from '../../state/useTodoStore';
 
 export const TodoItem = (props: TodoProps) => {
-  const { id, title, completed, favorite, description } = props;
+  const { id, title, completed, favorite } = props;
   const [toggleFavorite, toggleCompleted] = useTodoStore((state: any) => [state.toggleFavorite, state.toggleCompleted]);
 
   function handleFavorite() {
